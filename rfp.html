@@ -1,3 +1,11 @@
+<script>
+  const password = "s4scope123";
+  const userInput = prompt("Bu sayfa şifre korumalıdır. Lütfen şifreyi girin:");
+
+  if (userInput !== password) {
+    document.body.innerHTML = "<h2>Erişim reddedildi</h2>";
+  }
+</script>
 <!DOCTYPE html>
 <html lang="tr">
 <head>
