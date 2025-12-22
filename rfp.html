@@ -2,10 +2,124 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>s4scope | RFP</title>
+  <title>SAP S/4HANA RFP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #0a6ed1;
+      text-align: center;
+    }
+    .section {
+      background: #fff;
+      margin: 20px auto;
+      padding: 20px;
+      max-width: 900px;
+      border-radius: 8px;
+    }
+    .question {
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+  </style>
 </head>
 <body>
-  <h2>SAP S/4HANA RFP Formu</h2>
-  <p>Bu sayfaya birazdan RFP soruları eklenecek.</p>
+
+<h1>SAP S/4HANA – Online RFP</h1>
+
+<div class="section">
+  <h2>Genel Bilgiler</h2>
+
+  <div class="question">
+    <label>Şirket çoklu lokasyonda faaliyet gösteriyor mu?</label>
+    <select>
+      <option>Evet</option>
+      <option>Hayır</option>
+    </select>
+  </div>
+
+  <div class="question">
+    <label>Uluslararası operasyon mevcut mu?</label>
+    <select>
+      <option>Evet</option>
+      <option>Hayır</option>
+    </select>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Finans (FI / CO)</h2>
+
+  <div class="question">
+    <label>Çoklu para birimi ile muhasebe yönetimi gerekiyor mu?</label>
+    <select>
+      <option>Evet</option>
+      <option>Hayır</option>
+      <option>Kısmen</option>
+    </select>
+  </div>
+
+  <div class="question">
+    <label>Yasal ve yönetimsel raporlama ayrımı gerekli mi?</label>
+    <select>
+      <option>Evet</option>
+      <option>Hayır</option>
+      <option>Kısmen</option>
+    </select>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Lojistik (MM / SD)</h2>
+
+  <div class="question">
+    <label>Satın alma talepleri ve onay süreçleri var mı?</label>
+    <select>
+      <option>Evet</option>
+      <option>Hayır</option>
+    </select>
+  </div>
+
+  <div class="question">
+    <label>Depo stokları lokasyon bazlı takip ediliyor mu?</label>
+    <select>
+      <option>Evet</option>
+      <option>Hayır</option>
+    </select>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Üretim (PP)</h2>
+
+  <div class="question">
+    <label>Üretim emirleri ile maliyet takibi yapılıyor mu?</label>
+    <select>
+      <option>Evet</option>
+      <option>Hayır</option>
+      <option>Kısmen</option>
+    </select>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Ek Notlar</h2>
+  <textarea rows="5" placeholder="Ek açıklamalar..."></textarea>
+</div>
+
 </body>
 </html>
