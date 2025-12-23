@@ -177,8 +177,21 @@ const companiesContainer = document.getElementById("companies");
 const companyCountInput = document.getElementById("companyCount");
 const addCompanyBtn = document.getElementById("addCompanyBtn");
 
-// localStorage key
 const STORAGE_KEY = "s4scope_companies";
+
+let countries = [];
+
+async function loadCountries() {
+  try {
+    const response = await fetch('data/countries.json');
+    if (!response.ok) throw new Error('Countries JSON dosyası yüklenemedi');
+    countries = await response.json();
+  } catch (error) {
+    console.error('Ülke verisi yüklenirken hata:', error);
+    // İstersen fallback için statik liste koyabilirsin burada
+    countries = ["Türkiye", "Almanya", "İngiltere", "ABD", "Diğer"];
+  }
+}
 
 function saveCompaniesToStorage(){
     const companies = [];
@@ -266,14 +279,22 @@ function addCompanyBlock(index, data = {}){
     const select2 = document.createElement("select");
     select2.name = `country_${index}`;
     select2.required = true;
-    const countries = ["", "Türkiye","Almanya","İngiltere","ABD","Fransa","İtalya","İspanya","Hollanda","Çin","Japonya","Güney Kore","Hindistan","Rusya","Kanada","Avustralya","Brezilya","Meksika","Güney Afrika","Suudi Arabistan","Birleşik Arap Emirlikleri","Diğer"];
+
+    // Boş seçenek
+    const emptyOption = document.createElement("option");
+    emptyOption.value = "";
+    emptyOption.textContent = "Seçiniz";
+    select2.appendChild(emptyOption);
+
+    // Dinamik countries dizisinden option oluştur
     countries.forEach(c => {
         const opt = document.createElement("option");
         opt.value = c;
-        opt.textContent = c === "" ? "Seçiniz" : c;
+        opt.textContent = c;
         if(c === data.country) opt.selected = true;
         select2.appendChild(opt);
     });
+
     div2.appendChild(label2);
     div2.appendChild(select2);
 
@@ -369,8 +390,8 @@ addCompanyBtn.addEventListener("click", () => {
     saveCompaniesToStorage();
 });
 
-// Sayfa yüklendiğinde kayıtlı verileri yükle
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
+    await loadCountries();
     const loaded = loadCompaniesFromStorage();
     if(!loaded){
         companyCountInput.value = "";
@@ -378,7 +399,6 @@ window.addEventListener("load", () => {
     }
 });
 
-// Enter ile oluşturmayı engelle ve fonksiyonu çağır
 companyCountInput.addEventListener("keydown", (e) => {
     if(e.key === "Enter"){
         e.preventDefault();
