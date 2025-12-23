@@ -113,7 +113,7 @@ const sectorMap = {
   ],
   "Yüksek Teknoloji": [
     "Ürün Bileşenleri",
-    "OEM"  
+    "OEM"
   ],
   "Endüstriyel Üretim": [
     "Bileşen Üreticileri",
@@ -151,11 +151,16 @@ const sectorMap = {
 };
 
 function createCompanies(){
-    const count = document.getElementById("companyCount").value;
+    const count = parseInt(document.getElementById("companyCount").value, 10);
+    if (isNaN(count) || count < 1) {
+        alert("Lütfen 1 veya daha fazla pozitif bir sayı giriniz.");
+        return;
+    }
+
     const container = document.getElementById("companies");
     container.innerHTML = "";
 
-    for(let i=1;i<=count;i++){
+    for(let i=1; i<=count; i++){
         container.innerHTML += `
         <div class="company-block">
             <h3>Şirket ${i}</h3>
