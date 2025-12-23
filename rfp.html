@@ -118,32 +118,33 @@ function addCompany() {
   companyCount++;
   const div = document.createElement("div");
   div.className = "company-block";
-  div.innerHTML = `
-    <h2>Şirket ${companyCount}</h2>
+ div.innerHTML = `
+  <h2>Şirket ${companyCount}</h2>
 
-    <label>Şirket Kodu / Adı</label>
-    <input type="text" placeholder="Örn: TR01 / Holding A">
-    
-<label>Ana Faaliyet Türü</label>
-<select>
-  <option value="">Seçiniz</option>
-  <option value="uretim">Üretim</option>
-  <option value="ticaret">Ticaret</option>
-  <option value="hizmet">Hizmet</option>
-  <option value="karma">Karma</option>
-</select>
+  <label>Şirket Kodu / Adı</label>
+  <input type="text" placeholder="Örn: TR01 / Holding A">
 
-    <label>Ana Sektör</label>
-    <select onchange="updateSubSector(this)">
-      <option value="">Seçiniz</option>
-      ${Object.keys(sectorData).map(s => `<option value="${s}">${s}</option>`).join("")}
-    </select>
+  <label>Ana Sektör</label>
+  <select onchange="updateSubSector(this)">
+    <option value="">Seçiniz</option>
+    ${Object.keys(sectorData).map(s => `<option value="${s}">${s}</option>`).join("")}
+  </select>
 
-    <label>Alt Sektör</label>
-    <select>
-      <option value="">Önce ana sektör seçiniz</option>
-    </select>
-  `;
+  <label>Alt Sektör</label>
+  <select>
+    <option value="">Önce ana sektör seçiniz</option>
+  </select>
+
+  <label>Ana Faaliyet Türü</label>
+  <select>
+    <option value="">Seçiniz</option>
+    <option value="uretim">Üretim</option>
+    <option value="ticaret">Ticaret</option>
+    <option value="hizmet">Hizmet</option>
+    <option value="karma">Karma</option>
+  </select>
+`;
+;
   document.getElementById("companies").appendChild(div);
 }
 
