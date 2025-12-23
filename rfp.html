@@ -35,6 +35,7 @@ h2{
     padding:12px;
 }
 .company-block{
+    position: relative; /* Sil butonu için */
     background:#fff;
     border:1px solid #ccc;
     padding:15px;
@@ -60,6 +61,19 @@ button{
     color:white;
     border:none;
     cursor:pointer;
+}
+/* Sil butonu */
+.delete-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 4px;
 }
 footer{
     margin-top:40px;
@@ -168,6 +182,7 @@ function createCompanies(){
     for(let i=1; i<=count; i++){
         container.innerHTML += `
         <div class="company-block">
+            <button class="delete-btn" onclick="deleteCompany(this)">Sil</button>
             <h3>Şirket ${i}</h3>
 
             <div class="company-grid">
@@ -251,6 +266,13 @@ function loadSubSectors(index, sector){
         opt.textContent = sub;
         subSelect.appendChild(opt);
     });
+}
+
+function deleteCompany(button){
+    // button: sil butonuna tıklanan <button>
+    // onun parentNode: .company-block div'i
+    const companyBlock = button.parentNode;
+    companyBlock.remove();
 }
 
 // Enter tuşu ile createCompanies fonksiyonunu çalıştırmak için:
