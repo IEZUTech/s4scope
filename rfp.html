@@ -2,170 +2,141 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>S4Scope – SAP RFP</title>
-
+    <title>SAP RFP – Genel Bilgiler</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 40px;
-            background: #fafafa;
+            background: #f7f7f7;
+            padding: 20px;
         }
-        h1, h2, h3 {
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+        }
+        h1, h2 {
             color: #0a6ed1;
+        }
+        .company-block {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 6px;
         }
         label {
             display: block;
-            margin-top: 8px;
+            margin-top: 10px;
+            font-weight: bold;
         }
-        select, input[type="text"] {
-            padding: 6px;
-            width: 320px;
-            margin-top: 4px;
-        }
-        .section {
-            margin-bottom: 35px;
-        }
-        .company-box {
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin-bottom: 20px;
-            background: #fff;
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
         }
         button {
-            padding: 10px 25px;
-            font-size: 16px;
+            margin-top: 20px;
+            padding: 10px 16px;
             background: #0a6ed1;
-            color: #fff;
+            color: white;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
         }
-        button:hover {
-            background: #084b9a;
+        .secondary {
+            background: #666;
         }
     </style>
-
-    <script>
-        function generateCompanies() {
-            const count = document.getElementById("companyCount").value;
-            let html = "";
-
-            for (let i = 1; i <= count; i++) {
-                html += `
-                <div class="company-box">
-                    <h3>Şirket ${i}</h3>
-
-                    <label>Şirket Adı / Kod</label>
-                    <input type="text" name="company_${i}_name">
-
-                    <label>Ana Sektör</label>
-                    <select onchange="showSubSector(this, ${i})">
-                        <option value="">Seçiniz</option>
-                        <option value="discrete">Kesikli Üretim</option>
-                        <option value="aero">Havacılık ve Savunma</option>
-                        <option value="hightech">Yüksek Teknoloji</option>
-                        <option value="industrial">Endüstriyel Üretim</option>
-                        <option value="consumer">Tüketici Endüstrileri</option>
-                        <option value="energy">Enerji ve Doğal Kaynaklar</option>
-                        <option value="services">Hizmet Sektörleri</option>
-                        <option value="public">Kamu Hizmetleri</option>
-                    </select>
-
-                    <div id="subSector_${i}" style="margin-top:12px;"></div>
-                </div>`;
-            }
-
-            document.getElementById("companiesArea").innerHTML = html;
-        }
-
-        function showSubSector(selectEl, index) {
-            const sector = selectEl.value;
-            let html = "";
-
-            if (sector === "discrete") {
-                html = `
-                <label><input type="checkbox"> Otomotiv Tedarikçileri</label>
-                <label><input type="checkbox"> Kiralama & Leasing</label>
-                <label><input type="checkbox"> Batarya Üreticileri</label>`;
-            }
-
-            if (sector === "aero") {
-                html = `
-                <label><input type="checkbox"> Seviye 2+ Tedarikçiler</label>
-                <label><input type="checkbox"> OEM Bağlı Ortaklıkları</label>
-                <label><input type="checkbox"> Yeni Uzay & Gelişmiş Hava Mobilitesi</label>`;
-            }
-
-            if (sector === "hightech") {
-                html = `
-                <label><input type="checkbox"> Ürün Bileşenleri / OEM</label>`;
-            }
-
-            if (sector === "industrial") {
-                html = `
-                <label><input type="checkbox"> Bileşen Üreticileri</label>
-                <label><input type="checkbox"> Endüstriyel ve Ticari Makine & Ekipman</label>
-                <label><input type="checkbox"> Otomasyon ve Kontrol Çözümleri</label>`;
-            }
-
-            if (sector === "consumer") {
-                html = `
-                <label><input type="checkbox"> Tarım ve Gıda</label>
-                <label><input type="checkbox"> Tüketici Ürünleri</label>
-                <label><input type="checkbox"> Perakende</label>
-                <label><input type="checkbox"> Toptan Dağıtım</label>`;
-            }
-
-            if (sector === "energy") {
-                html = `
-                <label><input type="checkbox"> Kimya</label>
-                <label><input type="checkbox"> Petrol, Gaz ve Enerji</label>
-                <label><input type="checkbox"> Kamu Hizmetleri (Utilities)</label>`;
-            }
-
-            if (sector === "services") {
-                html = `
-                <label><input type="checkbox"> Bankacılık</label>
-                <label><input type="checkbox"> Sigortacılık</label>
-                <label><input type="checkbox"> Telekomünikasyon</label>
-                <label><input type="checkbox"> Profesyonel Hizmetler</label>`;
-            }
-
-            if (sector === "public") {
-                html = `
-                <label><input type="checkbox"> Kamu Sektörü</label>
-                <label><input type="checkbox"> Eğitim ve Araştırma</label>`;
-            }
-
-            document.getElementById("subSector_" + index).innerHTML = html;
-        }
-    </script>
 </head>
 
 <body>
+<div class="container">
 
-<h1>SAP RFP – Genel Bilgiler</h1>
+<h1>SAP RFP – 1. Bölüm: Genel Bilgiler</h1>
 
-<form>
+<form id="rfpForm">
 
-<div class="section">
-    <h2>1. Proje Kapsamı</h2>
+    <h2>1.1 Grup / Proje Genel Bilgileri</h2>
 
-    <label>Proje kapsamında kaç şirket (Company Code) olacak?</label>
-    <select id="companyCount" onchange="generateCompanies()">
-        <option value="">Seçiniz</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-    </select>
-</div>
+    <label>Firma / Grup Adı</label>
+    <input type="text" name="groupName" required>
 
-<div id="companiesArea"></div>
+    <label>Faaliyet Gösterilen Ülke Sayısı</label>
+    <input type="number" name="countryCount" min="1">
 
-<button type="submit">RFP’ye Devam Et</button>
+    <label>Toplam Çalışan Sayısı (Yaklaşık)</label>
+    <input type="number" name="employeeCount">
+
+    <h2>1.2 Şirket Kodları ve Sektör Bilgileri</h2>
+
+    <div id="companies"></div>
+
+    <button type="button" onclick="addCompany()">➕ Şirket Kodu Ekle</button>
+
+    <br><br>
+    <button type="submit">➡️ 2. Bölüme Geç</button>
 
 </form>
+
+</div>
+
+<script>
+let companyIndex = 0;
+
+function addCompany() {
+    companyIndex++;
+
+    const div = document.createElement("div");
+    div.className = "company-block";
+
+    div.innerHTML = `
+        <h3>Şirket ${companyIndex}</h3>
+
+        <label>Şirket Kodu / Şirket Adı</label>
+        <input type="text" name="company_${companyIndex}_name" required>
+
+        <label>Sektör</label>
+        <select name="company_${companyIndex}_sector" required>
+            <option value="">Seçiniz</option>
+            <option>Otomotiv</option>
+            <option>Plastik / Enjeksiyon</option>
+            <option>Tekstil</option>
+            <option>Gıda ve İçecek</option>
+            <option>Kimya</option>
+            <option>İnşaat</option>
+            <option>Enerji</option>
+            <option>Perakende</option>
+            <option>Lojistik</option>
+            <option>Makine İmalatı</option>
+            <option>Metal / Döküm</option>
+            <option>Sağlık</option>
+            <option>Hizmet</option>
+        </select>
+
+        <label>Üretim Var mı?</label>
+        <select name="company_${companyIndex}_production">
+            <option value="">Seçiniz</option>
+            <option>Evet</option>
+            <option>Hayır</option>
+        </select>
+
+        <label>Montaj Var mı?</label>
+        <select name="company_${companyIndex}_assembly">
+            <option value="">Seçiniz</option>
+            <option>Evet</option>
+            <option>Hayır</option>
+        </select>
+    `;
+
+    document.getElementById("companies").appendChild(div);
+}
+
+document.getElementById("rfpForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    alert("1. Bölüm tamamlandı. (Sonraki bölüm eklenecek)");
+});
+</script>
 
 </body>
 </html>
