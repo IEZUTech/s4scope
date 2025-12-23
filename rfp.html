@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>RFP – Bölüm 1</title>
+<title>S4Scope – RFP Bölüm 1</title>
 
 <style>
 body{
@@ -59,6 +59,55 @@ button{
 </form>
 
 <script>
+const sectorMap = {
+  "Ayrık Üretim": [
+    "Otomotiv Tedarikçileri",
+    "Kiralama & Leasing",
+    "Batarya Üreticileri"
+  ],
+  "Havacılık ve Savunma": [
+    "Seviye 2 ve üzeri Tedarikçiler (MRO hariç)",
+    "OEM Bağlı Ortaklıkları",
+    "Yeni Uzay Üretimi ve Gelişmiş Hava Mobilitesi"
+  ],
+  "Yüksek Teknoloji": [
+    "Ürün Bileşenleri / OEM"
+  ],
+  "Endüstriyel Üretim": [
+    "Bileşen Üreticileri",
+    "Endüstriyel ve Ticari Makine & Ekipman",
+    "Otomasyon ve Kontrol Çözümleri"
+  ],
+  "Tüketici Endüstrileri": [
+    "Tarım ve Gıda",
+    "Tüketici Ürünleri",
+    "Perakende",
+    "Toptan Dağıtım"
+  ],
+  "Enerji ve Doğal Kaynaklar": [
+    "Değirmen ve Madencilik",
+    "Yapı Malzemeleri, Metaller, Kağıt ve Ambalaj",
+    "Tekstil / Madencilik Hizmetleri / Genel Madencilik",
+    "Kimya",
+    "Petrol, Gaz ve Enerji",
+    "Kamu Hizmetleri (Utilities)"
+  ],
+  "Hizmet Sektörleri": [
+    "Bankacılık",
+    "İnşaat ve Gayrimenkul",
+    "Sigortacılık",
+    "Yüksek Teknoloji Yazılım",
+    "Medya",
+    "Profesyonel Hizmetler",
+    "Telekomünikasyon",
+    "Seyahat ve Ulaştırma"
+  ],
+  "Kamu Hizmetleri Sektörleri": [
+    "Kamu Sektörü",
+    "Eğitim ve Araştırma"
+  ]
+};
+
 function createCompanies(){
     const count = document.getElementById("companyCount").value;
     const container = document.getElementById("companies");
@@ -90,63 +139,17 @@ function createCompanies(){
 
                 <div>
                     <label>Ana Sektör</label>
-                    <select name="mainSector_${i}" required>
+                    <select name="mainSector_${i}" 
+                            onchange="loadSubSectors(${i}, this.value)" required>
                         <option value="">Seçiniz</option>
-                        <option>Ayrık Üretim</option>
-                        <option>Havacılık ve Savunma</option>
-                        <option>Yüksek Teknoloji</option>
-                        <option>Endüstriyel Üretim</option>
-                        <option>Tüketici Endüstrileri</option>
-                        <option>Enerji ve Doğal Kaynaklar</option>
-                        <option>Hizmet Sektörleri</option>
-                        <option>Kamu Hizmetleri Sektörleri</option>
+                        ${Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("")}
                     </select>
                 </div>
 
                 <div>
                     <label>Alt Sektör</label>
-                    <select name="subSector_${i}" required>
-                        <option value="">Seçiniz</option>
-
-                        <option>Ayrık Üretim – Otomotiv Tedarikçileri</option>
-                        <option>Ayrık Üretim – Kiralama & Leasing</option>
-                        <option>Ayrık Üretim – Batarya Üreticileri</option>
-
-                        <option>Havacılık – Seviye 2+ Tedarikçiler</option>
-                        <option>Havacılık – OEM Bağlı Ortaklıkları</option>
-                        <option>Havacılık – Yeni Uzay ve Gelişmiş Hava Mobilitesi</option>
-
-                        <option>Yüksek Teknoloji – Ürün Bileşenleri / OEM</option>
-
-                        <option>Endüstriyel – Bileşen Üreticileri</option>
-                        <option>Endüstriyel – Makine & Ekipman</option>
-                        <option>Endüstriyel – Otomasyon ve Kontrol</option>
-
-                        <option>Tarım ve Gıda – Ticari Tarım</option>
-                        <option>Tarım ve Gıda – Taze Ürünler</option>
-                        <option>Tarım ve Gıda – Süt, Et ve Balık</option>
-
-                        <option>Tüketici Ürünleri – Gıda</option>
-                        <option>Tüketici Ürünleri – İçecek</option>
-                        <option>Tüketici Ürünleri – Ev ve Kişisel Bakım</option>
-
-                        <option>Perakende – Marketler</option>
-                        <option>Perakende – Eczaneler</option>
-                        <option>Perakende – Tüketici Elektroniği</option>
-
-                        <option>Enerji – Kimya (Özel)</option>
-                        <option>Enerji – Kimya (Tarım / Temel)</option>
-                        <option>Enerji – Petrol, Gaz ve Yenilenebilir</option>
-                        <option>Enerji – Kamu Hizmetleri</option>
-
-                        <option>Hizmetler – Bankacılık</option>
-                        <option>Hizmetler – Sigortacılık</option>
-                        <option>Hizmetler – Yazılım</option>
-                        <option>Hizmetler – Telekom</option>
-                        <option>Hizmetler – Lojistik ve Ulaştırma</option>
-
-                        <option>Kamu – Kamu Kurumları</option>
-                        <option>Kamu – Eğitim ve Araştırma</option>
+                    <select name="subSector_${i}" id="subSector_${i}" required>
+                        <option value="">Önce Ana Sektör Seçiniz</option>
                     </select>
                 </div>
 
@@ -164,9 +167,22 @@ function createCompanies(){
                 </div>
 
             </div>
-        </div>
-        `;
+        </div>`;
     }
+}
+
+function loadSubSectors(index, sector){
+    const subSelect = document.getElementById(`subSector_${index}`);
+    subSelect.innerHTML = `<option value="">Seçiniz</option>`;
+
+    if(!sectorMap[sector]) return;
+
+    sectorMap[sector].forEach(sub=>{
+        const opt = document.createElement("option");
+        opt.value = sub;
+        opt.textContent = sub;
+        subSelect.appendChild(opt);
+    });
 }
 </script>
 
