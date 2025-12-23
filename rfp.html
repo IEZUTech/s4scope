@@ -10,8 +10,77 @@
         select { padding: 6px; width: 300px; }
         .section { margin-bottom: 30px; }
     </style>
+    
+<h2>1. Proje Kapsamı</h2>
+
+<label>Proje kapsamında kaç şirket olacak?</label>
+<select id="companyCount" onchange="generateCompanies()">
+    <option value="">Seçiniz</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+</select>
+
+<div id="companiesArea" style="margin-top:30px;"></div>
 
     <script>
+        <script>
+function generateCompanies() {
+    const count = document.getElementById("companyCount").value;
+    let html = "";
+
+    for (let i = 1; i <= count; i++) {
+        html += `
+        <div style="border:1px solid #ccc; padding:15px; margin-bottom:20px;">
+            <h3>Şirket ${i}</h3>
+
+            <label>Şirket Adı / Kod</label>
+            <input type="text" name="company_${i}_name">
+
+            <label>Ana Sektör</label>
+            <select onchange="showSubSectorDynamic(this, ${i})">
+                <option value="">Seçiniz</option>
+                <option value="discrete">Kesikli Üretim</option>
+                <option value="aero">Havacılık ve Savunma</option>
+                <option value="hightech">Yüksek Teknoloji</option>
+                <option value="industrial">Endüstriyel Üretim</option>
+                <option value="consumer">Tüketici Endüstrileri</option>
+                <option value="energy">Enerji ve Doğal Kaynaklar</option>
+                <option value="services">Hizmet Sektörleri</option>
+                <option value="public">Kamu Hizmetleri</option>
+            </select>
+
+            <div id="subSector_${i}" style="margin-top:10px;"></div>
+        </div>`;
+    }
+
+    document.getElementById("companiesArea").innerHTML = html;
+}
+
+function showSubSectorDynamic(selectEl, index) {
+    const sector = selectEl.value;
+    let html = "";
+
+    if (sector === "discrete") {
+        html = `
+        <label><input type="checkbox"> Otomotiv Tedarikçileri</label>
+        <label><input type="checkbox"> Kiralama & Leasing</label>
+        <label><input type="checkbox"> Batarya Üreticileri</label>`;
+    }
+
+    if (sector === "services") {
+        html = `
+        <label><input type="checkbox"> Bankacılık</label>
+        <label><input type="checkbox"> Telekomünikasyon</label>
+        <label><input type="checkbox"> Profesyonel Hizmetler</label>`;
+    }
+
+    document.getElementById("subSector_" + index).innerHTML = html;
+}
+</script>
+
         function showSubSector() {
             const sector = document.getElementById("mainSector").value;
             let html = "";
