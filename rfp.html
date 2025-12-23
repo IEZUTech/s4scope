@@ -123,6 +123,15 @@ function addCompany() {
 
     <label>Şirket Kodu / Adı</label>
     <input type="text" placeholder="Örn: TR01 / Holding A">
+    
+<label>Ana Faaliyet Türü</label>
+<select>
+  <option value="">Seçiniz</option>
+  <option value="uretim">Üretim</option>
+  <option value="ticaret">Ticaret</option>
+  <option value="hizmet">Hizmet</option>
+  <option value="karma">Karma</option>
+</select>
 
     <label>Ana Sektör</label>
     <select onchange="updateSubSector(this)">
