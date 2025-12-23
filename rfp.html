@@ -44,6 +44,32 @@
                 <label><input type="checkbox"> Perakende</label>
                 <label><input type="checkbox"> Toptan Dağıtım</label>`;
             }
+            if (sector === "hightech") {
+    html = `
+    <label><input type="checkbox"> Ürün Bileşenleri / OEM</label>`;
+}
+
+if (sector === "energy") {
+    html = `
+    <label><input type="checkbox"> Kimya</label>
+    <label><input type="checkbox"> Petrol, Gaz ve Enerji</label>
+    <label><input type="checkbox"> Kamu Hizmetleri (Utilities)</label>`;
+}
+
+if (sector === "services") {
+    html = `
+    <label><input type="checkbox"> Bankacılık</label>
+    <label><input type="checkbox"> İnşaat ve Gayrimenkul</label>
+    <label><input type="checkbox"> Sigortacılık</label>
+    <label><input type="checkbox"> Telekomünikasyon</label>
+    <label><input type="checkbox"> Profesyonel Hizmetler</label>`;
+}
+
+if (sector === "public") {
+    html = `
+    <label><input type="checkbox"> Kamu Sektörü</label>
+    <label><input type="checkbox"> Eğitim ve Araştırma</label>`;
+}
 
             document.getElementById("subSector").innerHTML = html;
         }
@@ -61,7 +87,6 @@
 
     <label>Ana Sektör</label>
     <select id="mainSector" onchange="showSubSector()" required>
-      <select id="mainSector" onchange="showSubSector()" required>
     <option value="">Seçiniz</option>
 
     <option value="discrete">Kesikli Üretim (Discrete Manufacturing)</option>
