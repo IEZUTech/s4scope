@@ -3,86 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <title>S4Scope – SAP RFP</title>
+
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        h1, h2 { color: #0a6ed1; }
-        label { display: block; margin: 6px 0; }
-        select { padding: 6px; width: 300px; }
-        .section { margin-bottom: 30px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #fafafa;
+        }
+        h1, h2, h3 {
+            color: #0a6ed1;
+        }
+        label {
+            display: block;
+            margin-top: 8px;
+        }
+        select, input[type="text"] {
+            padding: 6px;
+            width: 320px;
+            margin-top: 4px;
+        }
+        .section {
+            margin-bottom: 35px;
+        }
+        .company-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #fff;
+        }
+        button {
+            padding: 10px 25px;
+            font-size: 16px;
+            background: #0a6ed1;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #084b9a;
+        }
     </style>
-    
-<h2>1. Proje Kapsamı</h2>
-
-<label>Proje kapsamında kaç şirket olacak?</label>
-<select id="companyCount" onchange="generateCompanies()">
-    <option value="">Seçiniz</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-</select>
-
-<div id="companiesArea" style="margin-top:30px;"></div>
 
     <script>
-        <script>
-function generateCompanies() {
-    const count = document.getElementById("companyCount").value;
-    let html = "";
+        function generateCompanies() {
+            const count = document.getElementById("companyCount").value;
+            let html = "";
 
-    for (let i = 1; i <= count; i++) {
-        html += `
-        <div style="border:1px solid #ccc; padding:15px; margin-bottom:20px;">
-            <h3>Şirket ${i}</h3>
+            for (let i = 1; i <= count; i++) {
+                html += `
+                <div class="company-box">
+                    <h3>Şirket ${i}</h3>
 
-            <label>Şirket Adı / Kod</label>
-            <input type="text" name="company_${i}_name">
+                    <label>Şirket Adı / Kod</label>
+                    <input type="text" name="company_${i}_name">
 
-            <label>Ana Sektör</label>
-            <select onchange="showSubSectorDynamic(this, ${i})">
-                <option value="">Seçiniz</option>
-                <option value="discrete">Kesikli Üretim</option>
-                <option value="aero">Havacılık ve Savunma</option>
-                <option value="hightech">Yüksek Teknoloji</option>
-                <option value="industrial">Endüstriyel Üretim</option>
-                <option value="consumer">Tüketici Endüstrileri</option>
-                <option value="energy">Enerji ve Doğal Kaynaklar</option>
-                <option value="services">Hizmet Sektörleri</option>
-                <option value="public">Kamu Hizmetleri</option>
-            </select>
+                    <label>Ana Sektör</label>
+                    <select onchange="showSubSector(this, ${i})">
+                        <option value="">Seçiniz</option>
+                        <option value="discrete">Kesikli Üretim</option>
+                        <option value="aero">Havacılık ve Savunma</option>
+                        <option value="hightech">Yüksek Teknoloji</option>
+                        <option value="industrial">Endüstriyel Üretim</option>
+                        <option value="consumer">Tüketici Endüstrileri</option>
+                        <option value="energy">Enerji ve Doğal Kaynaklar</option>
+                        <option value="services">Hizmet Sektörleri</option>
+                        <option value="public">Kamu Hizmetleri</option>
+                    </select>
 
-            <div id="subSector_${i}" style="margin-top:10px;"></div>
-        </div>`;
-    }
+                    <div id="subSector_${i}" style="margin-top:12px;"></div>
+                </div>`;
+            }
 
-    document.getElementById("companiesArea").innerHTML = html;
-}
+            document.getElementById("companiesArea").innerHTML = html;
+        }
 
-function showSubSectorDynamic(selectEl, index) {
-    const sector = selectEl.value;
-    let html = "";
-
-    if (sector === "discrete") {
-        html = `
-        <label><input type="checkbox"> Otomotiv Tedarikçileri</label>
-        <label><input type="checkbox"> Kiralama & Leasing</label>
-        <label><input type="checkbox"> Batarya Üreticileri</label>`;
-    }
-
-    if (sector === "services") {
-        html = `
-        <label><input type="checkbox"> Bankacılık</label>
-        <label><input type="checkbox"> Telekomünikasyon</label>
-        <label><input type="checkbox"> Profesyonel Hizmetler</label>`;
-    }
-
-    document.getElementById("subSector_" + index).innerHTML = html;
-}
-</script>
-
-        function showSubSector() {
-            const sector = document.getElementById("mainSector").value;
+        function showSubSector(selectEl, index) {
+            const sector = selectEl.value;
             let html = "";
 
             if (sector === "discrete") {
@@ -99,10 +95,15 @@ function showSubSectorDynamic(selectEl, index) {
                 <label><input type="checkbox"> Yeni Uzay & Gelişmiş Hava Mobilitesi</label>`;
             }
 
+            if (sector === "hightech") {
+                html = `
+                <label><input type="checkbox"> Ürün Bileşenleri / OEM</label>`;
+            }
+
             if (sector === "industrial") {
                 html = `
                 <label><input type="checkbox"> Bileşen Üreticileri</label>
-                <label><input type="checkbox"> Endüstriyel Makine & Ekipman</label>
+                <label><input type="checkbox"> Endüstriyel ve Ticari Makine & Ekipman</label>
                 <label><input type="checkbox"> Otomasyon ve Kontrol Çözümleri</label>`;
             }
 
@@ -113,34 +114,29 @@ function showSubSectorDynamic(selectEl, index) {
                 <label><input type="checkbox"> Perakende</label>
                 <label><input type="checkbox"> Toptan Dağıtım</label>`;
             }
-            if (sector === "hightech") {
-    html = `
-    <label><input type="checkbox"> Ürün Bileşenleri / OEM</label>`;
-}
 
-if (sector === "energy") {
-    html = `
-    <label><input type="checkbox"> Kimya</label>
-    <label><input type="checkbox"> Petrol, Gaz ve Enerji</label>
-    <label><input type="checkbox"> Kamu Hizmetleri (Utilities)</label>`;
-}
+            if (sector === "energy") {
+                html = `
+                <label><input type="checkbox"> Kimya</label>
+                <label><input type="checkbox"> Petrol, Gaz ve Enerji</label>
+                <label><input type="checkbox"> Kamu Hizmetleri (Utilities)</label>`;
+            }
 
-if (sector === "services") {
-    html = `
-    <label><input type="checkbox"> Bankacılık</label>
-    <label><input type="checkbox"> İnşaat ve Gayrimenkul</label>
-    <label><input type="checkbox"> Sigortacılık</label>
-    <label><input type="checkbox"> Telekomünikasyon</label>
-    <label><input type="checkbox"> Profesyonel Hizmetler</label>`;
-}
+            if (sector === "services") {
+                html = `
+                <label><input type="checkbox"> Bankacılık</label>
+                <label><input type="checkbox"> Sigortacılık</label>
+                <label><input type="checkbox"> Telekomünikasyon</label>
+                <label><input type="checkbox"> Profesyonel Hizmetler</label>`;
+            }
 
-if (sector === "public") {
-    html = `
-    <label><input type="checkbox"> Kamu Sektörü</label>
-    <label><input type="checkbox"> Eğitim ve Araştırma</label>`;
-}
+            if (sector === "public") {
+                html = `
+                <label><input type="checkbox"> Kamu Sektörü</label>
+                <label><input type="checkbox"> Eğitim ve Araştırma</label>`;
+            }
 
-            document.getElementById("subSector").innerHTML = html;
+            document.getElementById("subSector_" + index).innerHTML = html;
         }
     </script>
 </head>
@@ -152,21 +148,24 @@ if (sector === "public") {
 <form>
 
 <div class="section">
-    <h2>1. Sektör Bilgileri</h2>
+    <h2>1. Proje Kapsamı</h2>
 
-    <label>Ana Sektör</label>
-    <select id="mainSector" onchange="showSubSector()" required>
-    <option value="">Seçiniz</option>
+    <label>Proje kapsamında kaç şirket (Company Code) olacak?</label>
+    <select id="companyCount" onchange="generateCompanies()">
+        <option value="">Seçiniz</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+</div>
 
-    <option value="discrete">Kesikli Üretim (Discrete Manufacturing)</option>
-    <option value="aero">Havacılık ve Savunma</option>
-    <option value="hightech">Yüksek Teknoloji</option>
-    <option value="industrial">Endüstriyel Üretim</option>
-    <option value="consumer">Tüketici Endüstrileri</option>
-    <option value="energy">Enerji ve Doğal Kaynaklar</option>
-    <option value="services">Hizmet Sektörleri</option>
-    <option value="public">Kamu Hizmetleri Sektörleri</option>
-</select>
+<div id="companiesArea"></div>
 
+<button type="submit">RFP’ye Devam Et</button>
 
-    <div id="subSector" style="margin-top:15px;"></
+</form>
+
+</body>
+</html>
