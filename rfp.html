@@ -70,6 +70,11 @@ footer{
     border-top:1px solid #ccc;
     background:#fff;
 }
+#companyCount {
+    width: 80px;
+    padding: 4px;
+    font-size: 14px;
+}
 </style>
 </head>
 
@@ -175,12 +180,28 @@ function createCompanies(){
                 <div>
                     <label>Ülke</label>
                     <select name="country_${i}" required>
-                        <option value="">Seçiniz</option>
-                        <option>Türkiye</option>
-                        <option>Almanya</option>
-                        <option>İngiltere</option>
-                        <option>ABD</option>
-                        <option>Diğer</option>
+                      <option value="">Seçiniz</option>
+                      <option>Türkiye</option>
+                      <option>Almanya</option>
+                      <option>İngiltere</option>
+                      <option>ABD</option>
+                      <option>Fransa</option>
+                      <option>İtalya</option>
+                      <option>İspanya</option>
+                      <option>Hollanda</option>
+                      <option>Çin</option>
+                      <option>Japonya</option>
+                      <option>Güney Kore</option>
+                      <option>Hindistan</option>
+                      <option>Rusya</option>
+                      <option>Kanada</option>
+                      <option>Avustralya</option>
+                      <option>Brezilya</option>
+                      <option>Meksika</option>
+                      <option>Güney Afrika</option>
+                      <option>Suudi Arabistan</option>
+                      <option>Birleşik Arap Emirlikleri</option>
+                      <option>Diğer</option>
                     </select>
                 </div>
 
@@ -231,6 +252,14 @@ function loadSubSectors(index, sector){
         subSelect.appendChild(opt);
     });
 }
+
+// Enter tuşu ile createCompanies fonksiyonunu çalıştırmak için:
+document.getElementById("companyCount").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault(); // formun submit olmasını engelle
+        createCompanies();
+    }
+});
 </script>
 
 </body>
