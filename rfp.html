@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>S4Scope – SAP RFP | IEZU Tech</title>
 
 <style>
@@ -35,7 +35,7 @@ h2{
     padding:12px;
 }
 .company-block{
-    position: relative; /* Sil butonu için */
+    position: relative;
     background:#fff;
     border:1px solid #ccc;
     padding:15px;
@@ -62,7 +62,6 @@ button{
     border:none;
     cursor:pointer;
 }
-/* Sil butonu */
 .delete-btn {
     position: absolute;
     top: 8px;
@@ -91,7 +90,6 @@ footer{
 }
 </style>
 </head>
-
 <body>
 
 <header>
@@ -104,7 +102,7 @@ footer{
 <h2>RFP – Bölüm 1: Şirket Bazlı Genel Bilgiler</h2>
 
 <label>Kaç şirket için RFP doldurulacak?</label>
-<input type="number" id="companyCount" min="1">
+<input type="number" id="companyCount" min="1" />
 
 <button onclick="createCompanies()">Şirketleri Oluştur</button>
 
@@ -180,77 +178,106 @@ function createCompanies(){
     container.innerHTML = "";
 
     for(let i=1; i<=count; i++){
-        container.innerHTML += `
-        <div class="company-block">
-            <button class="delete-btn" onclick="deleteCompany(this)">Sil</button>
-            <h3>Şirket ${i}</h3>
+        // company-block div oluşturuyoruz
+        const companyDiv = document.createElement("div");
+        companyDiv.className = "company-block";
 
-            <div class="company-grid">
+        // Sil butonu
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-btn";
+        deleteBtn.textContent = "Sil";
+        deleteBtn.type = "button";
+        deleteBtn.onclick = () => {
+            companyDiv.remove();
+        };
+        companyDiv.appendChild(deleteBtn);
 
-                <div>
-                    <label>Şirket Adı</label>
-                    <input type="text" name="companyName_${i}" required>
-                </div>
+        // Başlık
+        const h3 = document.createElement("h3");
+        h3.textContent = `Şirket ${i}`;
+        companyDiv.appendChild(h3);
 
-                <div>
-                    <label>Ülke</label>
-                    <select name="country_${i}" required>
-                      <option value="">Seçiniz</option>
-                      <option>Türkiye</option>
-                      <option>Almanya</option>
-                      <option>İngiltere</option>
-                      <option>ABD</option>
-                      <option>Fransa</option>
-                      <option>İtalya</option>
-                      <option>İspanya</option>
-                      <option>Hollanda</option>
-                      <option>Çin</option>
-                      <option>Japonya</option>
-                      <option>Güney Kore</option>
-                      <option>Hindistan</option>
-                      <option>Rusya</option>
-                      <option>Kanada</option>
-                      <option>Avustralya</option>
-                      <option>Brezilya</option>
-                      <option>Meksika</option>
-                      <option>Güney Afrika</option>
-                      <option>Suudi Arabistan</option>
-                      <option>Birleşik Arap Emirlikleri</option>
-                      <option>Diğer</option>
-                    </select>
-                </div>
+        // company-grid div
+        const gridDiv = document.createElement("div");
+        gridDiv.className = "company-grid";
 
-                <div>
-                    <label>Ana Sektör</label>
-                    <select name="mainSector_${i}" 
-                            onchange="loadSubSectors(${i}, this.value)" required>
-                        <option value="">Seçiniz</option>
-                        ${Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("")}
-                    </select>
-                </div>
+        // Şirket Adı
+        const div1 = document.createElement("div");
+        const label1 = document.createElement("label");
+        label1.textContent = "Şirket Adı";
+        const input1 = document.createElement("input");
+        input1.name = `companyName_${i}`;
+        input1.required = true;
+        input1.type = "text";
+        div1.appendChild(label1);
+        div1.appendChild(input1);
 
-                <div>
-                    <label>Alt Sektör</label>
-                    <select name="subSector_${i}" id="subSector_${i}" required>
-                        <option value="">Önce Ana Sektör Seçiniz</option>
-                    </select>
-                </div>
+        // Ülke
+        const div2 = document.createElement("div");
+        const label2 = document.createElement("label");
+        label2.textContent = "Ülke";
+        const select2 = document.createElement("select");
+        select2.name = `country_${i}`;
+        select2.required = true;
+        const countries = ["", "Türkiye","Almanya","İngiltere","ABD","Fransa","İtalya","İspanya","Hollanda","Çin","Japonya","Güney Kore","Hindistan","Rusya","Kanada","Avustralya","Brezilya","Meksika","Güney Afrika","Suudi Arabistan","Birleşik Arap Emirlikleri","Diğer"];
+        countries.forEach(c => {
+            const opt = document.createElement("option");
+            opt.value = c;
+            opt.textContent = c === "" ? "Seçiniz" : c;
+            select2.appendChild(opt);
+        });
+        div2.appendChild(label2);
+        div2.appendChild(select2);
 
-                <div>
-                    <label>Ana Faaliyet Türü</label>
-                    <select name="activity_${i}" required>
-                        <option value="">Seçiniz</option>
-                        <option>Üretim</option>
-                        <option>Montaj</option>
-                        <option>Ticaret</option>
-                        <option>Hizmet</option>
-                        <option>Proje Bazlı</option>
-                        <option>Karma</option>
-                    </select>
-                </div>
+        // Ana Sektör
+        const div3 = document.createElement("div");
+        const label3 = document.createElement("label");
+        label3.textContent = "Ana Sektör";
+        const select3 = document.createElement("select");
+        select3.name = `mainSector_${i}`;
+        select3.required = true;
+        select3.innerHTML = `<option value="">Seçiniz</option>` + 
+            Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("");
+        select3.onchange = () => loadSubSectors(i, select3.value);
+        div3.appendChild(label3);
+        div3.appendChild(select3);
 
-            </div>
-        </div>`;
+        // Alt Sektör
+        const div4 = document.createElement("div");
+        const label4 = document.createElement("label");
+        label4.textContent = "Alt Sektör";
+        const select4 = document.createElement("select");
+        select4.name = `subSector_${i}`;
+        select4.id = `subSector_${i}`;
+        select4.required = true;
+        select4.innerHTML = `<option value="">Önce Ana Sektör Seçiniz</option>`;
+        div4.appendChild(label4);
+        div4.appendChild(select4);
+
+        // Ana Faaliyet Türü
+        const div5 = document.createElement("div");
+        const label5 = document.createElement("label");
+        label5.textContent = "Ana Faaliyet Türü";
+        const select5 = document.createElement("select");
+        select5.name = `activity_${i}`;
+        select5.required = true;
+        select5.innerHTML = `
+            <option value="">Seçiniz</option>
+            <option>Üretim</option>
+            <option>Montaj</option>
+            <option>Ticaret</option>
+            <option>Hizmet</option>
+            <option>Proje Bazlı</option>
+            <option>Karma</option>
+        `;
+        div5.appendChild(label5);
+        div5.appendChild(select5);
+
+        // grid içine ekle
+        [div1, div2, div3, div4, div5].forEach(d => gridDiv.appendChild(d));
+        companyDiv.appendChild(gridDiv);
+
+        container.appendChild(companyDiv);
     }
 }
 
@@ -268,17 +295,10 @@ function loadSubSectors(index, sector){
     });
 }
 
-function deleteCompany(button){
-    // button: sil butonuna tıklanan <button>
-    // onun parentNode: .company-block div'i
-    const companyBlock = button.parentNode;
-    companyBlock.remove();
-}
-
 // Enter tuşu ile createCompanies fonksiyonunu çalıştırmak için:
 document.getElementById("companyCount").addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
-        event.preventDefault(); // formun submit olmasını engelle
+        event.preventDefault();
         createCompanies();
     }
 });
