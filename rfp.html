@@ -1,33 +1,47 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <title>S4Scope – RFP | Bölüm 1</title>
-    <style>
-        body { font-family: Arial, sans-serif; background:#f5f5f5; padding:20px; }
-        h2 { background:#0b5ed7; color:white; padding:10px; }
-        .company-block {
-            background:white;
-            border:1px solid #ccc;
-            padding:15px;
-            margin-bottom:20px;
-        }
-        label { display:block; margin-top:10px; font-weight:bold; }
-        input, select {
-            width:100%;
-            padding:6px;
-            margin-top:4px;
-        }
-        button {
-            margin-top:20px;
-            padding:10px 20px;
-            background:#198754;
-            color:white;
-            border:none;
-            cursor:pointer;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>RFP – Bölüm 1</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f9;
+    padding:20px;
+}
+h2{
+    background:#0b5ed7;
+    color:#fff;
+    padding:12px;
+}
+.company-block{
+    background:#fff;
+    border:1px solid #ccc;
+    padding:15px;
+    margin-top:20px;
+}
+label{
+    display:block;
+    margin-top:10px;
+    font-weight:bold;
+}
+input, select{
+    width:100%;
+    padding:6px;
+    margin-top:4px;
+}
+button{
+    margin-top:20px;
+    padding:10px 20px;
+    background:#198754;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+</style>
 </head>
+
 <body>
 
 <h2>RFP – Bölüm 1: Şirket Bazlı Genel Bilgiler</h2>
@@ -35,21 +49,19 @@
 <label>Kaç şirket için RFP doldurulacak?</label>
 <input type="number" id="companyCount" min="1">
 
-<button onclick="createCompanies()">Devam Et</button>
+<button onclick="createCompanies()">Şirketleri Oluştur</button>
 
 <form id="rfpForm">
-
 <div id="companies"></div>
-
 </form>
 
 <script>
-function createCompanies() {
+function createCompanies(){
     const count = document.getElementById("companyCount").value;
     const container = document.getElementById("companies");
     container.innerHTML = "";
 
-    for (let i = 1; i <= count; i++) {
+    for(let i=1;i<=count;i++){
         container.innerHTML += `
         <div class="company-block">
             <h3>Şirket ${i}</h3>
@@ -73,19 +85,65 @@ function createCompanies() {
             <label>Ana Sektör</label>
             <select name="mainSector_${i}" required>
                 <option value="">Seçiniz</option>
-
-                <!-- ⚠️ BURAYA SENİN VERDİĞİN ANA SEKTÖR LİSTESİNİ
-                     AYNEN, HİÇ DEĞİŞTİRMEDEN YAPIŞTIR -->
-
+                <option>Ayrık Üretim</option>
+                <option>Havacılık ve Savunma</option>
+                <option>Yüksek Teknoloji</option>
+                <option>Endüstriyel Üretim</option>
+                <option>Tüketici Endüstrileri</option>
+                <option>Enerji ve Doğal Kaynaklar</option>
+                <option>Hizmet Sektörleri</option>
+                <option>Kamu Hizmetleri Sektörleri</option>
             </select>
 
             <label>Alt Sektör</label>
             <select name="subSector_${i}" required>
                 <option value="">Seçiniz</option>
 
-                <!-- ⚠️ BURAYA SENİN VERDİĞİN ALT SEKTÖR LİSTELERİNİ
-                     AYNEN, HİÇ DEĞİŞTİRMEDEN YAPIŞTIR -->
+                <!-- 1 -->
+                <option>Ayrık Üretim – Otomotiv Tedarikçileri</option>
+                <option>Ayrık Üretim – Kiralama & Leasing</option>
+                <option>Ayrık Üretim – Batarya Üreticileri</option>
 
+                <!-- 2 -->
+                <option>Havacılık – Seviye 2+ Tedarikçiler</option>
+                <option>Havacılık – OEM Bağlı Ortaklıkları</option>
+                <option>Havacılık – Yeni Uzay ve Gelişmiş Hava Mobilitesi</option>
+
+                <!-- 3 -->
+                <option>Yüksek Teknoloji – Ürün Bileşenleri / OEM</option>
+
+                <!-- 4 -->
+                <option>Endüstriyel – Bileşen Üreticileri</option>
+                <option>Endüstriyel – Makine & Ekipman</option>
+                <option>Endüstriyel – Otomasyon ve Kontrol</option>
+
+                <!-- 5 -->
+                <option>Tarım ve Gıda – Ticari Tarım</option>
+                <option>Tarım ve Gıda – Taze Ürünler</option>
+                <option>Tarım ve Gıda – Süt, Et ve Balık</option>
+                <option>Tüketici Ürünleri – Gıda</option>
+                <option>Tüketici Ürünleri – İçecek</option>
+                <option>Tüketici Ürünleri – Ev ve Kişisel Bakım</option>
+                <option>Perakende – Marketler</option>
+                <option>Perakende – Eczaneler</option>
+                <option>Perakende – Tüketici Elektroniği</option>
+
+                <!-- 6 -->
+                <option>Enerji – Kimya (Özel)</option>
+                <option>Enerji – Kimya (Tarım / Temel)</option>
+                <option>Enerji – Petrol, Gaz ve Yenilenebilir</option>
+                <option>Enerji – Kamu Hizmetleri</option>
+
+                <!-- 7 -->
+                <option>Hizmetler – Bankacılık</option>
+                <option>Hizmetler – Sigortacılık</option>
+                <option>Hizmetler – Yazılım</option>
+                <option>Hizmetler – Telekom</option>
+                <option>Hizmetler – Lojistik ve Ulaştırma</option>
+
+                <!-- 8 -->
+                <option>Kamu – Kamu Kurumları</option>
+                <option>Kamu – Eğitim ve Araştırma</option>
             </select>
 
             <label>Ana Faaliyet Türü</label>
@@ -98,7 +156,6 @@ function createCompanies() {
                 <option>Proje Bazlı</option>
                 <option>Karma</option>
             </select>
-
         </div>
         `;
     }
