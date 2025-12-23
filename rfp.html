@@ -61,11 +61,18 @@
 
     <label>Ana Sektör</label>
     <select id="mainSector" onchange="showSubSector()" required>
-        <option value="">Seçiniz</option>
-        <option value="discrete">Kesikli Üretim</option>
-        <option value="aero">Havacılık ve Savunma</option>
-        <option value="industrial">Endüstriyel Üretim</option>
-        <option value="consumer">Tüketici Endüstrileri</option>
-    </select>
+      <select id="mainSector" onchange="showSubSector()" required>
+    <option value="">Seçiniz</option>
+
+    <option value="discrete">Kesikli Üretim (Discrete Manufacturing)</option>
+    <option value="aero">Havacılık ve Savunma</option>
+    <option value="hightech">Yüksek Teknoloji</option>
+    <option value="industrial">Endüstriyel Üretim</option>
+    <option value="consumer">Tüketici Endüstrileri</option>
+    <option value="energy">Enerji ve Doğal Kaynaklar</option>
+    <option value="services">Hizmet Sektörleri</option>
+    <option value="public">Kamu Hizmetleri Sektörleri</option>
+</select>
+
 
     <div id="subSector" style="margin-top:15px;"></
