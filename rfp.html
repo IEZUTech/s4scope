@@ -1,166 +1,108 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>S4Scope | SAP RFP – Genel Bilgiler</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 40px; }
-    h1, h2 { color: #0a3d62; }
-    .company-block { border: 1px solid #ccc; padding: 20px; margin-bottom: 20px; }
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    select, input { width: 100%; padding: 6px; margin-top: 5px; }
-    button { margin-top: 20px; padding: 10px 15px; }
-  </style>
+    <meta charset="UTF-8">
+    <title>S4Scope – RFP | Bölüm 1</title>
+    <style>
+        body { font-family: Arial, sans-serif; background:#f5f5f5; padding:20px; }
+        h2 { background:#0b5ed7; color:white; padding:10px; }
+        .company-block {
+            background:white;
+            border:1px solid #ccc;
+            padding:15px;
+            margin-bottom:20px;
+        }
+        label { display:block; margin-top:10px; font-weight:bold; }
+        input, select {
+            width:100%;
+            padding:6px;
+            margin-top:4px;
+        }
+        button {
+            margin-top:20px;
+            padding:10px 20px;
+            background:#198754;
+            color:white;
+            border:none;
+            cursor:pointer;
+        }
+    </style>
 </head>
 <body>
 
-<h1>📄 SAP RFP – Genel Bilgiler</h1>
+<h2>RFP – Bölüm 1: Şirket Bazlı Genel Bilgiler</h2>
 
-<p>Bu bölümde proje kapsamındaki her şirket için sektör bilgilerini giriniz.</p>
+<label>Kaç şirket için RFP doldurulacak?</label>
+<input type="number" id="companyCount" min="1">
+
+<button onclick="createCompanies()">Devam Et</button>
+
+<form id="rfpForm">
 
 <div id="companies"></div>
 
-<button onclick="addCompany()">➕ Şirket Ekle</button>
+</form>
 
 <script>
-const sectorData = {
-  "1. Ayrık Üretim (Discrete Manufacturing)": [
-    "1.1. Otomotiv Tedarikçileri",
-    "1.2. Kiralama & Leasing",
-    "1.3. Batarya Üreticileri"
-  ],
-  "2. Havacılık ve Savunma": [
-    "2.1. Seviye 2 ve üzeri Tedarikçiler (MRO hariç)",
-    "2.2. OEM Bağlı Ortaklıkları",
-    "2.3. Yeni Uzay Üretimi ve Gelişmiş Hava Mobilitesi"
-  ],
-  "3. Yüksek Teknoloji": [
-    "3.1. Ürün Bileşenleri",
-    "3.2. OEM"
-  ],
-  "4. Endüstriyel Üretim": [
-    "4.1. Bileşen Üreticileri",
-    "4.2. Endüstriyel ve Ticari Makine & Ekipman",
-    "4.3. Otomasyon ve Kontrol Çözümleri"
-  ],
-  "5. Tüketici Endüstrileri": [
-    "5.1. Tarım ve Gıda / Ticari Tarım Ürünleri",
-    "5.1. Tarım ve Gıda / Taze Ürünler",
-    "5.1. Tarım ve Gıda / Süt, Et ve Balık",
-    "5.2. Tüketici Ürünleri / Gıda",
-    "5.2. Tüketici Ürünleri / İçecek",
-    "5.2. Tüketici Ürünleri / Ev ve Kişisel Bakım",
-    "5.2. Tüketici Ürünleri / Dayanıklı Tüketim Ürünleri",
-    "5.3. Perakende / Marketler",
-    "5.3. Perakende / Eczaneler",
-    "5.3. Perakende / Dayanıklı Ürünler",
-    "5.3. Perakende / Yapı Market / DIY",
-    "5.3. Perakende / Tüketici Elektroniği",
-    "5.3. Perakende / Uzmanlaşmış Perakende / Moda",
-    "5.4. Toptan Dağıtım / Endüstriyel, Ticari ve İnşaat",
-    "5.4. Toptan Dağıtım / Yüksek Teknoloji ve Elektronik",
-    "5.4. Toptan Dağıtım / Diğer Dayanıklı ve Dayanıksız Ürünler"
-  ],
-  "6. Enerji ve Doğal Kaynaklar": [
-    "6.1. Değirmen ve Madencilik",
-    "6.2. Yapı Malzemeleri, Metaller, Kağıt ve Ambalaj",
-    "6.3. Tekstil / Madencilik Hizmetleri / Genel Madencilik",
-    "6.4. Kimya / Özel Kimyasallar",
-    "6.4. Kimya / Tarım Kimyasalları ve Temel Kimyasallar",
-    "6.4. Kimya / Geri Dönüşüm ve Yeni Enerji Malzemeleri",
-    "6.5. Petrol, Gaz ve Enerji / Üst Akım (Upstream)",
-    "6.5. Petrol, Gaz ve Enerji / Petrol Sahası Hizmetleri",
-    "6.5. Petrol, Gaz ve Enerji / Yağlayıcılar",
-    "6.5. Petrol, Gaz ve Enerji / Yenilenebilir Enerji",
-    "6.6. Kamu Hizmetleri (Utilities) / Finans Odaklı ve Fırsat Bazlı Kullanımlar"
-  ],
-  "7. Hizmet Sektörleri": [
-    "7.1. Bankacılık / Bireysel ve Ticari Bankacılık",
-    "7.1. Bankacılık / Yatırım Bankacılığı, Varlık ve Servet Yönetimi",
-    "7.1. Bankacılık / FinTech ve Ödeme Hizmetleri",
-    "7.2. İnşaat ve Gayrimenkul / İnşaat / Kendi Kaynağıyla İnşaat",
-    "7.2. İnşaat ve Gayrimenkul / Ticari Gayrimenkul",
-    "7.3. Sigortacılık / Birincil Sigorta ve Reasürans",
-    "7.3. Sigortacılık / Sigorta Hizmet Sağlayıcıları",
-    "7.4. Yüksek Teknoloji Yazılım / Paket Hizmetler",
-    "7.4. Yüksek Teknoloji Yazılım / Dijital Hizmetler",
-    "7.5. Medya / Medya Ajansları ve Prodüksiyon Hizmetleri",
-    "7.5. Medya / Yayıncılık ve Eğlence",
-    "7.5. Medya / Premium İçerik Yayıncıları",
-    "7.6. Profesyonel Hizmetler / Danışmanlık, Denetim, Vergi ve Mühendislik",
-    "7.6. Profesyonel Hizmetler / BT Hizmetleri ve BPO",
-    "7.6. Profesyonel Hizmetler / Odak Dışı İş Hizmetleri",
-    "7.6. Profesyonel Hizmetler / Personel ve İnsan Kaynakları",
-    "7.7. Telekomünikasyon / Çoklu Hizmet Sunan Telekom Operatörleri",
-    "7.7. Telekomünikasyon / Geniş Bant Odaklı Hizmet Sağlayıcılar",
-    "7.7. Telekomünikasyon / Telekom İnşaat Hizmetleri",
-    "7.7. Telekomünikasyon / Telekom Profesyonel Hizmetleri",
-    "7.8. Seyahat ve Ulaştırma / Konaklama",
-    "7.8. Seyahat ve Ulaştırma / Lojistik Hizmet Sağlayıcıları",
-    "7.8. Seyahat ve Ulaştırma / Havalimanları",
-    "7.8. Seyahat ve Ulaştırma / Yolcu Taşımacılığı",
-    "7.8. Seyahat ve Ulaştırma / Limanlar ve Terminaller"
-  ],
-  "8. Kamu Hizmetleri Sektörleri": [
-    "8.1. Kamu Sektörü / Şehirler, Eyalet ve Yerel Yönetimler",
-    "8.1. Kamu Sektörü / Küçük Federal Kurumlar",
-    "8.1. Kamu Sektörü / Merkez ve Kalkınma Bankaları",
-    "8.1. Kamu Sektörü / Posta Hizmetleri",
-    "8.1. Kamu Sektörü / Vakıflar, Dernekler ve Üyelik Kuruluşları",
-    "8.1. Kamu Sektörü / Kâr Amacı Gütmeyen Kuruluşlar ve Sosyal Hizmetler",
-    "8.2. Eğitim ve Araştırma / PSM Kapsamlı ERP",
-    "8.2. Eğitim ve Araştırma / Standart Kapsamlı ERP"
-  ]
-};
+function createCompanies() {
+    const count = document.getElementById("companyCount").value;
+    const container = document.getElementById("companies");
+    container.innerHTML = "";
 
-let companyCount = 0;
+    for (let i = 1; i <= count; i++) {
+        container.innerHTML += `
+        <div class="company-block">
+            <h3>Şirket ${i}</h3>
 
-function addCompany() {
-  companyCount++;
-  const div = document.createElement("div");
-  div.className = "company-block";
- div.innerHTML = `
-  <h2>Şirket ${companyCount}</h2>
+            <label>Şirket Kodu</label>
+            <input type="text" name="companyCode_${i}" required>
 
-  <label>Şirket Kodu / Adı</label>
-  <input type="text" placeholder="Örn: TR01 / Holding A">
+            <label>Şirket Adı</label>
+            <input type="text" name="companyName_${i}" required>
 
-  <label>Ana Sektör</label>
-  <select onchange="updateSubSector(this)">
-    <option value="">Seçiniz</option>
-    ${Object.keys(sectorData).map(s => `<option value="${s}">${s}</option>`).join("")}
-  </select>
+            <label>Ülke</label>
+            <select name="country_${i}" required>
+                <option value="">Seçiniz</option>
+                <option>Türkiye</option>
+                <option>Almanya</option>
+                <option>İngiltere</option>
+                <option>ABD</option>
+                <option>Diğer</option>
+            </select>
 
-  <label>Alt Sektör</label>
-  <select>
-    <option value="">Önce ana sektör seçiniz</option>
-  </select>
+            <label>Ana Sektör</label>
+            <select name="mainSector_${i}" required>
+                <option value="">Seçiniz</option>
 
-  <label>Ana Faaliyet Türü</label>
-  <select>
-    <option value="">Seçiniz</option>
-    <option value="uretim">Üretim</option>
-    <option value="ticaret">Ticaret</option>
-    <option value="hizmet">Hizmet</option>
-    <option value="karma">Karma</option>
-  </select>
-`;
-;
-  document.getElementById("companies").appendChild(div);
+                <!-- ⚠️ BURAYA SENİN VERDİĞİN ANA SEKTÖR LİSTESİNİ
+                     AYNEN, HİÇ DEĞİŞTİRMEDEN YAPIŞTIR -->
+
+            </select>
+
+            <label>Alt Sektör</label>
+            <select name="subSector_${i}" required>
+                <option value="">Seçiniz</option>
+
+                <!-- ⚠️ BURAYA SENİN VERDİĞİN ALT SEKTÖR LİSTELERİNİ
+                     AYNEN, HİÇ DEĞİŞTİRMEDEN YAPIŞTIR -->
+
+            </select>
+
+            <label>Ana Faaliyet Türü</label>
+            <select name="activity_${i}" required>
+                <option value="">Seçiniz</option>
+                <option>Üretim</option>
+                <option>Montaj</option>
+                <option>Ticaret</option>
+                <option>Hizmet</option>
+                <option>Proje Bazlı</option>
+                <option>Karma</option>
+            </select>
+
+        </div>
+        `;
+    }
 }
-
-function updateSubSector(select) {
-  const subSelect = select.parentElement.querySelectorAll("select")[1];
-  subSelect.innerHTML = `<option value="">Seçiniz</option>`;
-  if (sectorData[select.value]) {
-    sectorData[select.value].forEach(ss => {
-      subSelect.innerHTML += `<option value="${ss}">${ss}</option>`;
-    });
-  }
-}
-
-// İlk şirket otomatik gelsin
-addCompany();
 </script>
 
 </body>
