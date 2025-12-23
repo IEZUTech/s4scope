@@ -21,15 +21,18 @@ h2{
     padding:15px;
     margin-top:20px;
 }
+.company-grid{
+    display:grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap:12px;
+}
 label{
-    display:block;
-    margin-top:10px;
     font-weight:bold;
+    font-size:13px;
 }
 input, select{
     width:100%;
     padding:6px;
-    margin-top:4px;
 }
 button{
     margin-top:20px;
@@ -66,96 +69,101 @@ function createCompanies(){
         <div class="company-block">
             <h3>Şirket ${i}</h3>
 
-            <label>Şirket Kodu</label>
-            <input type="text" name="companyCode_${i}" required>
+            <div class="company-grid">
 
-            <label>Şirket Adı</label>
-            <input type="text" name="companyName_${i}" required>
+                <div>
+                    <label>Şirket Adı</label>
+                    <input type="text" name="companyName_${i}" required>
+                </div>
 
-            <label>Ülke</label>
-            <select name="country_${i}" required>
-                <option value="">Seçiniz</option>
-                <option>Türkiye</option>
-                <option>Almanya</option>
-                <option>İngiltere</option>
-                <option>ABD</option>
-                <option>Diğer</option>
-            </select>
+                <div>
+                    <label>Ülke</label>
+                    <select name="country_${i}" required>
+                        <option value="">Seçiniz</option>
+                        <option>Türkiye</option>
+                        <option>Almanya</option>
+                        <option>İngiltere</option>
+                        <option>ABD</option>
+                        <option>Diğer</option>
+                    </select>
+                </div>
 
-            <label>Ana Sektör</label>
-            <select name="mainSector_${i}" required>
-                <option value="">Seçiniz</option>
-                <option>Ayrık Üretim</option>
-                <option>Havacılık ve Savunma</option>
-                <option>Yüksek Teknoloji</option>
-                <option>Endüstriyel Üretim</option>
-                <option>Tüketici Endüstrileri</option>
-                <option>Enerji ve Doğal Kaynaklar</option>
-                <option>Hizmet Sektörleri</option>
-                <option>Kamu Hizmetleri Sektörleri</option>
-            </select>
+                <div>
+                    <label>Ana Sektör</label>
+                    <select name="mainSector_${i}" required>
+                        <option value="">Seçiniz</option>
+                        <option>Ayrık Üretim</option>
+                        <option>Havacılık ve Savunma</option>
+                        <option>Yüksek Teknoloji</option>
+                        <option>Endüstriyel Üretim</option>
+                        <option>Tüketici Endüstrileri</option>
+                        <option>Enerji ve Doğal Kaynaklar</option>
+                        <option>Hizmet Sektörleri</option>
+                        <option>Kamu Hizmetleri Sektörleri</option>
+                    </select>
+                </div>
 
-            <label>Alt Sektör</label>
-            <select name="subSector_${i}" required>
-                <option value="">Seçiniz</option>
+                <div>
+                    <label>Alt Sektör</label>
+                    <select name="subSector_${i}" required>
+                        <option value="">Seçiniz</option>
 
-                <!-- 1 -->
-                <option>Ayrık Üretim – Otomotiv Tedarikçileri</option>
-                <option>Ayrık Üretim – Kiralama & Leasing</option>
-                <option>Ayrık Üretim – Batarya Üreticileri</option>
+                        <option>Ayrık Üretim – Otomotiv Tedarikçileri</option>
+                        <option>Ayrık Üretim – Kiralama & Leasing</option>
+                        <option>Ayrık Üretim – Batarya Üreticileri</option>
 
-                <!-- 2 -->
-                <option>Havacılık – Seviye 2+ Tedarikçiler</option>
-                <option>Havacılık – OEM Bağlı Ortaklıkları</option>
-                <option>Havacılık – Yeni Uzay ve Gelişmiş Hava Mobilitesi</option>
+                        <option>Havacılık – Seviye 2+ Tedarikçiler</option>
+                        <option>Havacılık – OEM Bağlı Ortaklıkları</option>
+                        <option>Havacılık – Yeni Uzay ve Gelişmiş Hava Mobilitesi</option>
 
-                <!-- 3 -->
-                <option>Yüksek Teknoloji – Ürün Bileşenleri / OEM</option>
+                        <option>Yüksek Teknoloji – Ürün Bileşenleri / OEM</option>
 
-                <!-- 4 -->
-                <option>Endüstriyel – Bileşen Üreticileri</option>
-                <option>Endüstriyel – Makine & Ekipman</option>
-                <option>Endüstriyel – Otomasyon ve Kontrol</option>
+                        <option>Endüstriyel – Bileşen Üreticileri</option>
+                        <option>Endüstriyel – Makine & Ekipman</option>
+                        <option>Endüstriyel – Otomasyon ve Kontrol</option>
 
-                <!-- 5 -->
-                <option>Tarım ve Gıda – Ticari Tarım</option>
-                <option>Tarım ve Gıda – Taze Ürünler</option>
-                <option>Tarım ve Gıda – Süt, Et ve Balık</option>
-                <option>Tüketici Ürünleri – Gıda</option>
-                <option>Tüketici Ürünleri – İçecek</option>
-                <option>Tüketici Ürünleri – Ev ve Kişisel Bakım</option>
-                <option>Perakende – Marketler</option>
-                <option>Perakende – Eczaneler</option>
-                <option>Perakende – Tüketici Elektroniği</option>
+                        <option>Tarım ve Gıda – Ticari Tarım</option>
+                        <option>Tarım ve Gıda – Taze Ürünler</option>
+                        <option>Tarım ve Gıda – Süt, Et ve Balık</option>
 
-                <!-- 6 -->
-                <option>Enerji – Kimya (Özel)</option>
-                <option>Enerji – Kimya (Tarım / Temel)</option>
-                <option>Enerji – Petrol, Gaz ve Yenilenebilir</option>
-                <option>Enerji – Kamu Hizmetleri</option>
+                        <option>Tüketici Ürünleri – Gıda</option>
+                        <option>Tüketici Ürünleri – İçecek</option>
+                        <option>Tüketici Ürünleri – Ev ve Kişisel Bakım</option>
 
-                <!-- 7 -->
-                <option>Hizmetler – Bankacılık</option>
-                <option>Hizmetler – Sigortacılık</option>
-                <option>Hizmetler – Yazılım</option>
-                <option>Hizmetler – Telekom</option>
-                <option>Hizmetler – Lojistik ve Ulaştırma</option>
+                        <option>Perakende – Marketler</option>
+                        <option>Perakende – Eczaneler</option>
+                        <option>Perakende – Tüketici Elektroniği</option>
 
-                <!-- 8 -->
-                <option>Kamu – Kamu Kurumları</option>
-                <option>Kamu – Eğitim ve Araştırma</option>
-            </select>
+                        <option>Enerji – Kimya (Özel)</option>
+                        <option>Enerji – Kimya (Tarım / Temel)</option>
+                        <option>Enerji – Petrol, Gaz ve Yenilenebilir</option>
+                        <option>Enerji – Kamu Hizmetleri</option>
 
-            <label>Ana Faaliyet Türü</label>
-            <select name="activity_${i}" required>
-                <option value="">Seçiniz</option>
-                <option>Üretim</option>
-                <option>Montaj</option>
-                <option>Ticaret</option>
-                <option>Hizmet</option>
-                <option>Proje Bazlı</option>
-                <option>Karma</option>
-            </select>
+                        <option>Hizmetler – Bankacılık</option>
+                        <option>Hizmetler – Sigortacılık</option>
+                        <option>Hizmetler – Yazılım</option>
+                        <option>Hizmetler – Telekom</option>
+                        <option>Hizmetler – Lojistik ve Ulaştırma</option>
+
+                        <option>Kamu – Kamu Kurumları</option>
+                        <option>Kamu – Eğitim ve Araştırma</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Ana Faaliyet Türü</label>
+                    <select name="activity_${i}" required>
+                        <option value="">Seçiniz</option>
+                        <option>Üretim</option>
+                        <option>Montaj</option>
+                        <option>Ticaret</option>
+                        <option>Hizmet</option>
+                        <option>Proje Bazlı</option>
+                        <option>Karma</option>
+                    </select>
+                </div>
+
+            </div>
         </div>
         `;
     }
