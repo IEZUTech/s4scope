@@ -94,7 +94,6 @@ footer{
 table {
     border-collapse: collapse;
     width: 100%;
-    max-width: 100%;
 }
 th, td {
     border: 1px solid #ccc;
@@ -130,14 +129,25 @@ td:first-child {
 
 <label>Kaç şirket için RFP doldurulacak?</label>
 <input type="number" id="companyCount" min="1" />
-
+<br>
 <button onclick="createCompanies()">Şirketleri Oluştur</button>
 
 <form id="rfpForm">
-<div id="companies"></div>
+    <div id="companies"></div>
+
+    <!-- GRUP RAPORLAMA -->
+    <div class="company-block">
+        <h3>Grup Raporlama</h3>
+        <label>Şirketler için grup raporlama yapılacak mı?</label>
+        <select id="groupReporting" onchange="saveGroupReporting()">
+            <option value="">Seçiniz</option>
+            <option value="Evet">Evet</option>
+            <option value="Hayır">Hayır</option>
+        </select>
+    </div>
 </form>
 
-<button id="showStructureBtn" style="margin-top:20px;">Şirket Yapılanmasını Göster</button>
+<button id="showStructureBtn">Şirket Yapılanmasını Göster</button>
 
 <div id="companyStructure" style="margin-top:20px; overflow-x:auto;"></div>
 
@@ -149,299 +159,89 @@ td:first-child {
 
 <script>
 const sectorMap = {
-  "Ayrık Üretim": [
-    "Otomotiv Tedarikçileri",
-    "Kiralama & Leasing",
-    "Batarya Üreticileri"
-  ],
-  "Havacılık ve Savunma": [
-    "Seviye 2 ve üzeri Tedarikçiler (MRO hariç)",
-    "OEM Bağlı Ortaklıkları",
-    "Yeni Uzay Üretimi ve Gelişmiş Hava Mobilitesi"
-  ],
-  "Yüksek Teknoloji": [
-    "Ürün Bileşenleri",
-    "OEM"
-  ],
-  "Endüstriyel Üretim": [
-    "Bileşen Üreticileri",
-    "Endüstriyel ve Ticari Makine & Ekipman",
-    "Otomasyon ve Kontrol Çözümleri"
-  ],
-  "Tüketici Endüstrileri": [
-    "Tarım ve Gıda",
-    "Tüketici Ürünleri",
-    "Perakende",
-    "Toptan Dağıtım"
-  ],
-  "Enerji ve Doğal Kaynaklar": [
-    "Değirmen ve Madencilik",
-    "Yapı Malzemeleri, Metaller, Kağıt ve Ambalaj",
-    "Tekstil / Madencilik Hizmetleri / Genel Madencilik",
-    "Kimya",
-    "Petrol, Gaz ve Enerji",
-    "Kamu Hizmetleri (Utilities)"
-  ],
-  "Hizmet Sektörleri": [
-    "Bankacılık",
-    "İnşaat ve Gayrimenkul",
-    "Sigortacılık",
-    "Yüksek Teknoloji Yazılım",
-    "Medya",
-    "Profesyonel Hizmetler",
-    "Telekomünikasyon",
-    "Seyahat ve Ulaştırma"
-  ],
-  "Kamu Hizmetleri Sektörleri": [
-    "Kamu Sektörü",
-    "Eğitim ve Araştırma"
-  ]
+  "Ayrık Üretim": ["Otomotiv Tedarikçileri","Kiralama & Leasing","Batarya Üreticileri"],
+  "Havacılık ve Savunma": ["Seviye 2+ Tedarikçiler","OEM Bağlı Ortaklıkları","Yeni Uzay"],
+  "Yüksek Teknoloji": ["Ürün Bileşenleri","OEM"],
+  "Endüstriyel Üretim": ["Bileşen Üreticileri","Makine & Ekipman","Otomasyon"],
+  "Tüketici Endüstrileri": ["Tarım ve Gıda","Tüketici Ürünleri","Perakende"],
+  "Enerji ve Doğal Kaynaklar": ["Kimya","Petrol & Gaz","Utilities"],
+  "Hizmet Sektörleri": ["Bankacılık","Telekom","Profesyonel Hizmetler"],
+  "Kamu Hizmetleri": ["Kamu","Eğitim"]
 };
 
-const sapModules = ["FI", "CO", "MM", "SD", "PP", "QM", "PM", "WM", "HR", "PS"];
-
+const sapModules = ["FI","CO","MM","SD","PP","QM","PM","WM","HR","PS"];
 const STORAGE_KEY = "s4scopeRfpData";
+const GROUP_REPORTING_KEY = "s4scopeGroupReporting";
+
+function saveGroupReporting(){
+    localStorage.setItem(
+        GROUP_REPORTING_KEY,
+        document.getElementById("groupReporting").value
+    );
+}
 
 function saveDataToStorage(){
     const companies = [];
-    const companyBlocks = document.querySelectorAll(".company-block");
-    companyBlocks.forEach((block, idx) => {
-        const i = idx + 1;
-        const name = block.querySelector(`input[name^="companyName_"]`)?.value || "";
-        const country = block.querySelector(`select[name^="country_"]`)?.value || "";
-        const mainSector = block.querySelector(`select[name^="mainSector_"]`)?.value || "";
-        const subSector = block.querySelector(`select[name^="subSector_"]`)?.value || "";
-        const activity = block.querySelector(`select[name^="activity_"]`)?.value || "";
-
-        companies.push({ name, country, mainSector, subSector, activity });
+    document.querySelectorAll(".company-block[data-company]").forEach(block=>{
+        companies.push({
+            name: block.querySelector("input")?.value || ""
+        });
     });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(companies));
 }
 
-function loadDataFromStorage(){
-    const data = localStorage.getItem(STORAGE_KEY);
-    if(!data) return;
-
-    const companies = JSON.parse(data);
-    if(companies.length === 0) return;
-
-    document.getElementById("companyCount").value = companies.length;
-    createCompanies();
-
-    companies.forEach((comp, idx) => {
-        const i = idx + 1;
-        const nameInput = document.querySelector(`input[name="companyName_${i}"]`);
-        const countrySelect = document.querySelector(`select[name="country_${i}"]`);
-        const mainSectorSelect = document.querySelector(`select[name="mainSector_${i}"]`);
-        const subSectorSelect = document.querySelector(`select[name="subSector_${i}"]`);
-        const activitySelect = document.querySelector(`select[name="activity_${i}"]`);
-
-        if(nameInput) nameInput.value = comp.name;
-        if(countrySelect) countrySelect.value = comp.country;
-
-        if(mainSectorSelect){
-            mainSectorSelect.value = comp.mainSector;
-            if(comp.mainSector) loadSubSectors(i, comp.mainSector);
-        }
-        if(subSectorSelect) subSectorSelect.value = comp.subSector;
-        if(activitySelect) activitySelect.value = comp.activity;
-    });
-}
-
 function createCompanies(){
-    const count = parseInt(document.getElementById("companyCount").value, 10);
-    if (isNaN(count) || count < 1) {
-        alert("Lütfen 1 veya daha fazla pozitif bir sayı giriniz.");
-        return;
-    }
+    const count = parseInt(document.getElementById("companyCount").value);
+    if(!count || count < 1) return alert("Geçerli sayı giriniz");
 
     const container = document.getElementById("companies");
     container.innerHTML = "";
 
-    for(let i=1; i<=count; i++){
-        const companyDiv = document.createElement("div");
-        companyDiv.className = "company-block";
+    for(let i=1;i<=count;i++){
+        const div = document.createElement("div");
+        div.className = "company-block";
+        div.dataset.company = i;
 
-        const deleteBtn = document.createElement("button");
-        deleteBtn.className = "delete-btn";
-        deleteBtn.textContent = "Sil";
-        deleteBtn.type = "button";
-        deleteBtn.onclick = () => {
-            companyDiv.remove();
-            saveDataToStorage();
-        };
-        companyDiv.appendChild(deleteBtn);
-
-        const h3 = document.createElement("h3");
-        h3.textContent = `Şirket ${i}`;
-        companyDiv.appendChild(h3);
-
-        const gridDiv = document.createElement("div");
-        gridDiv.className = "company-grid";
-
-        const div1 = document.createElement("div");
-        const label1 = document.createElement("label");
-        label1.textContent = "Şirket Adı";
-        const input1 = document.createElement("input");
-        input1.name = `companyName_${i}`;
-        input1.required = true;
-        input1.type = "text";
-        input1.onchange = saveDataToStorage;
-        div1.appendChild(label1);
-        div1.appendChild(input1);
-
-        const div2 = document.createElement("div");
-        const label2 = document.createElement("label");
-        label2.textContent = "Ülke";
-        const select2 = document.createElement("select");
-        select2.name = `country_${i}`;
-        select2.required = true;
-        select2.onchange = saveDataToStorage;
-        const countries = ["", "Türkiye","Almanya","İngiltere","ABD","Fransa","İtalya","İspanya","Hollanda","Çin","Japonya","Güney Kore","Hindistan","Rusya","Kanada","Avustralya","Brezilya","Meksika","Güney Afrika","Suudi Arabistan","Birleşik Arap Emirlikleri","Diğer"];
-        countries.forEach(c => {
-            const opt = document.createElement("option");
-            opt.value = c;
-            opt.textContent = c === "" ? "Seçiniz" : c;
-            select2.appendChild(opt);
-        });
-        div2.appendChild(label2);
-        div2.appendChild(select2);
-
-        const div3 = document.createElement("div");
-        const label3 = document.createElement("label");
-        label3.textContent = "Ana Sektör";
-        const select3 = document.createElement("select");
-        select3.name = `mainSector_${i}`;
-        select3.required = true;
-        select3.innerHTML = `<option value="">Seçiniz</option>` + 
-            Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("");
-        select3.onchange = () => {
-            loadSubSectors(i, select3.value);
-            saveDataToStorage();
-        };
-        div3.appendChild(label3);
-        div3.appendChild(select3);
-
-        const div4 = document.createElement("div");
-        const label4 = document.createElement("label");
-        label4.textContent = "Alt Sektör";
-        const select4 = document.createElement("select");
-        select4.name = `subSector_${i}`;
-        select4.id = `subSector_${i}`;
-        select4.required = true;
-        select4.innerHTML = `<option value="">Önce Ana Sektör Seçiniz</option>`;
-        select4.onchange = saveDataToStorage;
-        div4.appendChild(label4);
-        div4.appendChild(select4);
-
-        const div5 = document.createElement("div");
-        const label5 = document.createElement("label");
-        label5.textContent = "Ana Faaliyet Türü";
-        const select5 = document.createElement("select");
-        select5.name = `activity_${i}`;
-        select5.required = true;
-        select5.innerHTML = `
-            <option value="">Seçiniz</option>
-            <option>Üretim</option>
-            <option>Montaj</option>
-            <option>Ticaret</option>
-            <option>Hizmet</option>
-            <option>Proje Bazlı</option>
-            <option>Karma</option>
+        div.innerHTML = `
+            <button class="delete-btn" type="button" onclick="this.parentElement.remove()">Sil</button>
+            <h3>Şirket ${i}</h3>
+            <label>Şirket Adı</label>
+            <input type="text" />
         `;
-        select5.onchange = saveDataToStorage;
-        div5.appendChild(label5);
-        div5.appendChild(select5);
-
-        [div1, div2, div3, div4, div5].forEach(d => gridDiv.appendChild(d));
-        companyDiv.appendChild(gridDiv);
-
-        container.appendChild(companyDiv);
+        container.appendChild(div);
     }
-    saveDataToStorage();
 }
 
-function loadSubSectors(index, sector){
-    const subSelect = document.getElementById(`subSector_${index}`);
-    subSelect.innerHTML = `<option value="">Seçiniz</option>`;
+document.getElementById("showStructureBtn").onclick = ()=>{
+    const companies = [...document.querySelectorAll(".company-block[data-company] input")]
+        .map((i,idx)=>i.value || `Şirket ${idx+1}`);
 
-    if(!sectorMap[sector]) return;
-
-    sectorMap[sector].forEach(sub=>{
-        const opt = document.createElement("option");
-        opt.value = sub;
-        opt.textContent = sub;
-        subSelect.appendChild(opt);
-    });
-}
-
-window.onload = () => {
-    loadDataFromStorage();
-};
-
-// Enter tuşu ile şirket oluşturmayı kolaylaştır
-document.getElementById("companyCount").addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        createCompanies();
-    }
-});
-
-document.getElementById("showStructureBtn").addEventListener("click", () => {
-    const companies = [];
-    const companyBlocks = document.querySelectorAll(".company-block");
-    companyBlocks.forEach((block, idx) => {
-        const name = block.querySelector(`input[name^="companyName_"]`)?.value || `Şirket ${idx+1}`;
-        companies.push(name);
-    });
-
-    if(companies.length === 0){
-        alert("Lütfen önce şirket bilgilerini oluşturunuz.");
-        return;
-    }
-
-    const container = document.getElementById("companyStructure");
-    container.innerHTML = "";
+    if(companies.length === 0) return alert("Şirket yok");
 
     const table = document.createElement("table");
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Şirket / Modül</th>
+                ${sapModules.map(m=>`<th>${m}</th>`).join("")}
+            </tr>
+        </thead>
+        <tbody>
+            ${companies.map(c=>`
+                <tr>
+                    <td>${c}</td>
+                    ${sapModules.map(()=>`<td><input type="checkbox"></td>`).join("")}
+                </tr>`).join("")}
+        </tbody>
+    `;
+    document.getElementById("companyStructure").innerHTML = "";
+    document.getElementById("companyStructure").appendChild(table);
+};
 
-    const thead = document.createElement("thead");
-    const trHead = document.createElement("tr");
-
-    const thEmpty = document.createElement("th");
-    thEmpty.textContent = "Şirketler / Modüller";
-    trHead.appendChild(thEmpty);
-
-    sapModules.forEach(mod => {
-        const th = document.createElement("th");
-        th.textContent = mod;
-        trHead.appendChild(th);
-    });
-    thead.appendChild(trHead);
-    table.appendChild(thead);
-
-    const tbody = document.createElement("tbody");
-    companies.forEach((company, idx) => {
-        const tr = document.createElement("tr");
-
-        const tdCompany = document.createElement("td");
-        tdCompany.textContent = company;
-        tr.appendChild(tdCompany);
-
-        sapModules.forEach(mod => {
-            const td = document.createElement("td");
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.name = `module_${idx}_${mod}`;
-            td.appendChild(checkbox);
-            tr.appendChild(td);
-        });
-
-        tbody.appendChild(tr);
-    });
-    table.appendChild(tbody);
-    container.appendChild(table);
-});
+window.onload = ()=>{
+    const grp = localStorage.getItem(GROUP_REPORTING_KEY);
+    if(grp) document.getElementById("groupReporting").value = grp;
+};
 </script>
 
 </body>
