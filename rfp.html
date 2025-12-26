@@ -8,7 +8,6 @@
 body{
     font-family: Arial, sans-serif;
     background:#f4f6f9;
-    padding:0;
     margin:0;
 }
 header{
@@ -18,13 +17,6 @@ header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-}
-header .logo{
-    font-size:18px;
-    font-weight:bold;
-}
-header .provider{
-    font-size:14px;
 }
 .container{
     padding:20px;
@@ -38,17 +30,17 @@ h2{
     background:#fff;
     border:1px solid #ccc;
     padding:20px;
-    margin-bottom:30px;
+    margin-top:20px;
 }
-.section label{
-    display:block;
+label{
     font-weight:bold;
-    margin-top:15px;
+    display:block;
+    margin-top:12px;
 }
-.section select{
-    width:300px;
+input, select{
+    width:100%;
     padding:6px;
-    margin-top:5px;
+    margin-top:4px;
 }
 button{
     margin-top:20px;
@@ -57,41 +49,45 @@ button{
     color:white;
     border:none;
     cursor:pointer;
-    border-radius: 4px;
-    font-size: 14px;
+    border-radius:4px;
+}
+.hidden{
+    display:none;
 }
 .company-block{
-    position: relative;
-    background:#fff;
+    position:relative;
     border:1px solid #ccc;
     padding:15px;
     margin-top:20px;
+    background:#fff;
 }
 .company-grid{
     display:grid;
     grid-template-columns: repeat(5, 1fr);
     gap:12px;
 }
-label{
-    font-weight:bold;
-    font-size:13px;
+.delete-btn{
+    position:absolute;
+    top:8px;
+    right:8px;
+    background:#dc3545;
+    color:white;
+    border:none;
+    padding:4px 8px;
+    cursor:pointer;
 }
-input, select{
+table{
     width:100%;
-    padding:6px;
-    box-sizing: border-box;
+    border-collapse:collapse;
 }
-.delete-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: #dc3545;
-    color: white;
-    border: none;
-    padding: 4px 8px;
-    font-size: 12px;
-    cursor: pointer;
-    border-radius: 4px;
+th, td{
+    border:1px solid #ccc;
+    padding:8px;
+    text-align:center;
+}
+th{
+    background:#0b5ed7;
+    color:white;
 }
 footer{
     margin-top:40px;
@@ -102,150 +98,169 @@ footer{
     border-top:1px solid #ccc;
     background:#fff;
 }
-#companyCount {
-    width: 80px;
-}
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
-th, td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align:center;
-}
-th {
-    background-color: #0b5ed7;
-    color: white;
-}
-td:first-child {
-    text-align:left;
-    font-weight:bold;
-}
-#showStructureBtn{
-    background:#0b5ed7;
-}
-.hidden{
-    display:none;
-}
 </style>
 </head>
 
 <body>
 
 <header>
-    <div class="logo">S4Scope</div>
-    <div class="provider">SAP RFP Platformu | <strong>IEZU Tech</strong></div>
+    <div><strong>S4Scope</strong></div>
+    <div>SAP RFP Platformu | IEZU Tech</div>
 </header>
 
 <div class="container">
 
 <!-- ===================== -->
-<!-- BÖLÜM 0 – GİRİŞ -->
+<!-- BÖLÜM 0 -->
 <!-- ===================== -->
-<div id="section0" class="section">
-    <h2>Bölüm 0: Mevcut ERP & Geçiş Yaklaşımı</h2>
+<h2>Bölüm 0 – Mevcut ERP ve Dönüşüm Yaklaşımı</h2>
 
-    <label>Mevcut ERP Sistemi</label>
-    <select id="erpSystem">
-        <option value="">Seçiniz</option>
-        <option>SAP</option>
-        <option>Oracle</option>
-        <option>Microsoft Dynamics</option>
-        <option>IFS</option>
-        <option>Logo</option>
-        <option>Diğer</option>
-    </select>
+<div class="section" id="section0">
 
-    <div id="sapDetails" class="hidden">
-        <label>SAP Modeli</label>
-        <select id="sapModel">
-            <option value="">Seçiniz</option>
-            <option>SAP R/3</option>
-            <option>SAP ECC</option>
-            <option>SAP S/4HANA</option>
-        </select>
+<label>Mevcut ERP Sistemi</label>
+<select id="erpSystem">
+    <option value="">Seçiniz</option>
+    <option>SAP</option>
+    <option>Oracle</option>
+    <option>Microsoft Dynamics</option>
+    <option>IFS</option>
+    <option>Logo / Netsis</option>
+    <option>Diğer</option>
+</select>
 
-        <label>Geçiş Yaklaşımı</label>
-        <select id="conversionType">
-            <option value="">Seçiniz</option>
-            <option>Greenfield</option>
-            <option>Brownfield</option>
-            <option>Bluefield / Hibrit</option>
-            <option>Henüz karar verilmedi</option>
-        </select>
-    </div>
+<label>SAP Modeli (SAP ise)</label>
+<select id="sapModel">
+    <option value="">Seçiniz</option>
+    <option>SAP R/3</option>
+    <option>SAP ECC</option>
+    <option>S/4HANA On-Premise</option>
+    <option>S/4HANA Cloud</option>
+</select>
 
-    <button onclick="goToSection1()">Kaydet ve Devam Et</button>
+<label>Bu proje Net New mi?</label>
+<label><input type="radio" name="netnew" value="install"> Install Base</label>
+<label><input type="radio" name="netnew" value="netnew"> Net New Name</label>
+
+<label>Geçiş Yaklaşımı</label>
+<select id="conversion">
+    <option value="">Seçiniz</option>
+    <option>Greenfield</option>
+    <option>Brownfield</option>
+    <option>Bluefield / Hibrit</option>
+    <option>Henüz karar verilmedi</option>
+</select>
+
+<button onclick="goSection1()">Kaydet ve Devam Et</button>
+
 </div>
 
 <!-- ===================== -->
-<!-- BÖLÜM 1 – AYNI HALİYLE -->
+<!-- BÖLÜM 1 -->
 <!-- ===================== -->
-<div id="section1" class="hidden">
+<h2 class="hidden" id="section1Title">Bölüm 1 – Şirket Bazlı Genel Bilgiler</h2>
 
-<h2>RFP – Bölüm 1: Şirket Bazlı Genel Bilgiler</h2>
+<div class="section hidden" id="section1">
+
+<label>Grup Raporlama olacak mı?</label>
+<label><input type="radio" name="groupReporting" value="yes"> Evet</label>
+<label><input type="radio" name="groupReporting" value="no"> Hayır</label>
 
 <label>Kaç şirket için RFP doldurulacak?</label>
-<input type="number" id="companyCount" min="1" />
+<input type="number" id="companyCount" min="1">
 
 <button onclick="createCompanies()">Şirketleri Oluştur</button>
 
-<form id="rfpForm">
 <div id="companies"></div>
-</form>
 
-<button id="showStructureBtn">Şirket Yapılanmasını Göster</button>
-<div id="companyStructure" style="margin-top:20px; overflow-x:auto;"></div>
+<button onclick="showStructure()">Şirket Yapılanmasını Göster</button>
+<div id="companyStructure" style="margin-top:20px;"></div>
 
 </div>
 
 </div>
 
 <footer>
-    © IEZU Tech | S4Scope – SAP Scope & RFP Services
+© IEZU Tech | S4Scope – SAP Scope & RFP Services
 </footer>
 
 <script>
-/* =======================
-   BÖLÜM 0 JS
-======================= */
-document.getElementById("erpSystem").addEventListener("change", function(){
-    document.getElementById("sapDetails").classList.toggle(
-        "hidden",
-        this.value !== "SAP"
-    );
-});
-
-function goToSection1(){
-    const erp = document.getElementById("erpSystem").value;
-    if(!erp){
-        alert("Lütfen mevcut ERP sistemini seçiniz.");
-        return;
-    }
+/* -------------------------
+   BÖLÜM GEÇİŞİ
+------------------------- */
+function goSection1(){
     document.getElementById("section0").classList.add("hidden");
     document.getElementById("section1").classList.remove("hidden");
+    document.getElementById("section1Title").classList.remove("hidden");
 }
 
-/* =======================
-   BÖLÜM 1 – ORİJİNAL KOD
-======================= */
+/* -------------------------
+   BÖLÜM 1 – ORİJİNAL ÇALIŞAN KOD
+------------------------- */
 const sectorMap = {
-  "Ayrık Üretim": ["Otomotiv Tedarikçileri","Kiralama & Leasing","Batarya Üreticileri"],
-  "Havacılık ve Savunma": ["Seviye 2 ve üzeri Tedarikçiler (MRO hariç)","OEM Bağlı Ortaklıkları","Yeni Uzay Üretimi ve Gelişmiş Hava Mobilitesi"],
-  "Yüksek Teknoloji": ["Ürün Bileşenleri","OEM"],
-  "Endüstriyel Üretim": ["Bileşen Üreticileri","Endüstriyel ve Ticari Makine & Ekipman","Otomasyon ve Kontrol Çözümleri"],
-  "Tüketici Endüstrileri": ["Tarım ve Gıda","Tüketici Ürünleri","Perakende","Toptan Dağıtım"],
-  "Enerji ve Doğal Kaynaklar": ["Değirmen ve Madencilik","Yapı Malzemeleri, Metaller, Kağıt ve Ambalaj","Tekstil / Madencilik Hizmetleri / Genel Madencilik","Kimya","Petrol, Gaz ve Enerji","Kamu Hizmetleri (Utilities)"],
-  "Hizmet Sektörleri": ["Bankacılık","İnşaat ve Gayrimenkul","Sigortacılık","Yüksek Teknoloji Yazılım","Medya","Profesyonel Hizmetler","Telekomünikasyon","Seyahat ve Ulaştırma"],
-  "Kamu Hizmetleri Sektörleri": ["Kamu Sektörü","Eğitim ve Araştırma"]
+  "Ayrık Üretim":["Otomotiv Tedarikçileri","Kiralama & Leasing","Batarya Üreticileri"],
+  "Havacılık ve Savunma":["Seviye 2+ Tedarikçiler","OEM Bağlı Ortaklıkları","Yeni Uzay"],
+  "Yüksek Teknoloji":["Ürün Bileşenleri","OEM"],
+  "Endüstriyel Üretim":["Bileşen Üreticileri","Makine & Ekipman","Otomasyon"],
+  "Hizmet Sektörleri":["Bankacılık","Sigorta","Telekom","Profesyonel Hizmetler"]
 };
-const sapModules = ["FI","CO","MM","SD","PP","QM","PM","WM","HR","PS"];
-const STORAGE_KEY = "s4scopeRfpData";
 
-/* --- burada senin gönderdiğin Bölüm 1 JS kodunun tamamı
-     DEĞİŞMEDEN devam ediyor --- */
+const sapModules=["FI","CO","MM","SD","PP","QM","PM","WM","HR","PS"];
 
+function createCompanies(){
+    const count=parseInt(companyCount.value);
+    if(!count||count<1){alert("Geçerli sayı gir");return;}
+    companies.innerHTML="";
+    for(let i=1;i<=count;i++){
+        const div=document.createElement("div");
+        div.className="company-block";
+        div.innerHTML=`
+        <button class="delete-btn" onclick="this.parentElement.remove()">Sil</button>
+        <h3>Şirket ${i}</h3>
+        <div class="company-grid">
+            <div><label>Şirket Adı</label><input></div>
+            <div><label>Ülke</label><input></div>
+            <div><label>Ana Sektör</label>
+                <select onchange="loadSub(this,${i})">
+                    <option></option>
+                    ${Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("")}
+                </select>
+            </div>
+            <div><label>Alt Sektör</label>
+                <select id="sub_${i}"><option></option></select>
+            </div>
+            <div><label>Ana Faaliyet</label>
+                <select>
+                    <option>Üretim</option>
+                    <option>Montaj</option>
+                    <option>Ticaret</option>
+                    <option>Hizmet</option>
+                    <option>Karma</option>
+                </select>
+            </div>
+        </div>`;
+        companies.appendChild(div);
+    }
+}
+
+function loadSub(sel,i){
+    const sub=document.getElementById("sub_"+i);
+    sub.innerHTML="<option></option>";
+    (sectorMap[sel.value]||[]).forEach(s=>{
+        const o=document.createElement("option");
+        o.textContent=s;
+        sub.appendChild(o);
+    });
+}
+
+function showStructure(){
+    const names=[...document.querySelectorAll(".company-block h3")].map(h=>h.textContent);
+    let html="<table><tr><th>Şirket</th>"+sapModules.map(m=>`<th>${m}</th>`).join("")+"</tr>";
+    names.forEach(n=>{
+        html+=`<tr><td>${n}</td>`+sapModules.map(()=>"<td><input type='checkbox'></td>").join("")+"</tr>";
+    });
+    html+="</table>";
+    companyStructure.innerHTML=html;
+}
 </script>
 
 </body>
