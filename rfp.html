@@ -119,7 +119,55 @@ th {
 </header>
 
 <div class="container">
+<h2>Bölüm 0 – Mevcut ERP & Başlangıç Durumu</h2>
 
+<div class="company-block">
+
+<label>Firmanızda şu anda kullanılan ERP sistemi nedir?</label><br><br>
+
+<label><input type="radio" name="erpType" value="SAP" onchange="toggleSap()"> SAP</label><br>
+<label><input type="radio" name="erpType" value="NonSAP" onchange="toggleSap()"> SAP Dışı ERP</label><br>
+<label><input type="radio" name="erpType" value="None" onchange="toggleSap()"> ERP Yok / Legacy</label><br>
+<label><input type="radio" name="erpType" value="Multiple" onchange="toggleSap()"> Birden Fazla ERP</label>
+
+<div id="sapDetails" style="display:none; margin-top:20px;">
+
+    <label>Kullanılan SAP çözümü</label>
+    <select id="sapModel">
+        <option value="">Seçiniz</option>
+        <option>SAP ECC</option>
+        <option>SAP S/4HANA On-Premise</option>
+        <option>SAP S/4HANA Cloud – Public Edition</option>
+        <option>SAP S/4HANA Cloud – Private Edition</option>
+        <option>SAP Business ByDesign</option>
+        <option>Diğer SAP</option>
+    </select>
+
+    <br><br>
+
+    <label>SAP versiyonu</label>
+    <input type="text" placeholder="Örn: ECC 6.0 EHP7 / S4 2021">
+
+    <br><br>
+
+    <label>Hedef SAP geçiş yaklaşımı</label><br><br>
+    <label><input type="radio" name="conversionType"> Greenfield</label><br>
+    <label><input type="radio" name="conversionType"> Brownfield</label><br>
+    <label><input type="radio" name="conversionType"> Selective / Landscape</label><br>
+    <label><input type="radio" name="conversionType"> Henüz karar verilmedi</label>
+
+</div>
+</div>
+
+<script>
+function toggleSap(){
+    const val = document.querySelector('input[name="erpType"]:checked')?.value;
+    document.getElementById("sapDetails").style.display =
+        val === "SAP" ? "block" : "none";
+}
+</script>
+
+    
 <h2>Bölüm 1 – Şirket Bazlı Genel Bilgiler</h2>
 
 <label>Kaç şirket için RFP doldurulacak?</label>
