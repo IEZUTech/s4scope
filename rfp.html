@@ -118,54 +118,51 @@ th {
     <div class="provider">SAP RFP Platformu | <strong>IEZU Tech</strong></div>
 </header>
 
-<div class="container">
-<h2>Bölüm 0 – Mevcut ERP & Başlangıç Durumu</h2>
+<div class="container"><button id="startRfpBtn">RFP’ye Başla</button>
 
-<div class="company-block">
+<section id="section0" style="display:none; margin-top:20px;">
+    <h2>RFP – Bölüm 0: Mevcut ERP ve Başlangıç Durumu</h2>
 
-<label>Firmanızda şu anda kullanılan ERP sistemi nedir?</label><br><br>
+    <div class="company-grid">
 
-<label><input type="radio" name="erpType" value="SAP" onchange="toggleSap()"> SAP</label><br>
-<label><input type="radio" name="erpType" value="NonSAP" onchange="toggleSap()"> SAP Dışı ERP</label><br>
-<label><input type="radio" name="erpType" value="None" onchange="toggleSap()"> ERP Yok / Legacy</label><br>
-<label><input type="radio" name="erpType" value="Multiple" onchange="toggleSap()"> Birden Fazla ERP</label>
+        <div>
+            <label>Mevcut ERP Sistemi</label>
+            <select id="erpSystem">
+                <option value="">Seçiniz</option>
+                <option value="SAP">SAP</option>
+                <option value="NonSAP">SAP Dışı</option>
+                <option value="None">ERP Yok</option>
+            </select>
+        </div>
 
-<div id="sapDetails" style="display:none; margin-top:20px;">
+        <div id="sapModelDiv" style="display:none;">
+            <label>SAP Modeli</label>
+            <select id="sapModel">
+                <option value="">Seçiniz</option>
+                <option>ECC</option>
+                <option>S/4HANA On-Premise</option>
+                <option>S/4HANA Cloud Private</option>
+                <option>S/4HANA Cloud Public</option>
+            </select>
+        </div>
 
-    <label>Kullanılan SAP çözümü</label>
-    <select id="sapModel">
-        <option value="">Seçiniz</option>
-        <option>SAP ECC</option>
-        <option>SAP S/4HANA On-Premise</option>
-        <option>SAP S/4HANA Cloud – Public Edition</option>
-        <option>SAP S/4HANA Cloud – Private Edition</option>
-        <option>SAP Business ByDesign</option>
-        <option>Diğer SAP</option>
-    </select>
+        <div id="sapVersionDiv" style="display:none;">
+            <label>SAP Versiyonu</label>
+            <input type="text" id="sapVersion" placeholder="Örn: 1909, 2021">
+        </div>
 
-    <br><br>
+        <div id="conversionTypeDiv" style="display:none;">
+            <label>Geçiş Yaklaşımı</label>
+            <div>
+                <input type="radio" name="conversionType" value="Greenfield"> Greenfield<br>
+                <input type="radio" name="conversionType" value="Brownfield"> Brownfield
+            </div>
+        </div>
 
-    <label>SAP versiyonu</label>
-    <input type="text" placeholder="Örn: ECC 6.0 EHP7 / S4 2021">
+    </div>
 
-    <br><br>
-
-    <label>Hedef SAP geçiş yaklaşımı</label><br><br>
-    <label><input type="radio" name="conversionType"> Greenfield</label><br>
-    <label><input type="radio" name="conversionType"> Brownfield</label><br>
-    <label><input type="radio" name="conversionType"> Selective / Landscape</label><br>
-    <label><input type="radio" name="conversionType"> Henüz karar verilmedi</label>
-
-</div>
-</div>
-
-<script>
-function toggleSap(){
-    const val = document.querySelector('input[name="erpType"]:checked')?.value;
-    document.getElementById("sapDetails").style.display =
-        val === "SAP" ? "block" : "none";
-}
-</script>
+    <button id="saveSection0Btn">Kaydet ve Devam Et</button>
+</section>
 
     
 <h2>Bölüm 1 – Şirket Bazlı Genel Bilgiler</h2>
@@ -294,6 +291,33 @@ document.getElementById("showStructureBtn").onclick = ()=>{
 window.onload=()=>{
     loadGroupReporting();
 };
+
+    <script>
+document.getElementById("startRfpBtn").onclick = () => {
+    document.getElementById("section0").style.display = "block";
+    document.getElementById("startRfpBtn").style.display = "none";
+};
+
+document.getElementById("erpSystem").onchange = function () {
+    const isSAP = this.value === "SAP";
+
+    document.getElementById("sapModelDiv").style.display = isSAP ? "block" : "none";
+    document.getElementById("sapVersionDiv").style.display = isSAP ? "block" : "none";
+    document.getElementById("conversionTypeDiv").style.display = isSAP ? "block" : "none";
+};
+
+document.getElementById("saveSection0Btn").onclick = () => {
+    const erp = document.getElementById("erpSystem").value;
+    if (!erp) {
+        alert("Lütfen mevcut ERP sistemini seçiniz.");
+        return;
+    }
+
+    document.getElementById("section0").style.display = "none";
+    document.querySelector('h2').scrollIntoView({ behavior: "smooth" });
+};
+</script>
+
 </script>
 
 </body>
