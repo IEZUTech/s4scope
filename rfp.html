@@ -35,12 +35,12 @@ h2{
 label{
     font-weight:bold;
     display:block;
-    margin-top:12px;
+    margin-top:14px;
 }
 input, select{
     width:100%;
     padding:6px;
-    margin-top:4px;
+    margin-top:6px;
 }
 button{
     margin-top:20px;
@@ -137,10 +137,6 @@ footer{
     <option>S/4HANA Cloud</option>
 </select>
 
-<label>Bu proje Net New mi?</label>
-<label><input type="radio" name="netnew" value="install"> Install Base</label>
-<label><input type="radio" name="netnew" value="netnew"> Net New Name</label>
-
 <label>Geçiş Yaklaşımı</label>
 <select id="conversion">
     <option value="">Seçiniz</option>
@@ -155,7 +151,7 @@ footer{
 </div>
 
 <!-- ===================== -->
-<!-- BÖLÜM 1 -->
+<!-- BÖLÜM 1 (AYNEN KORUNDU) -->
 <!-- ===================== -->
 <h2 class="hidden" id="section1Title">Bölüm 1 – Şirket Bazlı Genel Bilgiler</h2>
 
@@ -184,18 +180,12 @@ footer{
 </footer>
 
 <script>
-/* -------------------------
-   BÖLÜM GEÇİŞİ
-------------------------- */
 function goSection1(){
     document.getElementById("section0").classList.add("hidden");
     document.getElementById("section1").classList.remove("hidden");
     document.getElementById("section1Title").classList.remove("hidden");
 }
 
-/* -------------------------
-   BÖLÜM 1 – ORİJİNAL ÇALIŞAN KOD
-------------------------- */
 const sectorMap = {
   "Ayrık Üretim":["Otomotiv Tedarikçileri","Kiralama & Leasing","Batarya Üreticileri"],
   "Havacılık ve Savunma":["Seviye 2+ Tedarikçiler","OEM Bağlı Ortaklıkları","Yeni Uzay"],
