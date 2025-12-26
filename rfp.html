@@ -18,51 +18,68 @@ header{
     justify-content:space-between;
     align-items:center;
 }
-.container{ padding:20px; }
-h2{
-    background:#0b5ed7;
-    color:#fff;
-    padding:12px;
+.container{
+    padding:20px;
 }
 .section{
     background:#fff;
     border:1px solid #ccc;
-    padding:15px;
-    margin-bottom:20px;
+    margin-top:20px;
+    padding:20px;
 }
+.section-title{
+    background:#0b5ed7;
+    color:#fff;
+    padding:12px;
+    margin:-20px -20px 20px -20px;
+    font-size:18px;
+}
+.form-group{
+    margin-bottom:15px;
+}
+label{
+    font-weight:bold;
+    font-size:13px;
+    display:block;
+    margin-bottom:5px;
+}
+input, select{
+    width:100%;
+    padding:6px;
+    box-sizing:border-box;
+}
+button{
+    padding:10px 20px;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+    font-size:14px;
+}
+.btn-primary{ background:#0b5ed7; color:#fff; }
+.btn-success{ background:#198754; color:#fff; }
+.btn-danger{ background:#dc3545; color:#fff; }
+
 .company-block{
-    position: relative;
+    position:relative;
     border:1px solid #ccc;
     padding:15px;
     margin-top:20px;
 }
 .company-grid{
     display:grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5,1fr);
     gap:12px;
-}
-label{ font-weight:bold; font-size:13px; }
-input, select{ width:100%; padding:6px; }
-button{
-    margin-top:20px;
-    padding:10px 20px;
-    background:#198754;
-    color:white;
-    border:none;
-    cursor:pointer;
-    border-radius:4px;
 }
 .delete-btn{
     position:absolute;
     top:8px;
     right:8px;
-    background:#dc3545;
-    padding:4px 8px;
     font-size:12px;
 }
 table{
-    border-collapse:collapse;
     width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
 }
 th,td{
     border:1px solid #ccc;
@@ -74,13 +91,15 @@ th{
     color:#fff;
 }
 footer{
+    margin-top:40px;
     padding:12px;
     text-align:center;
     font-size:13px;
     color:#666;
-    background:#fff;
     border-top:1px solid #ccc;
+    background:#fff;
 }
+.hidden{ display:none; }
 </style>
 </head>
 
@@ -93,130 +112,147 @@ footer{
 
 <div class="container">
 
-<!-- ================= BÖLÜM 0 ================= -->
-<h2>Bölüm 0 – Mevcut ERP Bilgileri</h2>
+<!-- ===================== BÖLÜM 0 ===================== -->
+<div class="section" id="section0">
+    <div class="section-title">Bölüm 0 – Mevcut ERP ve Dönüşüm Yaklaşımı</div>
 
-<div class="section">
-    <label>Mevcut ERP Sistemi</label>
-    <select name="existingErp" id="existingErp">
-        <option value="">Seçiniz</option>
-        <option value="SAP">SAP</option>
-        <option value="SAP R3">SAP R/3</option>
-        <option value="Oracle">Oracle</option>
-        <option value="Logo">Logo</option>
-        <option value="Diğer">Diğer</option>
-    </select>
+    <div class="form-group">
+        <label>Mevcut ERP Sistemi</label>
+        <select id="erpSystem">
+            <option value="">Seçiniz</option>
+            <option>SAP</option>
+            <option>Oracle</option>
+            <option>Microsoft Dynamics</option>
+            <option>IFS</option>
+            <option>Diğer</option>
+        </select>
+    </div>
 
-    <br><br>
+    <div class="form-group">
+        <label>SAP Modeli (SAP ise)</label>
+        <select id="sapModel">
+            <option value="">Seçiniz</option>
+            <option>R/3</option>
+            <option>ECC</option>
+            <option>S/4HANA</option>
+        </select>
+    </div>
 
-    <label>Geçiş Yaklaşımı</label>
-    <select>
-        <option value="">Seçiniz</option>
-        <option>Greenfield</option>
-        <option>Brownfield</option>
-        <option>Bluefield / Hibrit</option>
-        <option>Henüz karar verilmedi</option>
-    </select>
+    <div class="form-group">
+        <label>Geçiş Yaklaşımı</label>
+        <select id="conversionType">
+            <option value="">Seçiniz</option>
+            <option>Greenfield</option>
+            <option>Brownfield</option>
+            <option>Bluefield / Hibrit</option>
+            <option>Henüz karar verilmedi</option>
+        </select>
+    </div>
+
+    <button class="btn-success" onclick="completeSection0()">Kaydet ve Devam Et</button>
 </div>
 
-<!-- ================= BÖLÜM 1 ================= -->
-<h2>Bölüm 1 – Şirket Bazlı Genel Bilgiler</h2>
+<!-- ===================== BÖLÜM 1 ===================== -->
+<div class="section hidden" id="section1">
+    <div class="section-title">Bölüm 1 – Şirket Bazlı Genel Bilgiler</div>
 
-<label>Kaç şirket için RFP doldurulacak?</label>
-<input type="number" id="companyCount" min="1" />
-<button onclick="createCompanies()">Şirketleri Oluştur</button>
+    <button class="btn-success" onclick="addCompany()">Şirket Ekle</button>
+    <button class="btn-primary" onclick="showStructure()">Şirket Yapılanmasını Göster</button>
 
-<form id="rfpForm">
     <div id="companies"></div>
-</form>
-
-<!-- SADECE SAP İSE GÖRÜNECEK -->
-<button id="companyModuleBtn" style="display:none;">
-    Şirket – Modül Eşleşmesi
-</button>
-
-<div id="companyStructure" style="margin-top:20px;"></div>
+    <div id="companyStructure"></div>
+</div>
 
 </div>
 
 <footer>
-© IEZU Tech | S4Scope
+© IEZU Tech | S4Scope – SAP Scope & RFP Services
 </footer>
 
 <script>
-/* ================= VERİLER ================= */
+/* ====== SABİT VERİLER ====== */
 const sectorMap = {
-  "Ayrık Üretim":["Otomotiv Tedarikçileri","Kiralama & Leasing","Batarya Üreticileri"],
-  "Havacılık ve Savunma":["Seviye 2+ Tedarikçiler","OEM Ortaklıkları","Yeni Uzay"],
-  "Yüksek Teknoloji":["Ürün Bileşenleri","OEM"],
-  "Endüstriyel Üretim":["Bileşen Üreticileri","Makine & Ekipman","Otomasyon"],
-  "Hizmet Sektörleri":["Bankacılık","Sigortacılık","BT Hizmetleri"]
+  "Ayrık Üretim": ["Otomotiv Tedarikçileri","Kiralama & Leasing","Batarya Üreticileri"],
+  "Endüstriyel Üretim": ["Bileşen Üreticileri","Makine & Ekipman"],
+  "Hizmet Sektörleri": ["Bankacılık","Telekom","Profesyonel Hizmetler"]
 };
 const sapModules = ["FI","CO","MM","SD","PP","QM","PM","PS"];
 
-/* ================= BÖLÜM 1 ================= */
-function createCompanies(){
-    const count = Number(companyCount.value);
-    const container = document.getElementById("companies");
-    container.innerHTML = "";
-
-    for(let i=1;i<=count;i++){
-        const div=document.createElement("div");
-        div.className="company-block";
-        div.innerHTML=`
-            <button class="delete-btn" type="button" onclick="this.parentElement.remove()">Sil</button>
-            <h3>Şirket ${i}</h3>
-            <div class="company-grid">
-                <div>
-                    <label>Şirket Adı</label>
-                    <input>
-                </div>
-                <div>
-                    <label>Ülke</label>
-                    <select><option>Türkiye</option><option>Diğer</option></select>
-                </div>
-                <div>
-                    <label>Ana Sektör</label>
-                    <select onchange="loadSub(this)">
-                        <option value="">Seçiniz</option>
-                        ${Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("")}
-                    </select>
-                </div>
-                <div>
-                    <label>Alt Sektör</label>
-                    <select></select>
-                </div>
-                <div>
-                    <label>Ana Faaliyet</label>
-                    <select>
-                        <option>Üretim</option>
-                        <option>Ticaret</option>
-                        <option>Hizmet</option>
-                    </select>
-                </div>
-            </div>
-        `;
-        container.appendChild(div);
+/* ====== BÖLÜM 0 ====== */
+function completeSection0(){
+    if(!erpSystem.value){
+        alert("Bölüm 0 eksik.");
+        return;
     }
+    document.getElementById("section0").classList.add("hidden");
+    document.getElementById("section1").classList.remove("hidden");
+}
+
+/* ====== BÖLÜM 1 ====== */
+let companyIndex = 0;
+
+function addCompany(){
+    companyIndex++;
+    const c = document.createElement("div");
+    c.className="company-block";
+    c.innerHTML=`
+        <button class="btn-danger delete-btn" onclick="this.parentElement.remove()">Sil</button>
+        <h3>Şirket ${companyIndex}</h3>
+        <div class="company-grid">
+            <div>
+                <label>Şirket Adı</label>
+                <input type="text">
+            </div>
+            <div>
+                <label>Ülke</label>
+                <select>
+                    <option>Türkiye</option><option>Almanya</option><option>ABD</option>
+                </select>
+            </div>
+            <div>
+                <label>Ana Sektör</label>
+                <select onchange="loadSub(this)">
+                    <option value="">Seçiniz</option>
+                    ${Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("")}
+                </select>
+            </div>
+            <div>
+                <label>Alt Sektör</label>
+                <select></select>
+            </div>
+            <div>
+                <label>Ana Faaliyet</label>
+                <select>
+                    <option>Üretim</option><option>Montaj</option><option>Hizmet</option>
+                </select>
+            </div>
+        </div>`;
+    document.getElementById("companies").appendChild(c);
 }
 
 function loadSub(sel){
-    const sub=sel.parentElement.nextElementSibling.querySelector("select");
+    const sub = sel.parentElement.nextElementSibling.querySelector("select");
     sub.innerHTML="";
     sectorMap[sel.value]?.forEach(s=>{
-        sub.innerHTML+=`<option>${s}</option>`;
+        const o=document.createElement("option");
+        o.textContent=s;
+        sub.appendChild(o);
     });
 }
 
-/* ================= SAP KONTROL ================= */
-function toggleCompanyModuleButton(){
-    const erp=document.getElementById("existingErp").value;
-    document.getElementById("companyModuleBtn").style.display =
-        erp==="SAP" ? "inline-block" : "none";
+function showStructure(){
+    const names=[...document.querySelectorAll(".company-block h3")].map(h=>h.textContent);
+    let html="<table><tr><th>Şirket</th>";
+    sapModules.forEach(m=>html+=`<th>${m}</th>`);
+    html+="</tr>";
+    names.forEach(n=>{
+        html+=`<tr><td>${n}</td>`;
+        sapModules.forEach(()=>html+="<td><input type='checkbox'></td>");
+        html+="</tr>";
+    });
+    html+="</table>";
+    document.getElementById("companyStructure").innerHTML=html;
 }
-
-document.getElementById("existingErp")
-    .addEventListener("change", toggleCompanyModuleButton);
 </script>
 
 </body>
