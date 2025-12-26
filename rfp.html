@@ -53,6 +53,7 @@ label{
 input, select{
     width:100%;
     padding:6px;
+    box-sizing: border-box;
 }
 button{
     margin-top:20px;
@@ -61,6 +62,8 @@ button{
     color:white;
     border:none;
     cursor:pointer;
+    border-radius: 4px;
+    font-size: 14px;
 }
 .delete-btn {
     position: absolute;
@@ -74,10 +77,6 @@ button{
     cursor: pointer;
     border-radius: 4px;
 }
-#addCompanyBtn {
-    background: #0b5ed7;
-    margin-top: 10px;
-}
 footer{
     margin-top:40px;
     padding:12px;
@@ -87,13 +86,31 @@ footer{
     border-top:1px solid #ccc;
     background:#fff;
 }
-#companyCount {
-    width: 80px;
-    padding: 4px;
-    font-size: 14px;
+.radio-box{
+    background:#fff;
+    border:1px solid #ccc;
+    padding:15px;
+    margin-top:20px;
+}
+.radio-box label{
+    font-weight:normal;
+    margin-right:20px;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+th {
+    background-color: #0b5ed7;
+    color: white;
 }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -103,288 +120,132 @@ footer{
 
 <div class="container">
 
-<h2>RFP – Bölüm 1: Şirket Bazlı Genel Bilgiler</h2>
+<h2>Bölüm 1 – Şirket Bazlı Genel Bilgiler</h2>
 
 <label>Kaç şirket için RFP doldurulacak?</label>
 <input type="number" id="companyCount" min="1" />
-
+<br>
 <button onclick="createCompanies()">Şirketleri Oluştur</button>
 
 <form id="rfpForm">
-<div id="companies"></div>
+    <div id="companies"></div>
 </form>
 
-<button id="addCompanyBtn" type="button">Şirket Ekle</button>
+<!-- GRUP RAPORLAMA SORUSU -->
+<div class="radio-box">
+    <label><strong>Grup raporlama olacak mı?</strong></label><br><br>
+    <label>
+        <input type="radio" name="groupReporting" value="Evet" onchange="saveGroupReporting()"> Evet
+    </label>
+    <label>
+        <input type="radio" name="groupReporting" value="Hayır" onchange="saveGroupReporting()"> Hayır
+    </label>
+</div>
+
+<button id="showStructureBtn">Şirket Yapılanmasını Göster</button>
+
+<div id="companyStructure" style="margin-top:20px; overflow-x:auto;"></div>
 
 </div>
 
 <footer>
-    © IEZU Tech | S4Scope – SAP Scope & RFP Services
+© IEZU Tech | S4Scope – SAP Scope & RFP Services
 </footer>
 
 <script>
+const STORAGE_KEY = "s4scopeRfpData";
+const GROUP_KEY = "groupReporting";
+
 const sectorMap = {
-  "Ayrık Üretim": [
-    "Otomotiv Tedarikçileri",
-    "Kiralama & Leasing",
-    "Batarya Üreticileri"
-  ],
-  "Havacılık ve Savunma": [
-    "Seviye 2 ve üzeri Tedarikçiler (MRO hariç)",
-    "OEM Bağlı Ortaklıkları",
-    "Yeni Uzay Üretimi ve Gelişmiş Hava Mobilitesi"
-  ],
-  "Yüksek Teknoloji": [
-    "Ürün Bileşenleri",
-    "OEM"
-  ],
-  "Endüstriyel Üretim": [
-    "Bileşen Üreticileri",
-    "Endüstriyel ve Ticari Makine & Ekipman",
-    "Otomasyon ve Kontrol Çözümleri"
-  ],
-  "Tüketici Endüstrileri": [
-    "Tarım ve Gıda",
-    "Tüketici Ürünleri",
-    "Perakende",
-    "Toptan Dağıtım"
-  ],
-  "Enerji ve Doğal Kaynaklar": [
-    "Değirmen ve Madencilik",
-    "Yapı Malzemeleri, Metaller, Kağıt ve Ambalaj",
-    "Tekstil / Madencilik Hizmetleri / Genel Madencilik",
-    "Kimya",
-    "Petrol, Gaz ve Enerji",
-    "Kamu Hizmetleri (Utilities)"
-  ],
-  "Hizmet Sektörleri": [
-    "Bankacılık",
-    "İnşaat ve Gayrimenkul",
-    "Sigortacılık",
-    "Yüksek Teknoloji Yazılım",
-    "Medya",
-    "Profesyonel Hizmetler",
-    "Telekomünikasyon",
-    "Seyahat ve Ulaştırma"
-  ],
-  "Kamu Hizmetleri Sektörleri": [
-    "Kamu Sektörü",
-    "Eğitim ve Araştırma"
-  ]
+  "Ayrık Üretim": ["Otomotiv Tedarikçileri","Kiralama & Leasing","Batarya Üreticileri"],
+  "Havacılık ve Savunma": ["Seviye 2 ve üzeri Tedarikçiler","OEM Bağlı Ortaklıkları"],
+  "Endüstriyel Üretim": ["Bileşen Üreticileri","Makine & Ekipman"]
 };
 
-const companiesContainer = document.getElementById("companies");
-const companyCountInput = document.getElementById("companyCount");
-const addCompanyBtn = document.getElementById("addCompanyBtn");
+const sapModules = ["FI","CO","MM","SD","PP","QM","PM","WM","HR","PS"];
 
-// localStorage key
-const STORAGE_KEY = "s4scope_companies";
-
-function saveCompaniesToStorage(){
-    const companies = [];
-    const companyBlocks = companiesContainer.querySelectorAll(".company-block");
-    companyBlocks.forEach(block => {
-        const companyData = {
-            companyName: block.querySelector(`input[name^="companyName"]`).value,
-            country: block.querySelector(`select[name^="country"]`).value,
-            mainSector: block.querySelector(`select[name^="mainSector"]`).value,
-            subSector: block.querySelector(`select[name^="subSector"]`).value,
-            activity: block.querySelector(`select[name^="activity"]`).value
-        };
-        companies.push(companyData);
-    });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(companies));
+function saveGroupReporting(){
+    const val = document.querySelector('input[name="groupReporting"]:checked')?.value || "";
+    localStorage.setItem(GROUP_KEY, val);
 }
 
-function loadCompaniesFromStorage(){
-    const data = localStorage.getItem(STORAGE_KEY);
-    if(!data) return false;
-    const companies = JSON.parse(data);
-    if(!Array.isArray(companies)) return false;
-    createCompanies(companies.length, companies);
-    return true;
+function loadGroupReporting(){
+    const val = localStorage.getItem(GROUP_KEY);
+    if(!val) return;
+    const radio = document.querySelector(`input[name="groupReporting"][value="${val}"]`);
+    if(radio) radio.checked = true;
 }
 
-function createCompanies(count, prefillData = []){
-    if(count === undefined){
-        count = parseInt(companyCountInput.value, 10);
-    }
-    if (isNaN(count) || count < 1) {
-        alert("Lütfen 1 veya daha fazla pozitif bir sayı giriniz.");
-        return;
-    }
+function createCompanies(){
+    const count = parseInt(document.getElementById("companyCount").value);
+    const container = document.getElementById("companies");
+    container.innerHTML = "";
 
-    companiesContainer.innerHTML = "";
-
-    for(let i=1; i<=count; i++){
-        const data = prefillData[i-1] || {};
-        addCompanyBlock(i, data);
+    for(let i=1;i<=count;i++){
+        const div = document.createElement("div");
+        div.className="company-block";
+        div.innerHTML = `
+        <h3>Şirket ${i}</h3>
+        <div class="company-grid">
+            <div>
+                <label>Şirket Adı</label>
+                <input type="text">
+            </div>
+            <div>
+                <label>Ülke</label>
+                <select>
+                    <option>Türkiye</option>
+                    <option>Almanya</option>
+                    <option>ABD</option>
+                </select>
+            </div>
+            <div>
+                <label>Ana Sektör</label>
+                <select onchange="loadSub(this)">
+                    <option></option>
+                    ${Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("")}
+                </select>
+            </div>
+            <div>
+                <label>Alt Sektör</label>
+                <select></select>
+            </div>
+            <div>
+                <label>Ana Faaliyet</label>
+                <select>
+                    <option>Üretim</option>
+                    <option>Hizmet</option>
+                    <option>Proje</option>
+                </select>
+            </div>
+        </div>`;
+        container.appendChild(div);
     }
-
-    companyCountInput.value = count;
-    saveCompaniesToStorage();
 }
 
-function addCompanyBlock(index, data = {}){
-    const companyDiv = document.createElement("div");
-    companyDiv.className = "company-block";
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.className = "delete-btn";
-    deleteBtn.type = "button";
-    deleteBtn.textContent = "Sil";
-    deleteBtn.onclick = () => {
-        companyDiv.remove();
-        updateCompanyCount();
-        saveCompaniesToStorage();
-    };
-    companyDiv.appendChild(deleteBtn);
-
-    const h3 = document.createElement("h3");
-    h3.textContent = `Şirket ${index}`;
-    companyDiv.appendChild(h3);
-
-    const gridDiv = document.createElement("div");
-    gridDiv.className = "company-grid";
-
-    // Şirket Adı
-    const div1 = document.createElement("div");
-    const label1 = document.createElement("label");
-    label1.textContent = "Şirket Adı";
-    const input1 = document.createElement("input");
-    input1.name = `companyName_${index}`;
-    input1.required = true;
-    input1.type = "text";
-    input1.value = data.companyName || "";
-    div1.appendChild(label1);
-    div1.appendChild(input1);
-
-    // Ülke
-    const div2 = document.createElement("div");
-    const label2 = document.createElement("label");
-    label2.textContent = "Ülke";
-    const select2 = document.createElement("select");
-    select2.name = `country_${index}`;
-    select2.required = true;
-    const countries = ["", "Türkiye","Almanya","İngiltere","ABD","Fransa","İtalya","İspanya","Hollanda","Çin","Japonya","Güney Kore","Hindistan","Rusya","Kanada","Avustralya","Brezilya","Meksika","Güney Afrika","Suudi Arabistan","Birleşik Arap Emirlikleri","Diğer"];
-    countries.forEach(c => {
-        const opt = document.createElement("option");
-        opt.value = c;
-        opt.textContent = c === "" ? "Seçiniz" : c;
-        if(c === data.country) opt.selected = true;
-        select2.appendChild(opt);
-    });
-    div2.appendChild(label2);
-    div2.appendChild(select2);
-
-    // Ana Sektör
-    const div3 = document.createElement("div");
-    const label3 = document.createElement("label");
-    label3.textContent = "Ana Sektör";
-    const select3 = document.createElement("select");
-    select3.name = `mainSector_${index}`;
-    select3.required = true;
-    select3.innerHTML = `<option value="">Seçiniz</option>` + 
-        Object.keys(sectorMap).map(s=>`<option${s === data.mainSector ? " selected" : ""}>${s}</option>`).join("");
-    select3.onchange = () => loadSubSectors(index, select3.value);
-    div3.appendChild(label3);
-    div3.appendChild(select3);
-
-    // Alt Sektör
-    const div4 = document.createElement("div");
-    const label4 = document.createElement("label");
-    label4.textContent = "Alt Sektör";
-    const select4 = document.createElement("select");
-    select4.name = `subSector_${index}`;
-    select4.id = `subSector_${index}`;
-    select4.required = true;
-    div4.appendChild(label4);
-    div4.appendChild(select4);
-
-    // Ana Faaliyet Türü
-    const div5 = document.createElement("div");
-    const label5 = document.createElement("label");
-    label5.textContent = "Ana Faaliyet Türü";
-    const select5 = document.createElement("select");
-    select5.name = `activity_${index}`;
-    select5.required = true;
-    select5.innerHTML = `
-        <option value="">Seçiniz</option>
-        <option${data.activity === "Üretim" ? " selected" : ""}>Üretim</option>
-        <option${data.activity === "Montaj" ? " selected" : ""}>Montaj</option>
-        <option${data.activity === "Ticaret" ? " selected" : ""}>Ticaret</option>
-        <option${data.activity === "Hizmet" ? " selected" : ""}>Hizmet</option>
-        <option${data.activity === "Proje Bazlı" ? " selected" : ""}>Proje Bazlı</option>
-        <option${data.activity === "Karma" ? " selected" : ""}>Karma</option>
-    `;
-    div5.appendChild(label5);
-    div5.appendChild(select5);
-
-    [div1, div2, div3, div4, div5].forEach(d => gridDiv.appendChild(d));
-    companyDiv.appendChild(gridDiv);
-
-    companiesContainer.appendChild(companyDiv);
-
-    // Alt sektörleri varsa yükle
-    if(data.mainSector){
-        loadSubSectors(index, data.mainSector);
-        if(data.subSector){
-            const subSelect = document.getElementById(`subSector_${index}`);
-            if(subSelect) subSelect.value = data.subSector;
-        }
-    }
-
-    // Değişiklik olunca kaydet
-    [input1, select2, select3, div4.querySelector('select'), select5].forEach(el => {
-        el.addEventListener('change', saveCompaniesToStorage);
-        el.addEventListener('input', saveCompaniesToStorage);
+function loadSub(sel){
+    const sector = sel.value;
+    const sub = sel.parentElement.nextElementSibling.querySelector("select");
+    sub.innerHTML = "";
+    (sectorMap[sector]||[]).forEach(s=>{
+        sub.innerHTML += `<option>${s}</option>`;
     });
 }
 
-function loadSubSectors(index, sector){
-    const subSelect = document.getElementById(`subSector_${index}`);
-    if(!subSelect) return;
-    subSelect.innerHTML = `<option value="">Seçiniz</option>`;
-
-    if(!sectorMap[sector]) return;
-
-    sectorMap[sector].forEach(sub=>{
-        const opt = document.createElement("option");
-        opt.value = sub;
-        opt.textContent = sub;
-        subSelect.appendChild(opt);
+document.getElementById("showStructureBtn").onclick = ()=>{
+    const c = document.getElementById("companyStructure");
+    c.innerHTML="";
+    const t=document.createElement("table");
+    t.innerHTML="<tr><th>Şirket</th>"+sapModules.map(m=>`<th>${m}</th>`).join("")+"</tr>";
+    document.querySelectorAll(".company-block").forEach((b,i)=>{
+        t.innerHTML+=`<tr><td>Şirket ${i+1}</td>${sapModules.map(()=>"<td><input type='checkbox'></td>").join("")}</tr>`;
     });
-}
+    c.appendChild(t);
+};
 
-function updateCompanyCount(){
-    const count = companiesContainer.querySelectorAll(".company-block").length;
-    companyCountInput.value = count;
-}
-
-addCompanyBtn.addEventListener("click", () => {
-    let count = companiesContainer.querySelectorAll(".company-block").length;
-    count++;
-    addCompanyBlock(count);
-    updateCompanyCount();
-    saveCompaniesToStorage();
-});
-
-// Sayfa yüklendiğinde kayıtlı verileri yükle
-window.addEventListener("load", () => {
-    const loaded = loadCompaniesFromStorage();
-    if(!loaded){
-        companyCountInput.value = "";
-        companiesContainer.innerHTML = "";
-    }
-});
-
-// Enter ile oluşturmayı engelle ve fonksiyonu çağır
-companyCountInput.addEventListener("keydown", (e) => {
-    if(e.key === "Enter"){
-        e.preventDefault();
-        createCompanies();
-    }
-});
+window.onload=()=>{
+    loadGroupReporting();
+};
 </script>
 
 </body>
