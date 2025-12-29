@@ -318,6 +318,23 @@ function goToSection1(){
     document.getElementById("section1").classList.remove("hidden");
     window.scrollTo({ top: document.getElementById("section1").offsetTop, behavior: "smooth" });
 }
+        <script>
+function createCompanies(){
+    const count = parseInt(document.getElementById("companyCount").value);
+    if(!count || count < 1){
+        alert("Lütfen geçerli bir şirket sayısı girin");
+        return;
+    }
+
+    document.getElementById("companies").innerHTML = "";
+    companyIndex = 0;
+
+    for(let i = 0; i < count; i++){
+        addCompany();
+    }
+}
+</script>
+
 </script>
 
 </body>
