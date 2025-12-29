@@ -124,7 +124,6 @@ footer{
 
 <br><br>
 
-<!-- SAP MODEL -->
 <div id="sapModelArea" style="display:none;">
     <label>SAP Modeli</label>
     <select id="sapModel">
@@ -136,38 +135,45 @@ footer{
         <option>R/3</option>
     </select>
 
-<!-- SAP VERSION -->
-<div id="sapVersionArea" style="display:none;">
-    <label>SAP Versiyonu</label>
-    <input type="text" placeholder="Örn: 1909, 2021 FPS02">
+    <div id="sapVersionArea" style="display:none;">
+        <label>SAP Versiyonu</label>
+        <input type="text" placeholder="Örn: 1909, 2021 FPS02">
+    </div>
+
+    <br>
+
+    <label>Geçiş Yaklaşımı</label>
+    <select>
+        <option value="">Seçiniz</option>
+        <option>Greenfield</option>
+        <option>Brownfield</option>
+        <option>Bluefield / Hibrit</option>
+        <option>Henüz karar verilmedi</option>
+    </select>
 </div>
 
 <br>
+<button onclick="goToSection1()">Kaydet ve Devam Et</button>
 
-<label>Geçiş Yaklaşımı</label>
-<select>
-    <option value="">Seçiniz</option>
-    <option>Greenfield</option>
-    <option>Brownfield</option>
-    <option>Bluefield / Hibrit</option>
-    <option>Henüz karar verilmedi</option>
-</select>
- </div> <!-- sapModelArea KAPANIŞI -->
-
- <button onclick="goToSection1()">Kaydet ve Devam Et</button>
-    
 <!-- ===================== BÖLÜM 1 ===================== -->
 <div class="section hidden" id="section1">
     <div class="section-title">Bölüm 1 – Şirket Bazlı Genel Bilgiler</div>
-  
-    <label>Kaç şirket için RFP doldurulacak?</label>
-<input type="number" id="companyCount" min="1" />
 
-<button onclick="createCompanies()">Şirketleri Oluştur</button>
+    <label>Kaç şirket için RFP doldurulacak?</label>
+    <input type="number" id="companyCount" min="1" />
+    <br><br>
+
+    <button onclick="createCompanies()">Şirketleri Oluştur</button>
     <button class="btn-success" onclick="addCompany()">Şirket Ekle</button>
-    <button class="btn-primary" onclick="showStructure()">Şirket Yapılanmasını Göster</button>
 
     <div id="companies"></div>
+
+    <br>
+    <button class="btn-success" onclick="saveCompanies()">Şirket Bilgilerini Kaydet</button>
+
+    <br><br>
+    <button class="btn-primary hidden" id="moduleBtn" onclick="showStructure()">Şirket – Modül Eşleşmesi</button>
+
     <div id="companyStructure"></div>
 </div>
 
@@ -178,70 +184,13 @@ footer{
 </footer>
 
 <script>
-/* ====== SABİT VERİLER ====== */
 const sectorMap = {
-  "Kesikli Üretim": [
-    "Otomotiv Tedarikçileri",
-    "Kiralama & Leasing",
-    "Batarya Üreticileri"
-  ],
-  "Havacılık ve Savunma": [
-    "Seviye 2 ve üzeri Tedarikçiler (MRO hariç)",
-    "OEM Bağlı Ortaklıkları",
-    "Yeni Uzay Üretimi ve Gelişmiş Hava Mobilitesi"
-  ],
-  "Yüksek Teknoloji": [
-    "Ürün Bileşenleri",
-    "OEM"
-  ],
-  "Endüstriyel Üretim": [
-    "Bileşen Üreticileri",
-    "Endüstriyel ve Ticari Makine & Ekipman",
-    "Otomasyon ve Kontrol Çözümleri"
-  ],
-  "Tüketici Endüstrileri": [
-    "Tarım ve Gıda",
-    "Tüketici Ürünleri",
-    "Perakende",
-    "Toptan Dağıtım"
-  ],
-  "Enerji ve Doğal Kaynaklar": [
-    "Değirmen ve Madencilik",
-    "Yapı Malzemeleri, Metaller, Kağıt ve Ambalaj",
-    "Tekstil / Madencilik Hizmetleri / Genel Madencilik",
-    "Kimya",
-    "Petrol, Gaz ve Enerji",
-    "Kamu Hizmetleri (Utilities)"
-  ],
-  "Hizmet Sektörleri": [
-    "Bankacılık",
-    "İnşaat ve Gayrimenkul",
-    "Sigortacılık",
-    "Yüksek Teknoloji Yazılım",
-    "Medya",
-    "Profesyonel Hizmetler",
-    "Telekomünikasyon",
-    "Seyahat ve Ulaştırma"
-  ],
-  "Kamu Hizmetleri Sektörleri": [
-    "Kamu Sektörü",
-    "Eğitim ve Araştırma"
-  ]
+  "Kesikli Üretim": ["Otomotiv Tedarikçileri","Kiralama & Leasing","Batarya Üreticileri"]
 };
-const sapModules = ["FI - Mali Muhasebesi", "FM - Bütçe Kontrol" , "CO - Maliyet Muhasebesi ve Karlılık","MM - Malzeme Yönetimi ve Satınalma","SD Satış ve Dağıtım","PP - Üretim ve Planlama","QM - Kalite Yönetimi","PM - Bakım Yönetimi","PS - Proje Sistemi"];
+const sapModules = ["FI","CO","MM","SD","PP","QM","PM","PS"];
 
-/* ====== BÖLÜM 0 ====== */
-function completeSection0(){
-    if(!erpSystem.value){
-        alert("Bölüm 0 eksik.");
-        return;
-    }
-    document.getElementById("section0").classList.add("hidden");
-    document.getElementById("section1").classList.remove("hidden");
-}
-
-/* ====== BÖLÜM 1 ====== */
 let companyIndex = 0;
+let savedCompanies = [];
 
 function addCompany(){
     companyIndex++;
@@ -253,20 +202,15 @@ function addCompany(){
         <div class="company-grid">
             <div>
                 <label>Şirket Adı</label>
-                <input type="text">
+                <input type="text" class="company-name">
             </div>
             <div>
                 <label>Ülke</label>
-                <select>
-                    <option>Türkiye</option><option>Almanya</option><option>ABD</option>
-                </select>
+                <select><option>Türkiye</option></select>
             </div>
             <div>
                 <label>Ana Sektör</label>
-                <select onchange="loadSub(this)">
-                    <option value="">Seçiniz</option>
-                    ${Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("")}
-                </select>
+                <select><option>Kesikli Üretim</option></select>
             </div>
             <div>
                 <label>Alt Sektör</label>
@@ -274,81 +218,54 @@ function addCompany(){
             </div>
             <div>
                 <label>Ana Faaliyet</label>
-                <select>
-                    <option>Üretim</option><option>Montaj</option><option>Hizmet</option>
-                </select>
+                <select><option>Üretim</option></select>
             </div>
         </div>`;
     document.getElementById("companies").appendChild(c);
 }
 
-function loadSub(sel){
-    const sub = sel.parentElement.nextElementSibling.querySelector("select");
-    sub.innerHTML="";
-    sectorMap[sel.value]?.forEach(s=>{
-        const o=document.createElement("option");
-        o.textContent=s;
-        sub.appendChild(o);
+function createCompanies(){
+    const count = parseInt(companyCount.value);
+    if(!count) return;
+    companies.innerHTML="";
+    companyIndex=0;
+    for(let i=0;i<count;i++) addCompany();
+}
+
+function saveCompanies(){
+    savedCompanies = [];
+    document.querySelectorAll(".company-name").forEach(i=>{
+        if(i.value) savedCompanies.push(i.value);
     });
+    if(savedCompanies.length===0){
+        alert("En az bir şirket adı girilmeli");
+        return;
+    }
+    document.getElementById("moduleBtn").classList.remove("hidden");
 }
 
 function showStructure(){
-    const names=[...document.querySelectorAll(".company-block h3")].map(h=>h.textContent);
     let html="<table><tr><th>Şirket</th>";
     sapModules.forEach(m=>html+=`<th>${m}</th>`);
     html+="</tr>";
-    names.forEach(n=>{
+    savedCompanies.forEach(n=>{
         html+=`<tr><td>${n}</td>`;
         sapModules.forEach(()=>html+="<td><input type='checkbox'></td>");
         html+="</tr>";
     });
     html+="</table>";
-    document.getElementById("companyStructure").innerHTML=html;
+    companyStructure.innerHTML=html;
 }
-</script>
-<script>
-document.getElementById("existingErp").addEventListener("change", function(){
-    const isSAP = this.value === "SAP";
-    document.getElementById("sapModelArea").style.display = isSAP ? "block" : "none";
-    document.getElementById("sapVersionArea").style.display = isSAP ? "block" : "none";
-});
-</script>
-  <script>
+
 function goToSection1(){
-    document.getElementById("section1").classList.remove("hidden");
-
-    const erp = document.getElementById("existingErp").value;
-    const moduleBtn = document.querySelector(".btn-primary");
-
-    if(erp === "SAP"){
-        moduleBtn.style.display = "inline-block";
-        moduleBtn.innerText = "Şirket – Modül Eşleşmesi";
-    }else{
-        moduleBtn.style.display = "none";
-    }
-
-    window.scrollTo({
-        top: document.getElementById("section1").offsetTop,
-        behavior: "smooth"
-    });
+    section1.classList.remove("hidden");
 }
 
-function createCompanies(){
-    const count = parseInt(document.getElementById("companyCount").value);
-    if(!count || count < 1){
-        alert("Lütfen geçerli bir şirket sayısı girin");
-        return;
-    }
-
-    document.getElementById("companies").innerHTML = "";
-    companyIndex = 0;
-
-    for(let i = 0; i < count; i++){
-        addCompany();
-    }
-}
-</script>
-
+existingErp.addEventListener("change",()=>{
+    const isSAP = existingErp.value==="SAP";
+    sapModelArea.style.display = isSAP?"block":"none";
+    sapVersionArea.style.display = isSAP?"block":"none";
+});
 </script>
 
 </body>
