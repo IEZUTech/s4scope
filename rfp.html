@@ -316,6 +316,17 @@ document.getElementById("existingErp").addEventListener("change", function(){
   <script>
 function goToSection1(){
     document.getElementById("section1").classList.remove("hidden");
+
+    const erp = document.getElementById("existingErp").value;
+    const moduleBtn = document.querySelector(".btn-primary");
+
+    if(erp === "SAP"){
+        moduleBtn.style.display = "inline-block";
+        moduleBtn.innerText = "Şirket – Modül Eşleşmesi";
+    }else{
+        moduleBtn.style.display = "none";
+    }
+
     window.scrollTo({
         top: document.getElementById("section1").offsetTop,
         behavior: "smooth"
