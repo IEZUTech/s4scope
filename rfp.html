@@ -159,7 +159,11 @@ footer{
 <!-- ===================== BÖLÜM 1 ===================== -->
 <div class="section hidden" id="section1">
     <div class="section-title">Bölüm 1 – Şirket Bazlı Genel Bilgiler</div>
+  
+    <label>Kaç şirket için RFP doldurulacak?</label>
+<input type="number" id="companyCount" min="1" />
 
+<button onclick="createCompanies()">Şirketleri Oluştur</button>
     <button class="btn-success" onclick="addCompany()">Şirket Ekle</button>
     <button class="btn-primary" onclick="showStructure()">Şirket Yapılanmasını Göster</button>
 
