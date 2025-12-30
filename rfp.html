@@ -185,8 +185,10 @@ footer{
 
 <script>
 const sectorMap = {
-  "Kesikli Üretim": ["Otomotiv Tedarikçileri","Kiralama & Leasing","Batarya Üreticileri"]
-};
+  "Kesikli Üretim": ["Otomotiv Tedarikçileri","Kiralama & Leasing","Batarya Üreticileri"],
+  "Havacılık ve Savunma": ["Seviye 2 ve üzeri Tedarikçiler","OEM Bağlı Ortaklıkları"],
+  "Endüstriyel Üretim": ["Bileşen Üreticileri","Makine & Ekipman"]
+      };
 const sapModules = ["FI","CO","MM","SD","PP","QM","PM","PS"];
 
 let companyIndex = 0;
@@ -206,11 +208,21 @@ function addCompany(){
             </div>
             <div>
                 <label>Ülke</label>
-                <select><option>Türkiye</option></select>
+                <select>
+                  <option>Türkiye</option>
+                    <option>Almanya</option>
+                    <option>ABD</option>
             </div>
             <div>
                 <label>Ana Sektör</label>
                 <select><option>Kesikli Üretim</option></select>
+            </div>
+            <div>
+               <label>Ana Sektör</label>
+                <select onchange="loadSub(this)">
+                    <option></option>
+                    ${Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("")}
+                </select>
             </div>
             <div>
                 <label>Alt Sektör</label>
@@ -218,12 +230,21 @@ function addCompany(){
             </div>
             <div>
                 <label>Ana Faaliyet</label>
-                <select><option>Üretim</option></select>
+                <select>
+                    <option>Üretim</option>
+                    <option>Hizmet</option>
+                    <option>Proje</option>
             </div>
         </div>`;
     document.getElementById("companies").appendChild(c);
 }
-
+function loadSub(sel){
+    const sector = sel.value;
+    const sub = sel.parentElement.nextElementSibling.querySelector("select");
+    sub.innerHTML = "";
+    (sectorMap[sector]||[]).forEach(s=>{
+        sub.innerHTML += `<option>${s}</option>`;
+        
 function createCompanies(){
     const count = parseInt(companyCount.value);
     if(!count) return;
