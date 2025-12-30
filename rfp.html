@@ -73,7 +73,7 @@
         color: var(--secondary-color);
     }
 
-    .grid-setup { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: left; }
+    .grid-setup { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; text-align: left; }
 
     label { font-weight: 600; font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 8px; }
 
@@ -97,10 +97,9 @@
     .counter-box { display: flex; align-items: center; gap: 12px; background: white; padding: 5px 12px; border-radius: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
     .val-span { font-weight: 700; font-size: 1.1rem; color: var(--primary-color); min-width: 25px; text-align: center; }
 
-    /* Modül Tablosu Genişliği */
     .table-container { overflow-x: auto; margin-top: 25px; border-radius: 8px; border: 1px solid var(--border-color); }
     table { width: 100%; border-collapse: collapse; min-width: 1000px; }
-    th { background: var(--secondary-color); color: white; padding: 15px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    th { background: var(--secondary-color); color: white; padding: 15px; font-size: 0.75rem; text-transform: uppercase; }
     td { padding: 12px; border-bottom: 1px solid var(--border-color); background: white; text-align: center; font-size: 0.9rem; }
 
     .hidden { display: none; }
@@ -144,9 +143,13 @@
                         <option>R/3</option>
                     </select>
                 </div>
+                <div id="sapVersionArea" style="display:none;">
+                    <label>SAP Versiyonu</label>
+                    <input type="text" id="sapVersion" placeholder="Örn: 1909, 2021 FPS02">
+                </div>
                 <div id="approachArea" style="display:none;">
                     <label>Geçiş Yaklaşımı</label>
-                    <select>
+                    <select id="transitionApproach">
                         <option value="">Seçiniz</option>
                         <option>Greenfield</option>
                         <option>Brownfield</option>
@@ -201,16 +204,9 @@
     };
 
     const sapModules = [
-        "FI - Mali Muhasebe",
-        "FM - Bütçe Kontrol",
-        "CO - Maliyet Muhasebesi ve Karlılık",
-        "PS - Proje Sistemi",
-        "MM - Malzeme Yönetimi ve Satınalma",
-        "SD - Satış ve Dağıtım",
-        "PP - Üretim ve Planlama",
-        "QM - Kalite Yönetimi",
-        "PM - Bakım Yönetimi",
-        "WM/EWM - Depo Yönetimi"
+        "FI - Mali Muhasebe", "FM - Bütçe Kontrol", "CO - Maliyet Muhasebesi ve Karlılık", 
+        "PS - Proje Sistemi", "MM - Malzeme Yönetimi ve Satınalma", "SD - Satış ve Dağıtım", 
+        "PP - Üretim ve Planlama", "QM - Kalite Yönetimi", "PM - Bakım Yönetimi", "WM/EWM - Depo Yönetimi"
     ];
 
     let companyIndex = 0;
@@ -219,6 +215,7 @@
     document.getElementById("existingErp").addEventListener("change", function() {
         const isSap = this.value === "SAP";
         document.getElementById("sapModelArea").style.display = isSap ? "block" : "none";
+        document.getElementById("sapVersionArea").style.display = isSap ? "block" : "none";
         document.getElementById("approachArea").style.display = isSap ? "block" : "none";
     });
 
@@ -292,7 +289,7 @@
     function showStructure() {
         let html = `<table><thead><tr><th>Şirket Adı</th>${sapModules.map(m=>`<th>${m}</th>`).join("")}</tr></thead><tbody>`;
         savedCompanies.forEach(name => {
-            html += `<tr><td style="font-weight:700; text-align:left; padding-left:20px;">${name}</td>${sapModules.map(()=>`<td><input type="checkbox" style="width:20px; height:20px; cursor:pointer;"></td>`).join("")}</tr>`;
+            html += `<tr><td style="font-weight:700; text-align:left; padding-left:20px;">${name}</td>${sapModules.map(()=>`<td><input type="checkbox" style="width:18px; height:18px; cursor:pointer;"></td>`).join("")}</tr>`;
         });
         document.getElementById("companyStructure").innerHTML = html + `</tbody></table>`;
     }
