@@ -2,130 +2,198 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>S4Scope – SAP RFP | IEZU Tech</title>
 
 <style>
-body{
-    font-family: Arial, sans-serif;
-    background:#f4f6f9;
-    margin:0;
-}
-header{
-    background:#0b5ed7;
-    color:#fff;
-    padding:14px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-.container{
-    padding:20px;
-}
-.section{
-    background:#fff;
-    border:1px solid #ccc;
-    margin-top:20px;
-    padding:20px;
-}
-.section-title{
-    background:#0b5ed7;
-    color:#fff;
-    padding:12px;
-    margin:-20px -20px 20px -20px;
-    font-size:18px;
-}
-.form-group{
-    margin-bottom:15px;
-}
-label{
-    font-weight:bold;
-    font-size:13px;
-    display:block;
-    margin-bottom:5px;
-}
-input, select{
-    width:100%;
-    padding:6px;
-    box-sizing:border-box;
-}
-button{
-    padding:10px 20px;
-    border:none;
-    border-radius:4px;
-    cursor:pointer;
-    font-size:14px;
-}
-.btn-primary{ background:#0b5ed7; color:#fff; }
-.btn-success{ background:#198754; color:#fff; }
-.btn-danger{ background:#dc3545; color:#fff; }
+    :root {
+        --primary-color: #0d47a1;
+        --secondary-color: #1a237e;
+        --accent-color: #00c853;
+        --danger-color: #d32f2f;
+        --bg-color: #f0f2f5;
+        --card-bg: #ffffff;
+        --text-main: #2c3e50;
+        --text-muted: #546e7a;
+        --border-color: #dee2e6;
+    }
 
-.company-block{
-    position:relative;
-    border:1px solid #ccc;
-    padding:15px;
-    margin-top:20px;
-}
-.company-grid{
-    display:grid;
-    grid-template-columns: repeat(5,1fr);
-    gap:12px;
-}
-.delete-btn{
-    position:absolute;
-    top:8px;
-    right:8px;
-    font-size:12px;
-}
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
-}
-th,td{
-    border:1px solid #ccc;
-    padding:8px;
-    text-align:center;
-}
-th{
-    background:#0b5ed7;
-    color:#fff;
-}
-footer{
-    margin-top:40px;
-    padding:12px;
-    text-align:center;
-    font-size:13px;
-    color:#666;
-    border-top:1px solid #ccc;
-    background:#fff;
-}
-.hidden{ display:none; }
+    body {
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background: var(--bg-color);
+        color: var(--text-main);
+        margin: 0;
+        line-height: 1.6;
+    }
 
-/* Bölüm 2 Sayaç Stilleri */
-.counter-row {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-top: 10px;
-}
-.counter-row span {
-    min-width: 100px;
-    font-weight: bold;
-}
-.counter-box {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: #f8f9fa;
-    padding: 5px 10px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-}
-.val-span {
-    font-size: 16px;
-    min-width: 25px;
-    text-align: center;
-}
+    /* Header Tasarımı */
+    header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: #fff;
+        padding: 20px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    header strong { font-size: 1.4rem; letter-spacing: 1px; }
+
+    .container {
+        max-width: 1100px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
+
+    /* Kart ve Bölüm Tasarımı */
+    .section {
+        background: var(--card-bg);
+        border-radius: 12px;
+        margin-top: 25px;
+        padding: 30px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        border: 1px solid var(--border-color);
+        transition: transform 0.2s;
+    }
+
+    .section-title {
+        border-left: 5px solid var(--primary-color);
+        padding-left: 15px;
+        margin-bottom: 25px;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--secondary-color);
+    }
+
+    /* Form Elemanları */
+    label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s;
+        background-color: #fdfdfd;
+    }
+
+    input:focus, select:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.1);
+    }
+
+    /* Butonlar */
+    button {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-primary { background: var(--primary-color); color: #fff; }
+    .btn-primary:hover { background: var(--secondary-color); transform: translateY(-1px); }
+
+    .btn-success { background: var(--accent-color); color: #fff; }
+    .btn-success:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+    .btn-danger { background: var(--danger-color); color: #fff; }
+
+    /* Şirket Blokları */
+    .company-block {
+        background: #f8fbff;
+        border: 1px solid #e3e9ef;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+        position: relative;
+    }
+
+    .company-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+    }
+
+    /* Tablo Tasarımı */
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 25px;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+    }
+
+    th {
+        background: var(--secondary-color);
+        color: #fff;
+        padding: 15px;
+        font-weight: 500;
+        font-size: 0.85rem;
+    }
+
+    td {
+        padding: 12px;
+        border-bottom: 1px solid var(--border-color);
+        background: #fff;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    /* Sayaçlar (Bölüm 2) */
+    .counter-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #edf2f7;
+    }
+
+    .counter-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #fff;
+        padding: 5px 15px;
+        border-radius: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .val-span {
+        font-weight: 700;
+        min-width: 30px;
+        text-align: center;
+        font-size: 1.1rem;
+        color: var(--primary-color);
+    }
+
+    footer {
+        margin-top: 50px;
+        padding: 30px;
+        background: var(--secondary-color);
+        color: rgba(255,255,255,0.7);
+        text-align: center;
+        font-size: 13px;
+    }
+
+    .hidden { display: none; }
+    .mt-2 { margin-top: 15px; }
 </style>
 </head>
 
@@ -137,233 +205,242 @@ footer{
 </header>
 
 <div class="container">
+    
+    <div class="section">
+        <div class="section-title">ERP Seçimi</div>
+        <div style="max-width: 400px;">
+            <label>Mevcut ERP Sistemi</label>
+            <select id="existingErp">
+                <option value="">Seçiniz</option>
+                <option value="SAP">SAP</option>
+                <option value="Oracle">Oracle</option>
+                <option value="Logo">Logo</option>
+                <option value="Diğer">Diğer</option>
+            </select>
+        </div>
 
-<label>Mevcut ERP Sistemi</label>
-<select id="existingErp">
-    <option value="">Seçiniz</option>
-    <option value="SAP">SAP</option>
-    <option value="Oracle">Oracle</option>
-    <option value="Logo">Logo</option>
-    <option value="Diğer">Diğer</option>
-</select>
+        <div id="sapModelArea" class="mt-2" style="display:none;">
+            <div class="company-grid">
+                <div>
+                    <label>SAP Modeli</label>
+                    <select id="sapModel">
+                        <option value="">Seçiniz</option>
+                        <option>S/4HANA OnPremise</option>
+                        <option>S/4HANA Public Cloud</option>
+                        <option>S/4HANA Private Cloud</option>
+                        <option>ECC</option>
+                        <option>R/3</option>
+                    </select>
+                </div>
+                <div id="sapVersionArea" style="display:none;">
+                    <label>SAP Versiyonu</label>
+                    <input type="text" placeholder="Örn: 1909, 2021 FPS02">
+                </div>
+                <div>
+                    <label>Geçiş Yaklaşımı</label>
+                    <select>
+                        <option value="">Seçiniz</option>
+                        <option>Greenfield</option>
+                        <option>Brownfield</option>
+                        <option>Bluefield / Hibrit</option>
+                        <option>Henüz karar verilmedi</option>
+                    </select>
+                </div>
+            </div>
+        </div>
 
-<br><br>
-
-<div id="sapModelArea" style="display:none;">
-    <label>SAP Modeli</label>
-    <select id="sapModel">
-        <option value="">Seçiniz</option>
-        <option>S/4HANA OnPremise</option>
-        <option>S/4HANA Public Cloud</option>
-        <option>S/4HANA Private Cloud</option>
-        <option>ECC</option>
-        <option>R/3</option>
-    </select>
-
-    <div id="sapVersionArea" style="display:none;">
-        <label>SAP Versiyonu</label>
-        <input type="text" placeholder="Örn: 1909, 2021 FPS02">
+        <div class="mt-2">
+            <button class="btn-primary" onclick="goToSection1()">Kaydet ve Devam Et →</button>
+        </div>
     </div>
 
-    <br>
+    <div class="section hidden" id="section1">
+        <div class="section-title">Bölüm 1 – Şirket Bazlı Genel Bilgiler</div>
 
-    <label>Geçiş Yaklaşımı</label>
-    <select>
-        <option value="">Seçiniz</option>
-        <option>Greenfield</option>
-        <option>Brownfield</option>
-        <option>Bluefield / Hibrit</option>
-        <option>Henüz karar verilmedi</option>
-    </select>
-</div>
+        <div style="display: flex; gap: 15px; align-items: flex-end;">
+            <div style="flex: 1; max-width: 300px;">
+                <label>Kaç şirket için RFP doldurulacak?</label>
+                <input type="number" id="companyCount" min="1" placeholder="Sayı giriniz..." />
+            </div>
+            <button class="btn-primary" onclick="createCompanies()">Şirketleri Oluştur</button>
+            <button class="btn-success" onclick="addCompany()">+ Şirket Ekle</button>
+        </div>
 
-<br>
-<button class="btn-primary" onclick="goToSection1()">Kaydet ve Devam Et</button>
+        <div id="companies"></div>
 
-<div class="section hidden" id="section1">
-    <div class="section-title">Bölüm 1 – Şirket Bazlı Genel Bilgiler</div>
+        <div class="mt-2" style="border-top: 1px solid #eee; padding-top: 20px;">
+            <button class="btn-success" onclick="saveCompanies()">Şirket Bilgilerini Kaydet</button>
+            <button class="btn-primary hidden" id="moduleBtn" onclick="showStructure()">Şirket – Modül Eşleşmesi</button>
+        </div>
 
-    <label>Kaç şirket için RFP doldurulacak?</label>
-    <input type="number" id="companyCount" min="1" />
-    <br><br>
+        <div id="companyStructure"></div>
+    </div>
 
-    <button onclick="createCompanies()">Şirketleri Oluştur</button>
-    <button class="btn-success" onclick="addCompany()">Şirket Ekle</button>
-
-    <div id="companies"></div>
-
-    <br>
-    <button class="btn-success" onclick="saveCompanies()">Şirket Bilgilerini Kaydet</button>
-
-    <br><br>
-    <button class="btn-primary hidden" id="moduleBtn" onclick="showStructure()">Şirket – Modül Eşleşmesi</button>
-
-    <div id="companyStructure"></div>
-</div>
-
-<div id="section2Area"></div>
+    <div id="section2Area"></div>
 
 </div>
 
 <footer>
-© IEZU Tech | S4Scope – SAP Scope & RFP Services
+    © 2025 IEZU Tech | S4Scope – SAP Scope & RFP Services
 </footer>
 
 <script>
-const sectorMap = {
- "Tüketici Endüstrileri": ["Tarım & Gıda", "Hızlı Tüketim Ürünleri (FMCG)", "İlaç, Medikal", "Perakende", "Toptan Dağıtım"],
- "Kesikli Üretim": ["Otomotiv Tedarikçileri", "Kiralama & Leasing", "Batarya Üreticileri", "Makine ve Ekipman Üreticileri", "Yüksek Teknoloji Üreticileri"],
- "Süreç Endüstrileri": ["Kimya", "Petrol & Gaz", "Enerji Üretimi", "Madencilik", "Orman Ürünleri & Kâğıt"],
- "Enerji ve Altyapı": ["Elektrik Dağıtım Şirketleri", "Doğalgaz Dağıtımı", "Su ve Atık Yönetimi", "Yenilenebilir Enerji"],
- "Finansal Hizmetler": ["Bankalar", "Sigorta Şirketleri", "Finansal Kiralama", "Ödeme ve Finans Teknolojileri"],
- "Kamu ve Sağlık": ["Kamu Kurumları", "Savunma ve Güvenlik", "Eğitim ve Araştırma", "Sağlık Hizmetleri"],
- "Hizmet Endüstrileri": ["Mühendislik & İnşaat", "Profesyonel Hizmetler", "Gayrimenkul", "Medya ve Eğlence", "Spor Organizasyonları"],
- "Ulaşım ve İletişim": ["Havayolu ve Yolcu Taşımacılığı", "Lojistik ve Taşımacılık", "Telekomünikasyon", "Seyahat Hizmetleri"]
-};
-const sapModules = ["FI - Mali Muhasebe","FM - Bütçe Kontrol","CO - Maliyet Muhasebesi ve Karlılık","PS - Proje Sistemi","MM - Malzeme Yönetimi ve Satınalma","SD - Satış ve Dağıtım","PP - Üretim ve Planlama","QM - Kalite Yönetimi","PM - Bakım Yönetimi","WM/EWM - Depo Yönetimi"];
+    // JavaScript kısmı aynı teknik işlevsellikte kaldı, hafızandaki kodla %100 uyumludur.
+    const sectorMap = {
+        "Tüketici Endüstrileri": ["Tarım & Gıda", "Hızlı Tüketim Ürünleri (FMCG)", "İlaç, Medikal", "Perakende", "Toptan Dağıtım"],
+        "Kesikli Üretim": ["Otomotiv Tedarikçileri", "Kiralama & Leasing", "Batarya Üreticileri", "Makine ve Ekipman Üreticileri", "Yüksek Teknoloji Üreticileri"],
+        "Süreç Endüstrileri": ["Kimya", "Petrol & Gaz", "Enerji Üretimi", "Madencilik", "Orman Ürünleri & Kâğıt"],
+        "Enerji ve Altyapı": ["Elektrik Dağıtım Şirketleri", "Doğalgaz Dağıtımı", "Su ve Atık Yönetimi", "Yenilenebilir Enerji"],
+        "Finansal Hizmetler": ["Bankalar", "Sigorta Şirketleri", "Finansal Kiralama", "Ödeme ve Finans Teknolojileri"],
+        "Kamu ve Sağlık": ["Kamu Kurumları", "Savunma ve Güvenlik", "Eğitim ve Araştırma", "Sağlık Hizmetleri"],
+        "Hizmet Endüstrileri": ["Mühendislik & İnşaat", "Profesyonel Hizmetler", "Gayrimenkul", "Medya ve Eğlence", "Spor Organizasyonları"],
+        "Ulaşım ve İletişim": ["Havayolu ve Yolcu Taşımacılığı", "Lojistik ve Taşımacılık", "Telekomünikasyon", "Seyahat Hizmetleri"]
+    };
+    const sapModules = ["FI - Mali Muhasebe","FM - Bütçe Kontrol","CO - Maliyet Muhasebesi ve Karlılık","PS - Proje Sistemi","MM - Malzeme Yönetimi ve Satınalma","SD - Satış ve Dağıtım","PP - Üretim ve Planlama","QM - Kalite Yönetimi","PM - Bakım Yönetimi","WM/EWM - Depo Yönetimi"];
 
-let companyIndex = 0;
-let savedCompanies = [];
+    let companyIndex = 0;
+    let savedCompanies = [];
 
-const sapModelArea = document.getElementById("sapModelArea");
-const sapVersionArea = document.getElementById("sapVersionArea");
-const existingErp = document.getElementById("existingErp");
-const section1 = document.getElementById("section1");
-const companies = document.getElementById("companies");
-const companyCount = document.getElementById("companyCount");
-const companyStructure = document.getElementById("companyStructure");
+    const existingErp = document.getElementById("existingErp");
+    const sapModelArea = document.getElementById("sapModelArea");
+    const sapVersionArea = document.getElementById("sapVersionArea");
+    const section1 = document.getElementById("section1");
+    const companies = document.getElementById("companies");
+    const companyCount = document.getElementById("companyCount");
+    const companyStructure = document.getElementById("companyStructure");
 
-function addCompany(){
-    companyIndex++;
-    const c = document.createElement("div");
-    c.className="company-block";
-    c.innerHTML=`
-        <button class="btn-danger delete-btn" onclick="this.parentElement.remove()">Sil</button>
-        <h3>Şirket ${companyIndex}</h3>
-        <div class="company-grid">
-            <div>
-                <label>Şirket Adı</label>
-                <input type="text" class="company-name">
-            </div>
-            <div>
-                <label>Ülke</label>
-                <select>
-                    <option>Türkiye</option>
-                    <option>Almanya</option>
-                    <option>ABD</option>
-                </select>
-            </div>
-            <div>
-               <label>Ana Sektör</label>
-                <select onchange="loadSub(this)">
-                    <option></option>
-                    ${Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("")}
-                </select>
-            </div>
-            <div>
-                <label>Alt Sektör</label>
-                <select></select>
-            </div>
-            <div>
-                <label>Ana Faaliyet</label>
-                <select>
-                    <option>Üretim</option>
-                    <option>Hizmet</option>
-                    <option>Proje</option>
-                </select>
-            </div>
-        </div>`;
-    companies.appendChild(c);
-}
-
-function loadSub(sel){
-    const sector = sel.value;
-    const sub = sel.parentElement.nextElementSibling.querySelector("select");
-    sub.innerHTML = "";
-    (sectorMap[sector] || []).forEach(s=>{
-        sub.innerHTML += `<option>${s}</option>`;
-    });
-}
-
-function createCompanies(){
-    const count = parseInt(companyCount.value);
-    if(!count) return;
-    companies.innerHTML="";
-    companyIndex=0;
-    for(let i=0;i<count;i++) addCompany();
-}
-
-function saveCompanies(){
-    savedCompanies = [];
-    document.querySelectorAll(".company-name").forEach(i=>{
-        if(i.value) savedCompanies.push(i.value);
-    });
-    if(savedCompanies.length===0){
-        alert("En az bir şirket adı girilmeli");
-        return;
+    function addCompany(){
+        companyIndex++;
+        const c = document.createElement("div");
+        c.className="company-block";
+        c.innerHTML=`
+            <button class="btn-danger delete-btn" onclick="this.parentElement.remove()" style="padding: 4px 10px; font-size: 11px;">Sil</button>
+            <h4 style="margin-top:0; color:var(--primary-color)">Şirket #${companyIndex}</h4>
+            <div class="company-grid">
+                <div>
+                    <label>Şirket Adı</label>
+                    <input type="text" class="company-name" placeholder="Örn: IEZU Holding">
+                </div>
+                <div>
+                    <label>Ülke</label>
+                    <select>
+                        <option>Türkiye</option>
+                        <option>Almanya</option>
+                        <option>ABD</option>
+                    </select>
+                </div>
+                <div>
+                   <label>Ana Sektör</label>
+                    <select onchange="loadSub(this)">
+                        <option></option>
+                        ${Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("")}
+                    </select>
+                </div>
+                <div>
+                    <label>Alt Sektör</label>
+                    <select></select>
+                </div>
+                <div>
+                    <label>Ana Faaliyet</label>
+                    <select>
+                        <option>Üretim</option>
+                        <option>Hizmet</option>
+                        <option>Proje</option>
+                    </select>
+                </div>
+            </div>`;
+        companies.appendChild(c);
     }
-    document.getElementById("moduleBtn").classList.remove("hidden");
-    renderSection2(); // Bölüm 2'yi oluştur
-}
 
-function renderSection2(){
-    const area = document.getElementById("section2Area");
-    let html = `<div class="section" id="section2">
-        <div class="section-title">Bölüm 2 – Organizasyon & Yapı</div>`;
-    
-    savedCompanies.forEach((name, i) => {
-        html += `
-        <div class="company-block">
-            <h3>${name}</h3>
-            ${createCounter('Üretim Tesisi', 'p'+i)}
-            ${createCounter('Depo / Lojistik Merkezi', 'w'+i)}
-            ${createCounter('Satış Ofisi / Bölge Müdürlüğü', 's'+i)}
+    function loadSub(sel){
+        const sector = sel.value;
+        const sub = sel.parentElement.nextElementSibling.querySelector("select");
+        sub.innerHTML = "";
+        (sectorMap[sector] || []).forEach(s=>{
+            sub.innerHTML += `<option>${s}</option>`;
+        });
+    }
+
+    function createCompanies(){
+        const count = parseInt(companyCount.value);
+        if(!count) return;
+        companies.innerHTML="";
+        companyIndex=0;
+        for(let i=0;i<count;i++) addCompany();
+    }
+
+    function saveCompanies(){
+        savedCompanies = [];
+        document.querySelectorAll(".company-name").forEach(i=>{
+            if(i.value) savedCompanies.push(i.value);
+        });
+        if(savedCompanies.length===0){
+            alert("En az bir şirket adı girilmeli");
+            return;
+        }
+        document.getElementById("moduleBtn").classList.remove("hidden");
+        renderSection2();
+    }
+
+    function renderSection2(){
+        const area = document.getElementById("section2Area");
+        let html = `<div class="section" id="section2">
+            <div class="section-title">Bölüm 2 – Organizasyon & Yapı</div>`;
+        
+        savedCompanies.forEach((name, i) => {
+            html += `
+            <div class="company-block">
+                <h4 style="margin-top:0; color:var(--primary-color)">${name}</h4>
+                ${createCounter('Üretim Tesisi', 'p'+i)}
+                ${createCounter('Depo / Lojistik Merkezi', 'w'+i)}
+                ${createCounter('Satış Ofisi / Bölge Müdürlüğü', 's'+i)}
+            </div>`;
+        });
+        html += `</div>`;
+        area.innerHTML = html;
+    }
+
+    function createCounter(label, id){
+        return `
+        <div class="counter-row">
+            <span>${label}</span>
+            <div class="counter-box">
+                <button class="btn-danger" style="padding:4px 10px" onclick="changeVal('${id}',-1)">-</button>
+                <span class="val-span" id="${id}">0</span>
+                <button class="btn-success" style="padding:4px 10px" onclick="changeVal('${id}',1)">+</button>
+            </div>
         </div>`;
+    }
+
+    function changeVal(id, delta){
+        const el = document.getElementById(id);
+        let current = parseInt(el.innerText);
+        el.innerText = Math.max(0, current + delta);
+    }
+
+    function showStructure(){
+        let html="<table><thead><tr><th>Şirket</th>";
+        sapModules.forEach(m=>html+=`<th>${m}</th>`);
+        html+="</tr></thead><tbody>";
+        savedCompanies.forEach(n=>{
+            html+=`<tr><td style="font-weight:600">${n}</td>`;
+            sapModules.forEach(()=>html+="<td><input type='checkbox' style='width:auto'></td>");
+            html+="</tr>";
+        });
+        html+="</tbody></table>";
+        companyStructure.innerHTML=html;
+    }
+
+    function goToSection1(){
+        section1.classList.remove("hidden");
+        window.scrollTo({ top: section1.offsetTop - 50, behavior: 'smooth' });
+    }
+
+    existingErp.addEventListener("change",()=>{
+        const isSAP = existingErp.value==="SAP";
+        sapModelArea.style.display = isSAP?"block":"none";
+        sapVersionArea.style.display = isSAP?"block":"none";
     });
-    html += `</div>`;
-    area.innerHTML = html;
-}
-
-function createCounter(label, id){
-    return `
-    <div class="counter-row">
-        <span>${label}</span>
-        <div class="counter-box">
-            <button class="btn-danger" style="padding:2px 8px" onclick="changeVal('${id}',-1)">-</button>
-            <span class="val-span" id="${id}">0</span>
-            <button class="btn-success" style="padding:2px 8px" onclick="changeVal('${id}',1)">+</button>
-        </div>
-    </div>`;
-}
-
-function changeVal(id, delta){
-    const el = document.getElementById(id);
-    let current = parseInt(el.innerText);
-    el.innerText = Math.max(0, current + delta);
-}
-
-function showStructure(){
-    let html="<table><tr><th>Şirket</th>";
-    sapModules.forEach(m=>html+=`<th>${m}</th>`);
-    html+="</tr>";
-    savedCompanies.forEach(n=>{
-        html+=`<tr><td>${n}</td>`;
-        sapModules.forEach(()=>html+="<td><input type='checkbox'></td>");
-        html+="</tr>";
-    });
-    html+="</table>";
-    companyStructure.innerHTML=html;
-}
-
-function goToSection1(){
-    section1.classList.remove("hidden");
-}
-
-existingErp.addEventListener("change",()=>{
-    const isSAP = existingErp.value==="SAP";
-    sapModelArea.style.display = isSAP?"block":"none";
-    sapVersionArea.style.display = isSAP?"block":"none";
-});
 </script>
 
 </body>
