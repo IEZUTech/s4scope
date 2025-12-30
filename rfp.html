@@ -79,7 +79,7 @@
             <li onclick="validateAndShowStep(1)" id="nav-1">Bölüm 1: Genel Bilgiler</li>
             <li onclick="validateAndShowStep(2)" id="nav-2">Bölüm 2: Organizasyon & Yapı</li>
             <li onclick="validateAndShowStep(3)" id="nav-3">Bölüm 3: İş Süreçleri</li>
-            <li id="nav-4">Bölüm 4: Teknik & Entegrasyon</li>
+            <li onclick="validateAndShowStep(4)" id="nav-4">Bölüm 4: Teknik & Entegrasyon</li>
             <li id="nav-5">Bölüm 5: Dönüşüm Stratejisi</li>
             <li id="nav-6">Bölüm 6: Çıktı & Değerlendirme</li>
         </ul>
@@ -153,7 +153,16 @@
             <div id="processArea"></div>
             <div class="nav-buttons">
                 <button class="btn-secondary" onclick="showStep(2)">← Geri</button>
-                <button class="btn-primary" onclick="alert('Bölüm 4 Hazırlanıyor...')">Sonraki Bölüm →</button>
+                <button class="btn-primary" onclick="validateAndShowStep(4)">Sonraki Bölüm →</button>
+            </div>
+        </div>
+
+        <div class="section" id="step-4">
+            <div class="section-title">Bölüm 4 – Teknik Entegrasyon & Yazılım Envanteri</div>
+            <div id="softwareInventoryArea"></div>
+            <div class="nav-buttons">
+                <button class="btn-secondary" onclick="showStep(3)">← Geri</button>
+                <button class="btn-primary" onclick="alert('Bölüm 5 Hazırlanıyor...')">Sonraki Bölüm →</button>
             </div>
         </div>
     </main>
@@ -175,6 +184,14 @@
         "PS - Proje Sistemi", "MM - Malzeme Yönetimi ve Satınalma", "SD - Satış ve Dağıtım", 
         "PP - Üretim ve Planlama", "QM - Kalite Yönetimi", "PM - Bakım Yönetimi", "WM/EWM - Depo Yönetimi"
     ];
+
+    const softwareGroups = {
+        "Analitik & Finans": ["Power BI", "LucaNet", "Tableau", "QlikView"],
+        "Üretim & Operasyon": ["Doruk OT (MES)", "SimSoft MES", "ProManage", "Siemens MES"],
+        "Otomasyon": ["UiPath", "Automation Anywhere", "Blue Prism"],
+        "Satış & Müşteri": ["T-Soft", "Salesforce", "Microsoft Dynamics CRM"],
+        "İnsan Kaynakları": ["Kolay İK", "Logo HR", "SAP SuccessFactors"]
+    };
 
     const fiWbsStructure = {
         "1. Organizasyon ve Temel Muhasebe Yapısı": [
@@ -297,6 +314,7 @@
             document.getElementById("modTabBtn").classList.remove("hidden");
             renderOrg();
             renderProcesses();
+            renderTechInventory();
             alert("Şirket bilgileri kaydedildi. Lütfen 'Şirket-Modül Tablosu'nu oluşturun.");
         } else {
             alert("Lütfen en az bir şirket adı giriniz.");
@@ -386,6 +404,83 @@
         });
         document.getElementById("processArea").innerHTML = html;
     }
+
+    // --- BÖLÜM 4: TEKNİK ENVANTER FONKSİYONLARI ---
+
+    function renderTechInventory() {
+        let html = "";
+        Object.keys(softwareGroups).forEach((groupName, gIdx) => {
+            html += `
+            <div class="company-block">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <h4 style="margin:0; color:var(--secondary); font-size:1.1rem;">${groupName}</h4>
+                    <div style="display:flex; gap:10px;">
+                        <select id="select-soft-${gIdx}" style="width:200px; padding:8px;">
+                            <option value="">Yazılım Seçiniz...</option>
+                            ${softwareGroups[groupName].map(s => `<option value="${s}">${s}</option>`).join("")}
+                            <option value="DİĞER">Diğer +</option>
+                        </select>
+                        <button class="btn-success" style="padding:8px 15px;" onclick="addSoftwareRow(${gIdx})">+</button>
+                    </div>
+                </div>
+                <div class="table-container" id="container-soft-${gIdx}" style="display:none; margin-top:0;">
+                    <table style="min-width:100%;">
+                        <thead>
+                            <tr>
+                                <th style="text-align:left; width:30%;">Yazılım</th>
+                                <th style="text-align:left; width:50%;">Hedef Mimarideki Konumu</th>
+                                <th style="width:20%;">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-soft-${gIdx}"></tbody>
+                    </table>
+                </div>
+            </div>`;
+        });
+        document.getElementById("softwareInventoryArea").innerHTML = html;
+    }
+
+    function addSoftwareRow(gIdx) {
+        const select = document.getElementById(`select-soft-${gIdx}`);
+        let val = select.value;
+        if(!val) return;
+
+        if(val === "DİĞER") {
+            val = prompt("Lütfen yazılım adını giriniz:");
+            if(!val) return;
+        }
+
+        const container = document.getElementById(`container-soft-${gIdx}`);
+        const tbody = document.getElementById(`tbody-soft-${gIdx}`);
+        container.style.display = "block";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td style="text-align:left; font-weight:600;">${val}</td>
+            <td style="text-align:left;">
+                <select style="padding:8px; font-size:0.85rem;">
+                    <option>SAP ürün ve modülü ile değiştirilebilir</option>
+                    <option>Hedef Mimaride kalacak</option>
+                    <option>3. parti sistem ile değiştirilebilir</option>
+                </select>
+            </td>
+            <td>
+                <button class="btn-danger" style="padding:5px 12px; font-size:0.8rem;" onclick="removeSoftwareRow(this, ${gIdx})">- Kaldır</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+    function removeSoftwareRow(btn, gIdx) {
+        const tr = btn.closest("tr");
+        const tbody = tr.parentElement;
+        tr.remove();
+        if(tbody.children.length === 0) {
+            document.getElementById(`container-soft-${gIdx}`).style.display = "none";
+        }
+    }
+
+    // --- NAVIGASYON VE VALIDASYON ---
 
     function validateAndShowStep(targetIdx) {
         const currentIdx = parseInt(document.querySelector("nav ul li.active").id.split("-")[1]);
