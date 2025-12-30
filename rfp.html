@@ -50,6 +50,7 @@
         .btn-primary { background: var(--primary); color: white; }
         .btn-success { background: var(--accent); color: white; }
         .btn-danger { background: #d32f2f; color: white; }
+        .btn-secondary { background: #78909c; color: white; } /* Geri butonu için nötr renk */
 
         .table-container { overflow-x: auto; margin-top: 20px; border-radius: 8px; border: 1px solid var(--border); }
         table { width: 100%; border-collapse: collapse; min-width: 1000px; }
@@ -57,6 +58,15 @@
         td { padding: 12px; border: 1px solid #eee; text-align: center; background: white; font-size: 0.9rem;}
 
         .hidden { display: none; }
+
+        /* Navigasyon Buton Konteynırı */
+        .nav-buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -66,10 +76,10 @@
     <nav>
         <h2>S4Scope RFP</h2>
         <ul>
-            <li onclick="showStep(0)" id="nav-0" class="active">Bölüm 0: ERP Yapısı</li>
-            <li onclick="showStep(1)" id="nav-1">Bölüm 1: Genel Bilgiler</li>
-            <li onclick="showStep(2)" id="nav-2">Bölüm 2: Organizasyon & Yapı</li>
-            <li onclick="showStep(3)" id="nav-3">Bölüm 3: İş Süreçleri</li>
+            <li onclick="validateAndShowStep(0)" id="nav-0" class="active">Bölüm 0: ERP Yapısı</li>
+            <li onclick="validateAndShowStep(1)" id="nav-1">Bölüm 1: Genel Bilgiler</li>
+            <li onclick="validateAndShowStep(2)" id="nav-2">Bölüm 2: Organizasyon & Yapı</li>
+            <li onclick="validateAndShowStep(3)" id="nav-3">Bölüm 3: İş Süreçleri</li>
             <li id="nav-4">Bölüm 4: Teknik & Entegrasyon</li>
             <li id="nav-5">Bölüm 5: Dönüşüm Stratejisi</li>
             <li id="nav-6">Bölüm 6: Çıktı & Değerlendirme</li>
@@ -92,18 +102,20 @@
                 </div>
                 <div id="sapModelArea" class="hidden">
                     <label>SAP Modeli</label>
-                    <select><option value="">Seçiniz</option><option>S/4HANA OnPremise</option><option>S/4HANA Public Cloud</option><option>S/4HANA Private Cloud</option><option>ECC</option><option>R/3</option></select>
+                    <select id="sapModel"><option value="">Seçiniz</option><option>S/4HANA OnPremise</option><option>S/4HANA Public Cloud</option><option>S/4HANA Private Cloud</option><option>ECC</option><option>R/3</option></select>
                 </div>
                 <div id="sapVersionArea" class="hidden">
                     <label>SAP Versiyonu</label>
-                    <input type="text" placeholder="Örn: 1909, 2022 FPS02">
+                    <input type="text" id="sapVersion" placeholder="Örn: 1909, 2022 FPS02">
                 </div>
                 <div id="approachArea" class="hidden">
                     <label>Geçiş Yaklaşımı</label>
-                    <select><option value="">Seçiniz</option><option>Greenfield</option><option>Brownfield</option><option>Bluefield / Hibrit</option><option>Henüz karar verilmedi</option></select>
+                    <select id="sapApproach"><option value="">Seçiniz</option><option>Greenfield</option><option>Brownfield</option><option>Bluefield / Hibrit</option><option>Henüz karar verilmedi</option></select>
                 </div>
             </div>
-            <button class="btn-primary" onclick="showStep(1)">Sonraki Bölüm →</button>
+            <div class="nav-buttons" style="justify-content: flex-end;">
+                <button class="btn-primary" onclick="validateAndShowStep(1)">Sonraki Bölüm →</button>
+            </div>
         </div>
 
         <div class="section" id="step-1">
@@ -126,21 +138,28 @@
             
             <div id="modTableContainer" class="table-container"></div>
             
-            <div style="margin-top: 20px;">
-                <button class="btn-primary" onclick="showStep(2)">Sonraki Bölüm →</button>
+            <div class="nav-buttons">
+                <button class="btn-secondary" onclick="showStep(0)">← Geri</button>
+                <button class="btn-primary" onclick="validateAndShowStep(2)">Sonraki Bölüm →</button>
             </div>
         </div>
 
         <div class="section" id="step-2">
             <div class="section-title">Bölüm 2 – Organizasyon & Yapı</div>
             <div id="orgContainer"></div>
-            <button class="btn-primary" onclick="showStep(3)">Sonraki Bölüm →</button>
+            <div class="nav-buttons">
+                <button class="btn-secondary" onclick="showStep(1)">← Geri</button>
+                <button class="btn-primary" onclick="validateAndShowStep(3)">Sonraki Bölüm →</button>
+            </div>
         </div>
 
         <div class="section" id="step-3">
             <div class="section-title">Bölüm 3 – İş Süreçleri</div>
             <div id="processArea"></div>
-            <button class="btn-primary" onclick="alert('Bölüm 4 Hazırlanıyor...')">Sonraki Bölüm →</button>
+            <div class="nav-buttons">
+                <button class="btn-secondary" onclick="showStep(2)">← Geri</button>
+                <button class="btn-primary" onclick="alert('Bölüm 4 Hazırlanıyor...')">Sonraki Bölüm →</button>
+            </div>
         </div>
     </main>
 
@@ -164,6 +183,7 @@
 
     let companyIndex = 0;
     let savedCompanies = [];
+    let modTableGenerated = false; // Bölüm 1 kontrolü için
 
     function toggleSapFields() {
         const isSap = document.getElementById("existingErp").value === "SAP";
@@ -188,10 +208,12 @@
                 <div><label>Ana Faaliyet</label><select><option>Üretim</option><option>Hizmet</option><option>Proje</option></select></div>
             </div>`;
         container.appendChild(div);
+        modTableGenerated = false; // Yeni şirket eklendiğinde tabloyu tekrar istemek için
     }
 
     function createCompanies() {
         const count = document.getElementById("companyCount").value;
+        if(!count || count < 1) { alert("Lütfen geçerli bir şirket sayısı giriniz."); return; }
         document.getElementById("companiesContainer").innerHTML = "";
         companyIndex = 0;
         for(let i=0; i<count; i++) addCompany();
@@ -208,7 +230,9 @@
             document.getElementById("modTabBtn").classList.remove("hidden");
             renderOrg();
             renderProcesses();
-            alert("Şirket bilgileri kaydedildi.");
+            alert("Şirket bilgileri kaydedildi. Lütfen 'Şirket-Modül Tablosu'nu oluşturun.");
+        } else {
+            alert("Lütfen en az bir şirket adı giriniz.");
         }
     }
 
@@ -218,6 +242,7 @@
             html += `<tr><td style="font-weight:700; text-align:left; padding-left:20px;">${name}</td>${sapModules.map(()=>`<td><input type="checkbox" style="width:18px; height:18px;"></td>`).join("")}</tr>`;
         });
         document.getElementById("modTableContainer").innerHTML = html + `</tbody></table>`;
+        modTableGenerated = true;
     }
 
     function renderOrg() {
@@ -260,6 +285,38 @@
             </div>`;
         });
         document.getElementById("processArea").innerHTML = html;
+    }
+
+    // --- NAVIGASYON VE VALIDASYON ---
+    
+    function validateAndShowStep(targetIdx) {
+        const currentIdx = parseInt(document.querySelector("nav ul li.active").id.split("-")[1]);
+        
+        // Geriye gidiliyorsa validasyon yapma
+        if (targetIdx < currentIdx) {
+            showStep(targetIdx);
+            return;
+        }
+
+        // BÖLÜM 0 KONTROLÜ
+        if (currentIdx === 0) {
+            const erp = document.getElementById("existingErp").value;
+            if (!erp) { alert("Lütfen mevcut ERP sisteminizi seçiniz."); return; }
+            if (erp === "SAP") {
+                if (!document.getElementById("sapModel").value || !document.getElementById("sapApproach").value) {
+                    alert("Lütfen SAP Modelini ve Geçiş Yaklaşımını seçiniz."); return;
+                }
+            }
+        }
+
+        // BÖLÜM 1 KONTROLÜ
+        if (currentIdx === 1) {
+            if (savedCompanies.length === 0) { alert("Lütfen şirketleri oluşturun ve kaydedin."); return; }
+            if (!modTableGenerated) { alert("Lütfen Modül Eşleşme Tablosunu oluşturun."); return; }
+        }
+
+        // Tüm kontroller geçtiyse ilerle
+        showStep(targetIdx);
     }
 
     function showStep(idx) {
