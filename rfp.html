@@ -26,24 +26,19 @@
         line-height: 1.6;
     }
 
-    /* Header */
     header {
         background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
         color: #fff;
-        padding: 15px 40px;
+        padding: 20px 40px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
-    .container {
-        max-width: 1000px;
-        margin: 40px auto;
-        padding: 0 20px;
-    }
+    .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
 
-    /* Hero / Karşılama Kartı */
+    /* Hero Section */
     .hero-section {
         background: var(--card-bg);
         border-radius: 16px;
@@ -54,21 +49,9 @@
         margin-bottom: 30px;
     }
 
-    .hero-section h1 {
-        color: var(--secondary-color);
-        margin-top: 0;
-        font-size: 2rem;
-        font-weight: 800;
-    }
+    .hero-section h1 { color: var(--secondary-color); font-size: 2.2rem; margin-bottom: 10px; }
+    .hero-section p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 30px; }
 
-    .hero-section p {
-        color: var(--text-muted);
-        font-size: 1.1rem;
-        max-width: 600px;
-        margin: 0 auto 30px auto;
-    }
-
-    /* Form Grupları */
     .section {
         background: var(--card-bg);
         border-radius: 12px;
@@ -85,17 +68,12 @@
         border-left: 5px solid var(--primary-color);
         padding-left: 15px;
         margin-bottom: 25px;
-        font-size: 1.2rem;
+        font-size: 1.25rem;
         font-weight: 700;
         color: var(--secondary-color);
     }
 
-    .setup-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 20px;
-        text-align: left;
-    }
+    .grid-setup { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: left; }
 
     label { font-weight: 600; font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 8px; }
 
@@ -108,34 +86,25 @@
         transition: all 0.3s;
     }
 
-    input:focus, select:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.1); }
-
-    /* Butonlar */
-    button {
-        padding: 12px 28px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: 0.3s;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-    }
-
+    button { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; }
     .btn-primary { background: var(--primary-color); color: white; }
-    .btn-primary:hover { background: var(--secondary-color); transform: translateY(-2px); }
     .btn-success { background: var(--accent-color); color: white; }
     .btn-danger { background: var(--danger-color); color: white; }
 
-    .company-block { background: #f8fbff; border: 1px solid #e3e9ef; border-radius: 10px; padding: 20px; margin-top: 20px; position: relative; }
+    .company-block { background: #f8fbff; border: 1px solid #e3e9ef; border-radius: 10px; padding: 25px; margin-top: 20px; position: relative; }
+    
+    .counter-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #edf2f7; }
+    .counter-box { display: flex; align-items: center; gap: 12px; background: white; padding: 5px 12px; border-radius: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .val-span { font-weight: 700; font-size: 1.1rem; color: var(--primary-color); min-width: 25px; text-align: center; }
 
-    table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 20px; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
-    th { background: var(--secondary-color); color: white; padding: 12px; font-size: 0.9rem; }
-    td { padding: 10px; border-bottom: 1px solid var(--border-color); background: white; text-align: center; }
+    /* Modül Tablosu Genişliği */
+    .table-container { overflow-x: auto; margin-top: 25px; border-radius: 8px; border: 1px solid var(--border-color); }
+    table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+    th { background: var(--secondary-color); color: white; padding: 15px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    td { padding: 12px; border-bottom: 1px solid var(--border-color); background: white; text-align: center; font-size: 0.9rem; }
 
     .hidden { display: none; }
-    footer { padding: 30px; text-align: center; color: var(--text-muted); font-size: 0.8rem; }
+    footer { padding: 40px; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
 </style>
 </head>
 
@@ -148,12 +117,12 @@
 
 <div class="container">
     
-    <div class="hero-section" id="heroArea">
+    <div class="hero-section">
         <h1>SAP S/4HANA Scope Discovery</h1>
-        <p>Şirketiniz için SAP kapsamını, modül bazlı gereksinimleri ve organizasyonel yapıyı profesyonelce belirleyin.</p>
+        <p>Dijital dönüşüm ve RFP süreçlerinizi IEZU Tech güvencesiyle yapılandırın.</p>
         
-        <div class="section" style="box-shadow: none; border: 1px solid #eee;">
-            <div class="setup-grid">
+        <div class="section" style="box-shadow: none; border: 1px solid #eee; text-align: left;">
+            <div class="grid-setup">
                 <div>
                     <label>Mevcut ERP Sistemi</label>
                     <select id="existingErp">
@@ -171,94 +140,161 @@
                         <option>S/4HANA OnPremise</option>
                         <option>S/4HANA Public Cloud</option>
                         <option>S/4HANA Private Cloud</option>
+                        <option>ECC</option>
+                        <option>R/3</option>
                     </select>
                 </div>
-                <div id="sapVersionArea" style="display:none;">
+                <div id="approachArea" style="display:none;">
                     <label>Geçiş Yaklaşımı</label>
                     <select>
                         <option value="">Seçiniz</option>
                         <option>Greenfield</option>
                         <option>Brownfield</option>
-                        <option>Hibrit</option>
+                        <option>Bluefield / Hibrit</option>
+                        <option>Henüz karar verilmedi</option>
                     </select>
                 </div>
             </div>
-            <div style="margin-top: 30px;">
-                <button class="btn-primary" onclick="startProcess()">RFP'ye Başla →</button>
+            <div style="margin-top: 25px; text-align: center;">
+                <button class="btn-primary" onclick="startRfp()">RFP Sürecini Başlat →</button>
             </div>
         </div>
     </div>
 
     <div class="section hidden" id="section1">
         <div class="section-title">Bölüm 1 – Şirket Bazlı Genel Bilgiler</div>
-        <div style="display: flex; gap: 10px; align-items: flex-end;">
-            <div style="flex:1">
-                <label>Kaç şirket için RFP doldurulacak?</label>
-                <input type="number" id="companyCount" min="1" placeholder="Sayı giriniz">
+        <div style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 20px;">
+            <div style="flex: 1; min-width: 250px;">
+                <label>RFP Kapsamındaki Şirket Sayısı</label>
+                <input type="number" id="companyCount" min="1" placeholder="Örn: 2">
             </div>
             <button class="btn-primary" onclick="createCompanies()">Şirketleri Oluştur</button>
+            <button class="btn-success" onclick="addCompany()">+ Şirket Ekle</button>
         </div>
-        <div id="companies"></div>
-        <div style="margin-top:20px; display:flex; gap:10px;">
-            <button class="btn-success" onclick="saveCompanies()">Şirketleri Kaydet</button>
-            <button class="btn-primary hidden" id="moduleBtn" onclick="showStructure()">Modül Eşleşmesi</button>
+
+        <div id="companiesContainer"></div>
+
+        <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+            <button class="btn-success" onclick="saveCompanies()">Şirket Bilgilerini Kaydet</button>
+            <button class="btn-primary hidden" id="moduleBtn" onclick="showStructure()">Şirket – Modül Eşleşme Tablosu</button>
         </div>
-        <div id="companyStructure"></div>
+
+        <div id="companyStructure" class="table-container"></div>
     </div>
 
     <div id="section2Area"></div>
 
 </div>
 
-<footer>© 2025 IEZU Tech | S4Scope – Digital Transformation RFP Services</footer>
+<footer>© 2025 IEZU Tech | S4Scope – SAP Scope & RFP Services</footer>
 
 <script>
-    const sectorMap = { "Tüketici": ["Gıda","Perakende"], "Üretim": ["Otomotiv","Makine"] };
-    const sapModules = ["FI","CO","MM","SD","PP","QM","PM","WM"];
-    let savedCompanies = [];
+    const sectorMap = {
+        "Tüketici Endüstrileri": ["Tarım & Gıda", "Hızlı Tüketim Ürünleri (FMCG)", "İlaç, Medikal", "Perakende", "Toptan Dağıtım"],
+        "Kesikli Üretim": ["Otomotiv Tedarikçileri", "Kiralama & Leasing", "Batarya Üreticileri", "Makine ve Ekipman Üreticileri", "Yüksek Teknoloji Üreticileri"],
+        "Süreç Endüstrileri": ["Kimya", "Petrol & Gaz", "Enerji Üretimi", "Madencilik", "Orman Ürünleri & Kâğıt"],
+        "Enerji ve Altyapı": ["Elektrik Dağıtım Şirketleri", "Doğalgaz Dağıtımı", "Su ve Atık Yönetimi", "Yenilenebilir Enerji"],
+        "Finansal Hizmetler": ["Bankalar", "Sigorta Şirketleri", "Finansal Kiralama", "Ödeme ve Finans Teknolojileri"],
+        "Kamu ve Sağlık": ["Kamu Kurumları", "Savunma ve Güvenlik", "Eğitim ve Araştırma", "Sağlık Hizmetleri"],
+        "Hizmet Endüstrileri": ["Mühendislik & İnşaat", "Profesyonel Hizmetler", "Gayrimenkul", "Medya ve Eğlence", "Spor Organizasyonları"],
+        "Ulaşım ve İletişim": ["Havayolu ve Yolcu Taşımacılığı", "Lojistik ve Taşımacılık", "Telekomünikasyon", "Seyahat Hizmetleri"]
+    };
 
-    function startProcess() {
-        document.getElementById("section1").classList.remove("hidden");
-        window.scrollTo({ top: document.getElementById("section1").offsetTop - 40, behavior: 'smooth' });
-    }
+    const sapModules = [
+        "FI - Mali Muhasebe",
+        "FM - Bütçe Kontrol",
+        "CO - Maliyet Muhasebesi ve Karlılık",
+        "PS - Proje Sistemi",
+        "MM - Malzeme Yönetimi ve Satınalma",
+        "SD - Satış ve Dağıtım",
+        "PP - Üretim ve Planlama",
+        "QM - Kalite Yönetimi",
+        "PM - Bakım Yönetimi",
+        "WM/EWM - Depo Yönetimi"
+    ];
+
+    let companyIndex = 0;
+    let savedCompanies = [];
 
     document.getElementById("existingErp").addEventListener("change", function() {
         const isSap = this.value === "SAP";
         document.getElementById("sapModelArea").style.display = isSap ? "block" : "none";
-        document.getElementById("sapVersionArea").style.display = isSap ? "block" : "none";
+        document.getElementById("approachArea").style.display = isSap ? "block" : "none";
     });
+
+    function startRfp() {
+        document.getElementById("section1").classList.remove("hidden");
+        window.scrollTo({ top: document.getElementById("section1").offsetTop - 40, behavior: 'smooth' });
+    }
+
+    function addCompany() {
+        companyIndex++;
+        const div = document.createElement("div");
+        div.className = "company-block";
+        div.innerHTML = `
+            <button class="btn-danger" style="position:absolute; top:15px; right:15px; padding:5px 10px; font-size:11px;" onclick="this.parentElement.remove()">Sil</button>
+            <h4 style="margin:0 0 20px 0; color:var(--primary-color)">Şirket #${companyIndex}</h4>
+            <div class="grid-setup">
+                <div><label>Şirket Adı</label><input type="text" class="company-name"></div>
+                <div><label>Ülke</label><select><option>Türkiye</option><option>Almanya</option><option>ABD</option></select></div>
+                <div><label>Ana Sektör</label><select onchange="loadSub(this)"><option></option>${Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("")}</select></div>
+                <div><label>Alt Sektör</label><select></select></div>
+                <div><label>Ana Faaliyet</label><select><option>Üretim</option><option>Hizmet</option><option>Proje</option></select></div>
+            </div>`;
+        document.getElementById("companiesContainer").appendChild(div);
+    }
+
+    function loadSub(sel) {
+        const sub = sel.parentElement.nextElementSibling.querySelector("select");
+        sub.innerHTML = (sectorMap[sel.value] || []).map(s=>`<option>${s}</option>`).join("");
+    }
 
     function createCompanies() {
         const count = document.getElementById("companyCount").value;
-        const container = document.getElementById("companies");
-        container.innerHTML = "";
-        for(let i=1; i<=count; i++) {
-            container.innerHTML += `<div class="company-block"><h4>Şirket ${i}</h4><input type="text" class="company-name" placeholder="Şirket Adı"></div>`;
-        }
+        document.getElementById("companiesContainer").innerHTML = "";
+        companyIndex = 0;
+        for(let i=0; i<count; i++) addCompany();
     }
 
     function saveCompanies() {
         savedCompanies = Array.from(document.querySelectorAll(".company-name")).map(i => i.value).filter(v => v);
-        if(savedCompanies.length) {
-            document.getElementById("moduleBtn").classList.remove("hidden");
-            renderSection2();
-        }
+        if(!savedCompanies.length) return alert("Lütfen en az bir şirket adı giriniz.");
+        document.getElementById("moduleBtn").classList.remove("hidden");
+        renderSection2();
     }
 
     function renderSection2() {
-        let html = `<div class="section"><div class="section-title">Bölüm 2 – Organizasyon Yapısı</div>`;
-        savedCompanies.forEach(name => {
-            html += `<div class="company-block"><strong>${name}</strong><br>Üretim Tesisi Sayısı: <input type="number" value="0" style="width:60px"></div>`;
+        let html = `<div class="section"><div class="section-title">Bölüm 2 – Organizasyon & Yapı</div>`;
+        savedCompanies.forEach((name, i) => {
+            html += `<div class="company-block">
+                <h4 style="margin:0 0 15px 0; color:var(--secondary-color)">${name}</h4>
+                ${counterRow('Üretim Tesisi', 'p'+i)}
+                ${counterRow('Depo / Lojistik Merkezi', 'w'+i)}
+                ${counterRow('Satış Ofisi / Bölge Müdürlüğü', 's'+i)}
+            </div>`;
         });
         document.getElementById("section2Area").innerHTML = html + `</div>`;
     }
 
+    function counterRow(label, id) {
+        return `<div class="counter-row"><span>${label}</span><div class="counter-box">
+            <button class="btn-danger" style="padding:2px 10px" onclick="changeVal('${id}',-1)">-</button>
+            <span class="val-span" id="${id}">0</span>
+            <button class="btn-success" style="padding:2px 10px" onclick="changeVal('${id}',1)">+</button>
+        </div></div>`;
+    }
+
+    function changeVal(id, delta) {
+        const el = document.getElementById(id);
+        el.innerText = Math.max(0, parseInt(el.innerText) + delta);
+    }
+
     function showStructure() {
-        let html = `<table><tr><th>Şirket</th>${sapModules.map(m=>`<th>${m}</th>`).join("")}</tr>`;
+        let html = `<table><thead><tr><th>Şirket Adı</th>${sapModules.map(m=>`<th>${m}</th>`).join("")}</tr></thead><tbody>`;
         savedCompanies.forEach(name => {
-            html += `<tr><td>${name}</td>${sapModules.map(()=>`<td><input type="checkbox"></td>`).join("")}</tr>`;
+            html += `<tr><td style="font-weight:700; text-align:left; padding-left:20px;">${name}</td>${sapModules.map(()=>`<td><input type="checkbox" style="width:20px; height:20px; cursor:pointer;"></td>`).join("")}</tr>`;
         });
-        document.getElementById("companyStructure").innerHTML = html + `</table>`;
+        document.getElementById("companyStructure").innerHTML = html + `</tbody></table>`;
     }
 </script>
 </body>
