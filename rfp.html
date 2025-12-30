@@ -66,6 +66,9 @@
             border-top: 1px solid #eee;
             padding-top: 20px;
         }
+
+        .phase-card { border: 2px dashed #ccc; padding: 20px; margin-top: 20px; border-radius: 10px; background: #fff; }
+        .phase-badge { background: var(--secondary); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; margin: 5px; display: inline-block; }
     </style>
 </head>
 <body>
@@ -80,7 +83,7 @@
             <li onclick="validateAndShowStep(2)" id="nav-2">Bölüm 2: Organizasyon & Yapı</li>
             <li onclick="validateAndShowStep(3)" id="nav-3">Bölüm 3: İş Süreçleri</li>
             <li onclick="validateAndShowStep(4)" id="nav-4">Bölüm 4: Teknik & Entegrasyon</li>
-            <li id="nav-5">Bölüm 5: Dönüşüm Stratejisi</li>
+            <li onclick="validateAndShowStep(5)" id="nav-5">Bölüm 5: Dönüşüm Stratejisi</li>
             <li id="nav-6">Bölüm 6: Çıktı & Değerlendirme</li>
         </ul>
     </nav>
@@ -162,12 +165,31 @@
             <div id="softwareInventoryArea"></div>
             <div class="nav-buttons">
                 <button class="btn-secondary" onclick="showStep(3)">← Geri</button>
-                <button class="btn-primary" onclick="alert('Bölüm 5 Hazırlanıyor...')">Sonraki Bölüm →</button>
+                <button class="btn-primary" onclick="validateAndShowStep(5)">Sonraki Bölüm →</button>
+            </div>
+        </div>
+
+        <div class="section" id="step-5">
+            <div class="section-title">Bölüm 5 – Dönüşüm Stratejisi (Fazlandırma)</div>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">
+                Lütfen Bölüm 1'de tanımladığınız şirketleri uygulama fazlarına ayırın ve hedef canlıya geçiş tarihlerini belirleyin.
+            </p>
+            
+            <div style="margin-bottom:20px;">
+                <button class="btn-success" onclick="addNewPhase()">+ Yeni Faz Ekle</button>
+            </div>
+
+            <div id="phasesContainer"></div>
+
+            <div class="nav-buttons">
+                <button class="btn-secondary" onclick="showStep(4)">← Geri</button>
+                <button class="btn-primary" onclick="alert('Bölüm 6 Hazırlanıyor...')">Son Bölüm: Çıktı & Özet →</button>
             </div>
         </div>
     </main>
 
 <script>
+    // --- VERİ YAPILARI ---
     const sectorMap = {
         "Tüketici Endüstrileri": ["Tarım & Gıda", "Hızlı Tüketim Ürünleri (FMCG)", "İlaç, Medikal", "Perakende", "Toptan Dağıtım"],
         "Kesikli Üretim": ["Otomotiv Tedarikçileri", "Kiralama & Leasing", "Batarya Üreticileri", "Makine ve Ekipman Üreticileri", "Yüksek Teknoloji Üreticileri"],
@@ -268,7 +290,9 @@
     let companyIndex = 0;
     let savedCompanies = [];
     let modTableGenerated = false;
+    let phaseCount = 0;
 
+    // --- GENEL ERP FONKSİYONLARI ---
     function toggleSapFields() {
         const isSap = document.getElementById("existingErp").value === "SAP";
         ["sapModelArea", "sapVersionArea", "approachArea"].forEach(id => {
@@ -315,7 +339,7 @@
             renderOrg();
             renderProcesses();
             renderTechInventory();
-            alert("Şirket bilgileri kaydedildi. Lütfen 'Şirket-Modül Tablosu'nu oluşturun.");
+            alert("Şirket bilgileri kaydedildi.");
         } else {
             alert("Lütfen en az bir şirket adı giriniz.");
         }
@@ -363,40 +387,11 @@
                 <h3 style="color:var(--secondary); margin-bottom:20px; background:#e3f2fd; padding:10px; border-radius:5px;">
                     ${name} - Mali Muhasebe (FI) Süreç Analizi
                 </h3>`;
-
             for (const [sectionTitle, questions] of Object.entries(fiWbsStructure)) {
-                html += `
-                <div style="margin-bottom: 30px;">
-                    <h4 style="background: var(--secondary); color: white; padding: 10px 15px; border-radius: 5px; font-size: 1rem;">
-                        ${sectionTitle}
-                    </h4>
-                    <div class="table-container" style="margin-top:0;">
-                        <table style="min-width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th style="width: 40%; text-align: left;">Süreç Sorusu</th>
-                                    <th style="width: 25%;">Cevap</th>
-                                    <th style="width: 35%;">Açıklama / Not</th>
-                                </tr>
-                            </thead>
-                            <tbody>`;
-
+                html += `<div style="margin-bottom: 30px;"><h4 style="background: var(--secondary); color: white; padding: 10px 15px; border-radius: 5px; font-size: 1rem;">${sectionTitle}</h4>
+                <div class="table-container" style="margin-top:0;"><table style="min-width: 100%;"><thead><tr><th style="width: 40%; text-align: left;">Süreç Sorusu</th><th style="width: 25%;">Cevap</th><th style="width: 35%;">Açıklama / Not</th></tr></thead><tbody>`;
                 questions.forEach((q, qIdx) => {
-                    html += `
-                    <tr>
-                        <td style="text-align: left; font-size: 0.85rem; font-weight: 600;">${q}</td>
-                        <td>
-                            <select style="padding: 5px; font-size: 0.85rem;">
-                                <option value="">Seçiniz</option>
-                                <option value="evet">Evet</option>
-                                <option value="hayir">Hayır</option>
-                                <option value="kismen">Kısmen</option>
-                            </select>
-                        </td>
-                        <td>
-                            <input type="text" placeholder="Not ekleyin..." style="padding: 5px; font-size: 0.85rem; width: 95%;">
-                        </td>
-                    </tr>`;
+                    html += `<tr><td style="text-align: left; font-size: 0.85rem; font-weight: 600;">${q}</td><td><select style="padding: 5px;"><option value="">Seçiniz</option><option>Evet</option><option>Hayır</option><option>Kısmen</option></select></td><td><input type="text" placeholder="Not..." style="padding: 5px; width: 95%;"></td></tr>`;
                 });
                 html += `</tbody></table></div></div>`;
             }
@@ -405,18 +400,16 @@
         document.getElementById("processArea").innerHTML = html;
     }
 
-    // --- BÖLÜM 4: TEKNİK ENVANTER FONKSİYONLARI ---
-
     function renderTechInventory() {
         let html = "";
         Object.keys(softwareGroups).forEach((groupName, gIdx) => {
             html += `
             <div class="company-block">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                    <h4 style="margin:0; color:var(--secondary); font-size:1.1rem;">${groupName}</h4>
+                    <h4 style="margin:0; color:var(--secondary);">${groupName}</h4>
                     <div style="display:flex; gap:10px;">
                         <select id="select-soft-${gIdx}" style="width:200px; padding:8px;">
-                            <option value="">Yazılım Seçiniz...</option>
+                            <option value="">Yazılım Seç...</option>
                             ${softwareGroups[groupName].map(s => `<option value="${s}">${s}</option>`).join("")}
                             <option value="DİĞER">Diğer +</option>
                         </select>
@@ -424,16 +417,7 @@
                     </div>
                 </div>
                 <div class="table-container" id="container-soft-${gIdx}" style="display:none; margin-top:0;">
-                    <table style="min-width:100%;">
-                        <thead>
-                            <tr>
-                                <th style="text-align:left; width:30%;">Yazılım</th>
-                                <th style="text-align:left; width:50%;">Hedef Mimarideki Konumu</th>
-                                <th style="width:20%;">İşlem</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-soft-${gIdx}"></tbody>
-                    </table>
+                    <table style="min-width:100%;"><thead><tr><th style="text-align:left; width:30%;">Yazılım</th><th style="text-align:left; width:50%;">Hedef Mimari Konumu</th><th style="width:20%;">İşlem</th></tr></thead><tbody id="tbody-soft-${gIdx}"></tbody></table>
                 </div>
             </div>`;
         });
@@ -444,63 +428,91 @@
         const select = document.getElementById(`select-soft-${gIdx}`);
         let val = select.value;
         if(!val) return;
-
-        if(val === "DİĞER") {
-            val = prompt("Lütfen yazılım adını giriniz:");
-            if(!val) return;
-        }
-
+        if(val === "DİĞER") { val = prompt("Yazılım adı:"); if(!val) return; }
         const container = document.getElementById(`container-soft-${gIdx}`);
         const tbody = document.getElementById(`tbody-soft-${gIdx}`);
         container.style.display = "block";
-
         const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td style="text-align:left; font-weight:600;">${val}</td>
-            <td style="text-align:left;">
-                <select style="padding:8px; font-size:0.85rem;">
-                    <option>SAP ürün ve modülü ile değiştirilebilir</option>
-                    <option>Hedef Mimaride kalacak</option>
-                    <option>3. parti sistem ile değiştirilebilir</option>
-                </select>
-            </td>
-            <td>
-                <button class="btn-danger" style="padding:5px 12px; font-size:0.8rem;" onclick="removeSoftwareRow(this, ${gIdx})">- Kaldır</button>
-            </td>
-        `;
+        tr.innerHTML = `<td style="text-align:left; font-weight:600;">${val}</td><td style="text-align:left;"><select style="padding:8px;"><option>SAP ürün ve modülü ile değiştirilebilir</option><option>Hedef Mimaride kalacak</option><option>3. parti sistem ile değiştirilebilir</option></select></td><td><button class="btn-danger" style="padding:5px 12px;" onclick="removeSoftwareRow(this, ${gIdx})">- Kaldır</button></td>`;
         tbody.appendChild(tr);
     }
 
     function removeSoftwareRow(btn, gIdx) {
-        const tr = btn.closest("tr");
-        const tbody = tr.parentElement;
-        tr.remove();
-        if(tbody.children.length === 0) {
-            document.getElementById(`container-soft-${gIdx}`).style.display = "none";
-        }
+        btn.closest("tr").remove();
+        const tbody = document.getElementById(`tbody-soft-${gIdx}`);
+        if(tbody.children.length === 0) document.getElementById(`container-soft-${gIdx}`).style.display = "none";
     }
 
-    // --- NAVIGASYON VE VALIDASYON ---
+    // --- BÖLÜM 5: FAZLANDIRMA FONKSİYONLARI ---
 
+    function addNewPhase() {
+        phaseCount++;
+        const container = document.getElementById("phasesContainer");
+        const div = document.createElement("div");
+        div.className = "phase-card";
+        div.id = `phase-box-${phaseCount}`;
+        div.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h4 style="margin:0; color:var(--primary)">Faz #${phaseCount} Planlaması</h4>
+                <button class="btn-danger" style="padding:5px 10px; font-size:0.7rem;" onclick="this.closest('.phase-card').remove()">Fazı Kaldır</button>
+            </div>
+            <div class="grid-setup">
+                <div>
+                    <label>Hedef Canlıya Geçiş Tarihi</label>
+                    <input type="month" class="phase-date">
+                </div>
+                <div>
+                    <label>Bu Faza Şirket Ekle</label>
+                    <div style="display:flex; gap:5px;">
+                        <select class="phase-comp-select">
+                            <option value="">Şirket Seçin...</option>
+                            ${savedCompanies.map(c => `<option value="${c}">${c}</option>`).join("")}
+                        </select>
+                        <button class="btn-success" style="padding:5px 15px;" onclick="addCompToPhase(this)">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="selected-companies-list" style="margin-top:10px;">
+                <label>Bu Fazdaki Şirketler:</label>
+                <div class="badges-area"></div>
+            </div>
+        `;
+        container.appendChild(div);
+    }
+
+    function addCompToPhase(btn) {
+        const select = btn.previousElementSibling;
+        const companyName = select.value;
+        if(!companyName) return;
+
+        const badgesArea = btn.closest(".phase-card").querySelector(".badges-area");
+        
+        // Mükerrer kontrolü
+        const existing = Array.from(badgesArea.querySelectorAll(".phase-badge")).map(b => b.dataset.name);
+        if(existing.includes(companyName)) { alert("Bu şirket zaten bu faza ekli."); return; }
+
+        const span = document.createElement("span");
+        span.className = "phase-badge";
+        span.dataset.name = companyName;
+        span.innerHTML = `${companyName} <span style="cursor:pointer; margin-left:8px; font-weight:bold" onclick="this.parentElement.remove()">×</span>`;
+        badgesArea.appendChild(span);
+    }
+
+    // --- NAVIGASYON ---
     function validateAndShowStep(targetIdx) {
         const currentIdx = parseInt(document.querySelector("nav ul li.active").id.split("-")[1]);
-        if (targetIdx < currentIdx) {
-            showStep(targetIdx);
-            return;
-        }
+        if (targetIdx < currentIdx) { showStep(targetIdx); return; }
         if (currentIdx === 0) {
             const erp = document.getElementById("existingErp").value;
             if (!erp) { alert("Lütfen mevcut ERP sisteminizi seçiniz."); return; }
-            if (erp === "SAP") {
-                if (!document.getElementById("sapModel").value || !document.getElementById("sapApproach").value) {
-                    alert("Lütfen SAP Modelini ve Geçiş Yaklaşımını seçiniz."); return;
-                }
-            }
         }
-        if (currentIdx === 1) {
-            if (savedCompanies.length === 0) { alert("Lütfen şirketleri oluşturun ve kaydedin."); return; }
-            if (!modTableGenerated) { alert("Lütfen Modül Eşleşme Tablosunu oluşturun."); return; }
+        if (currentIdx === 1 && savedCompanies.length === 0) { alert("Lütfen şirketleri kaydedin."); return; }
+        
+        // Bölüm 5'e geçerken faz alanını hazırla
+        if(targetIdx === 5 && document.getElementById("phasesContainer").children.length === 0) {
+            addNewPhase(); // Başlangıç için bir faz ekle
         }
+
         showStep(targetIdx);
     }
 
