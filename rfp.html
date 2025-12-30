@@ -67,8 +67,15 @@
             padding-top: 20px;
         }
 
+        /* PHASE SPECIFIC STYLES */
         .phase-card { border: 2px dashed #ccc; padding: 20px; margin-top: 20px; border-radius: 10px; background: #fff; }
         .phase-badge { background: var(--secondary); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; margin: 5px; display: inline-block; }
+
+        @media print {
+            nav, #progress-container, .nav-buttons, button { display: none !important; }
+            main { margin-left: 0; padding: 0; }
+            .section { box-shadow: none; border: none; display: block !important; }
+        }
     </style>
 </head>
 <body>
@@ -84,7 +91,7 @@
             <li onclick="validateAndShowStep(3)" id="nav-3">Bölüm 3: İş Süreçleri</li>
             <li onclick="validateAndShowStep(4)" id="nav-4">Bölüm 4: Teknik & Entegrasyon</li>
             <li onclick="validateAndShowStep(5)" id="nav-5">Bölüm 5: Dönüşüm Stratejisi</li>
-            <li id="nav-6">Bölüm 6: Çıktı & Değerlendirme</li>
+            <li onclick="validateAndShowStep(6)" id="nav-6">Bölüm 6: Çıktı & Özet</li>
         </ul>
     </nav>
 
@@ -104,7 +111,14 @@
                 </div>
                 <div id="sapModelArea" class="hidden">
                     <label>SAP Modeli</label>
-                    <select id="sapModel"><option value="">Seçiniz</option><option>S/4HANA OnPremise</option><option>S/4HANA Public Cloud</option><option>S/4HANA Private Cloud</option><option>ECC</option><option>R/3</option></select>
+                    <select id="sapModel">
+                        <option value="">Seçiniz</option>
+                        <option>S/4HANA OnPremise</option>
+                        <option>S/4HANA Public Cloud</option>
+                        <option>S/4HANA Private Cloud</option>
+                        <option>ECC</option>
+                        <option>R/3</option>
+                    </select>
                 </div>
                 <div id="sapVersionArea" class="hidden">
                     <label>SAP Versiyonu</label>
@@ -112,7 +126,13 @@
                 </div>
                 <div id="approachArea" class="hidden">
                     <label>Geçiş Yaklaşımı</label>
-                    <select id="sapApproach"><option value="">Seçiniz</option><option>Greenfield</option><option>Brownfield</option><option>Bluefield / Hibrit</option><option>Henüz karar verilmedi</option></select>
+                    <select id="sapApproach">
+                        <option value="">Seçiniz</option>
+                        <option>Greenfield</option>
+                        <option>Brownfield</option>
+                        <option>Bluefield / Hibrit</option>
+                        <option>Henüz karar verilmedi</option>
+                    </select>
                 </div>
             </div>
             <div class="nav-buttons" style="justify-content: flex-end;">
@@ -174,22 +194,29 @@
             <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">
                 Lütfen Bölüm 1'de tanımladığınız şirketleri uygulama fazlarına ayırın ve hedef canlıya geçiş tarihlerini belirleyin.
             </p>
-            
             <div style="margin-bottom:20px;">
                 <button class="btn-success" onclick="addNewPhase()">+ Yeni Faz Ekle</button>
             </div>
-
             <div id="phasesContainer"></div>
-
             <div class="nav-buttons">
                 <button class="btn-secondary" onclick="showStep(4)">← Geri</button>
-                <button class="btn-primary" onclick="alert('Bölüm 6 Hazırlanıyor...')">Son Bölüm: Çıktı & Özet →</button>
+                <button class="btn-primary" onclick="validateAndShowStep(6)">Son Bölüm: Çıktı & Özet →</button>
+            </div>
+        </div>
+
+        <div class="section" id="step-6">
+            <div class="section-title">Bölüm 6 – RFP Özet ve Çıktı Raporu</div>
+            <div id="rfpReportArea"></div>
+            <div class="nav-buttons">
+                <button class="btn-secondary" onclick="showStep(5)">← Geri</button>
+                <button class="btn-success" onclick="generateFinalReport()">Raporu Güncelle</button>
+                <button class="btn-primary" onclick="window.print()">PDF Olarak Kaydet (Yazdır)</button>
             </div>
         </div>
     </main>
 
 <script>
-    // --- VERİ YAPILARI ---
+    // --- VERİ YAPILARI (TAM LİSTE) ---
     const sectorMap = {
         "Tüketici Endüstrileri": ["Tarım & Gıda", "Hızlı Tüketim Ürünleri (FMCG)", "İlaç, Medikal", "Perakende", "Toptan Dağıtım"],
         "Kesikli Üretim": ["Otomotiv Tedarikçileri", "Kiralama & Leasing", "Batarya Üreticileri", "Makine ve Ekipman Üreticileri", "Yüksek Teknoloji Üreticileri"],
@@ -316,7 +343,6 @@
                 <div><label>Ana Faaliyet</label><select><option>Üretim</option><option>Hizmet</option><option>Proje</option></select></div>
             </div>`;
         container.appendChild(div);
-        modTableGenerated = false;
     }
 
     function createCompanies() {
@@ -443,14 +469,12 @@
         if(tbody.children.length === 0) document.getElementById(`container-soft-${gIdx}`).style.display = "none";
     }
 
-    // --- BÖLÜM 5: FAZLANDIRMA FONKSİYONLARI ---
-
+    // --- BÖLÜM 5: FAZLANDIRMA ---
     function addNewPhase() {
         phaseCount++;
         const container = document.getElementById("phasesContainer");
         const div = document.createElement("div");
         div.className = "phase-card";
-        div.id = `phase-box-${phaseCount}`;
         div.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                 <h4 style="margin:0; color:var(--primary)">Faz #${phaseCount} Planlaması</h4>
@@ -484,13 +508,9 @@
         const select = btn.previousElementSibling;
         const companyName = select.value;
         if(!companyName) return;
-
         const badgesArea = btn.closest(".phase-card").querySelector(".badges-area");
-        
-        // Mükerrer kontrolü
         const existing = Array.from(badgesArea.querySelectorAll(".phase-badge")).map(b => b.dataset.name);
         if(existing.includes(companyName)) { alert("Bu şirket zaten bu faza ekli."); return; }
-
         const span = document.createElement("span");
         span.className = "phase-badge";
         span.dataset.name = companyName;
@@ -498,21 +518,41 @@
         badgesArea.appendChild(span);
     }
 
+    // --- BÖLÜM 6: RAPOR OLUŞTURMA ---
+    function generateFinalReport() {
+        const erp = document.getElementById("existingErp").value;
+        const approach = document.getElementById("sapApproach").value || "Belirtilmedi";
+        let phaseHtml = "";
+        document.querySelectorAll(".phase-card").forEach((card, i) => {
+            const date = card.querySelector(".phase-date").value || "Tarih Belirtilmedi";
+            const companies = Array.from(card.querySelectorAll(".phase-badge")).map(b => b.dataset.name).join(", ");
+            phaseHtml += `<div style="border-left:4px solid var(--accent); padding-left:15px; margin-bottom:15px;">
+                <strong>Faz ${i+1} (${date}):</strong> ${companies || 'Şirket atanmadı'}
+            </div>`;
+        });
+
+        document.getElementById("rfpReportArea").innerHTML = `
+            <div class="company-block" style="background:#fff; border: 2px solid var(--primary);">
+                <h2 style="color:var(--primary); text-align:center; border-bottom:2px solid var(--primary); padding-bottom:10px;">S/4HANA DÖNÜŞÜM PROJESİ RFP ÖZETİ</h2>
+                <h4 style="color:var(--secondary)">1. Proje Yaklaşımı</h4>
+                <p>Mevcut Sistem: <strong>${erp}</strong> | Geçiş Stratejisi: <strong>${approach}</strong></p>
+                <h4 style="color:var(--secondary)">2. Kapsamdaki Şirketler</h4>
+                <ul>${savedCompanies.map(c => `<li>${c}</li>`).join("")}</ul>
+                <h4 style="color:var(--secondary)">3. Uygulama Takvimi</h4>
+                ${phaseHtml}
+                <div style="margin-top:20px; padding:15px; background:#fff3e0; border-radius:8px;">
+                    <strong>💡 IEZU Tech Notu:</strong> Rapor detayları ve teknik envanter eklerde mevcuttur.
+                </div>
+            </div>`;
+    }
+
     // --- NAVIGASYON ---
     function validateAndShowStep(targetIdx) {
         const currentIdx = parseInt(document.querySelector("nav ul li.active").id.split("-")[1]);
         if (targetIdx < currentIdx) { showStep(targetIdx); return; }
-        if (currentIdx === 0) {
-            const erp = document.getElementById("existingErp").value;
-            if (!erp) { alert("Lütfen mevcut ERP sisteminizi seçiniz."); return; }
-        }
-        if (currentIdx === 1 && savedCompanies.length === 0) { alert("Lütfen şirketleri kaydedin."); return; }
-        
-        // Bölüm 5'e geçerken faz alanını hazırla
-        if(targetIdx === 5 && document.getElementById("phasesContainer").children.length === 0) {
-            addNewPhase(); // Başlangıç için bir faz ekle
-        }
-
+        if (currentIdx === 0 && !document.getElementById("existingErp").value) { alert("ERP seçiniz."); return; }
+        if (currentIdx === 1 && savedCompanies.length === 0) { alert("Şirketleri kaydedin."); return; }
+        if (targetIdx === 6) generateFinalReport();
         showStep(targetIdx);
     }
 
