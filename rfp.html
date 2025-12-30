@@ -112,7 +112,6 @@ footer{
 
 <div class="container">
 
-<!-- ===================== BÖLÜM 0 ===================== -->
 <label>Mevcut ERP Sistemi</label>
 <select id="existingErp">
     <option value="">Seçiniz</option>
@@ -155,7 +154,6 @@ footer{
 <br>
 <button onclick="goToSection1()">Kaydet ve Devam Et</button>
 
-<!-- ===================== BÖLÜM 1 ===================== -->
 <div class="section hidden" id="section1">
     <div class="section-title">Bölüm 1 – Şirket Bazlı Genel Bilgiler</div>
 
@@ -188,11 +186,19 @@ const sectorMap = {
   "Kesikli Üretim": ["Otomotiv Tedarikçileri","Kiralama & Leasing","Batarya Üreticileri"],
   "Havacılık ve Savunma": ["Seviye 2 ve üzeri Tedarikçiler","OEM Bağlı Ortaklıkları"],
   "Endüstriyel Üretim": ["Bileşen Üreticileri","Makine & Ekipman"]
-      };
+};
 const sapModules = ["FI","CO","MM","SD","PP","QM","PM","PS"];
 
 let companyIndex = 0;
 let savedCompanies = [];
+
+const sapModelArea = document.getElementById("sapModelArea");
+const sapVersionArea = document.getElementById("sapVersionArea");
+const existingErp = document.getElementById("existingErp");
+const section1 = document.getElementById("section1");
+const companies = document.getElementById("companies");
+const companyCount = document.getElementById("companyCount");
+const companyStructure = document.getElementById("companyStructure");
 
 function addCompany(){
     companyIndex++;
@@ -209,9 +215,10 @@ function addCompany(){
             <div>
                 <label>Ülke</label>
                 <select>
-                  <option>Türkiye</option>
+                    <option>Türkiye</option>
                     <option>Almanya</option>
                     <option>ABD</option>
+                </select>
             </div>
             <div>
                 <label>Ana Sektör</label>
@@ -234,17 +241,21 @@ function addCompany(){
                     <option>Üretim</option>
                     <option>Hizmet</option>
                     <option>Proje</option>
+                </select>
             </div>
         </div>`;
-    document.getElementById("companies").appendChild(c);
+    companies.appendChild(c);
 }
+
 function loadSub(sel){
     const sector = sel.value;
     const sub = sel.parentElement.nextElementSibling.querySelector("select");
     sub.innerHTML = "";
-    (sectorMap[sector]||[]).forEach(s=>{
+    (sectorMap[sector] || []).forEach(s=>{
         sub.innerHTML += `<option>${s}</option>`;
-        
+    });
+}
+
 function createCompanies(){
     const count = parseInt(companyCount.value);
     if(!count) return;
