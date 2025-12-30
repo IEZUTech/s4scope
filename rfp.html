@@ -50,7 +50,7 @@
         .btn-primary { background: var(--primary); color: white; }
         .btn-success { background: var(--accent); color: white; }
         .btn-danger { background: #d32f2f; color: white; }
-        .btn-secondary { background: #78909c; color: white; } /* Geri butonu için nötr renk */
+        .btn-secondary { background: #78909c; color: white; }
 
         .table-container { overflow-x: auto; margin-top: 20px; border-radius: 8px; border: 1px solid var(--border); }
         table { width: 100%; border-collapse: collapse; min-width: 1000px; }
@@ -59,7 +59,6 @@
 
         .hidden { display: none; }
 
-        /* Navigasyon Buton Konteynırı */
         .nav-buttons {
             margin-top: 30px;
             display: flex;
@@ -128,16 +127,12 @@
                 <button class="btn-primary" onclick="createCompanies()">Şirketleri Oluştur</button>
                 <button class="btn-success" onclick="addCompany()">+ Şirket Ekle</button>
             </div>
-            
             <div id="companiesContainer"></div>
-            
             <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
                 <button class="btn-success" onclick="saveCompanies()">Şirket Bilgilerini Kaydet</button>
                 <button class="btn-primary hidden" id="modTabBtn" onclick="showModTable()">Şirket - Modül Eşleşme Tablosu</button>
             </div>
-            
             <div id="modTableContainer" class="table-container"></div>
-            
             <div class="nav-buttons">
                 <button class="btn-secondary" onclick="showStep(0)">← Geri</button>
                 <button class="btn-primary" onclick="validateAndShowStep(2)">Sonraki Bölüm →</button>
@@ -181,9 +176,81 @@
         "PP - Üretim ve Planlama", "QM - Kalite Yönetimi", "PM - Bakım Yönetimi", "WM/EWM - Depo Yönetimi"
     ];
 
+    const fiWbsStructure = {
+        "1. Organizasyon ve Temel Muhasebe Yapısı": [
+            "1.1 Birden fazla şirket kodu (company code) kullanıyor musunuz?",
+            "1.2 Şirket kodları arasında mali konsolidasyon ihtiyacı var mı?",
+            "1.3 Farklı mali yıl varyantları kullanıyor musunuz?",
+            "1.4 Birden fazla hesap planı (chart of accounts) ihtiyacınız var mı?",
+            "1.5 Yerel mevzuat ve grup raporlaması için farklı muhasebe kuralları uyguluyor musunuz?"
+        ],
+        "2. Genel Muhasebe (General Ledger – GL)": [
+            "2.1 Ana defter muhasebesini S/4HANA Universal Journal (ACDOCA) yapısı ile kullanmak ister misiniz?",
+            "2.2 Birden fazla defter (leading / non-leading ledger) kullanıyor musunuz?",
+            "2.3 Muhasebe kayıtlarında belge bazlı muhasebe prensibini uyguluyor musunuz?",
+            "2.4 Otomatik muhasebe kayıtları (MM/SD kaynaklı) kullanılıyor mu?",
+            "2.5 Manuel muhasebe fişleri sıkça oluşturuluyor mu?",
+            "2.6 Muhasebe fişleri için onay süreci bulunuyor mu?",
+            "2.7 Muhasebe belgelerinde açıklama ve referans alanları zorunlu mu?"
+        ],
+        "3. Alacaklar Muhasebesi (Accounts Receivable – AR)": [
+            "3.1 Müşteri bazında açık hesap takibi yapıyor musunuz?",
+            "3.2 Müşteri risk ve kredi limitleri tanımlıyor musunuz?",
+            "3.3 Vadeli satış ve ödeme planları kullanıyor musunuz?",
+            "3.4 Müşteri bazında mutabakat (reconciliation) ihtiyacı var mı?",
+            "3.5 Tahsilat süreçlerini sistem üzerinden takip ediyor musunuz?",
+            "3.6 Gecikmiş alacaklar için otomatik hatırlatma (dunning) kullanıyor musunuz?",
+            "3.7 Farklı para birimlerinde müşteri işlemleri yapıyor musunuz?"
+        ],
+        "4. Borçlar Muhasebesi (Accounts Payable – AP)": [
+            "4.1 Tedarikçi bazında açık hesap takibi yapıyor musunuz?",
+            "4.2 Tedarikçi faturaları için onay süreci uyguluyor musunuz?",
+            "4.3 Vadeli ödeme ve ödeme planları kullanıyor musunuz?",
+            "4.4 Avans ödemeleri takip ediyor musunuz?",
+            "4.5 Tedarikçi mutabakatı yapıyor musunuz?",
+            "4.6 Otomatik ödeme programları kullanıyor musunuz?",
+            "4.7 Erken ödeme indirimi (iskonto) uyguluyor musunuz?"
+        ],
+        "5. Vergi ve Yasal Raporlama": [
+            "5.1 KDV hesaplamalarını sistem üzerinden otomatik yapmak istiyor musunuz?",
+            "5.2 Farklı vergi kodları ve oranları kullanıyor musunuz?",
+            "5.3 Yerel mevzuata uygun yasal defterler (yevmiye, kebir vb.) üretiliyor mu?",
+            "5.4 Vergi beyannameleri için sistemden rapor alıyor musunuz?",
+            "5.5 Vergi düzeltme ve fark kayıtları yapılıyor mu?"
+        ],
+        "6. Sabit Kıymet Muhasebesi (Asset Accounting – FI-AA)": [
+            "6.1 Sabit kıymetleri sistem üzerinden takip ediyor musunuz?",
+            "6.2 Birden fazla amortisman alanı kullanıyor musunuz?",
+            "6.3 Vergi ve muhasebe amortismanlarını ayrı ayrı hesaplıyor musunuz?",
+            "6.4 Kıymet alım, satış ve hurdaya ayırma işlemleri yapılıyor mu?",
+            "6.5 Kıymet transferleri (departman / lokasyon) takip ediliyor mu?"
+        ],
+        "7. Dönem Sonu ve Kapanış İşlemleri": [
+            "7.1 Aylık mali kapanış süreçleri standart bir takvime bağlı mı?",
+            "7.2 Dönem sonu reeskont ve değerleme işlemleri yapılıyor mu?",
+            "7.3 Kur farkı değerlemeleri sistem tarafından otomatik yapılıyor mu?",
+            "7.4 Kapanış öncesi kontrol ve mutabakat raporları kullanılıyor mu?",
+            "7.5 Dönem kapatma için yetkilendirme kısıtları uygulanıyor mu?"
+        ],
+        "8. Raporlama ve Analiz": [
+            "8.1 Standart mali tablolar (Bilanço, Gelir Tablosu) sistemden alınıyor mu?",
+            "8.2 Finansal raporlar farklı kırılımlarda (şirket, dönem, para birimi) alınmalı mı?",
+            "8.3 Gerçek zamanlı finansal raporlama ihtiyacınız var mı?",
+            "8.4 SAP Fiori finans raporlarını kullanmak ister misiniz?",
+            "8.5 Kullanıcı bazlı rapor yetkilendirmesi gerekiyor mu?"
+        ],
+        "9. Genel ve Kullanım": [
+            "9.1 Muhasebe kullanıcıları için rol bazlı yetkilendirme kullanıyor musunuz?",
+            "9.2 Muhasebe belgelerinde belge kilitleme ve değişiklik logu gerekli mi?",
+            "9.3 Çoklu dil desteği gerekli mi?",
+            "9.4 Çoklu para birimi ile muhasebe tutuluyor mu?",
+            "9.5 Denetim (audit) gereksinimleri için detaylı izleme bekliyor musunuz?"
+        ]
+    };
+
     let companyIndex = 0;
     let savedCompanies = [];
-    let modTableGenerated = false; // Bölüm 1 kontrolü için
+    let modTableGenerated = false;
 
     function toggleSapFields() {
         const isSap = document.getElementById("existingErp").value === "SAP";
@@ -208,7 +275,7 @@
                 <div><label>Ana Faaliyet</label><select><option>Üretim</option><option>Hizmet</option><option>Proje</option></select></div>
             </div>`;
         container.appendChild(div);
-        modTableGenerated = false; // Yeni şirket eklendiğinde tabloyu tekrar istemek için
+        modTableGenerated = false;
     }
 
     function createCompanies() {
@@ -273,32 +340,59 @@
 
     function renderProcesses() {
         let html = "";
-        savedCompanies.forEach(name => {
-            html += `<div class="company-block"><h5>${name} - Süreç Gereksinimleri</h5>
-                <label>Modül Bazlı Kritik Süreçler (Checklist)</label>
-                <div class="grid-setup">
-                    <div><input type="checkbox"> E-Dönüşüm (E-Fatura/Defter)</div>
-                    <div><input type="checkbox"> IFRS Raporlama</div>
-                    <div><input type="checkbox"> Dış Ticaret (İthalat/İhracat)</div>
-                    <div><input type="checkbox"> Fason Takibi</div>
-                </div>
-            </div>`;
+        savedCompanies.forEach((name, companyIdx) => {
+            html += `<div class="company-block" style="border-left: 8px solid var(--primary);">
+                <h3 style="color:var(--secondary); margin-bottom:20px; background:#e3f2fd; padding:10px; border-radius:5px;">
+                    ${name} - Mali Muhasebe (FI) Süreç Analizi
+                </h3>`;
+
+            for (const [sectionTitle, questions] of Object.entries(fiWbsStructure)) {
+                html += `
+                <div style="margin-bottom: 30px;">
+                    <h4 style="background: var(--secondary); color: white; padding: 10px 15px; border-radius: 5px; font-size: 1rem;">
+                        ${sectionTitle}
+                    </h4>
+                    <div class="table-container" style="margin-top:0;">
+                        <table style="min-width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40%; text-align: left;">Süreç Sorusu</th>
+                                    <th style="width: 25%;">Cevap</th>
+                                    <th style="width: 35%;">Açıklama / Not</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+
+                questions.forEach((q, qIdx) => {
+                    html += `
+                    <tr>
+                        <td style="text-align: left; font-size: 0.85rem; font-weight: 600;">${q}</td>
+                        <td>
+                            <select style="padding: 5px; font-size: 0.85rem;">
+                                <option value="">Seçiniz</option>
+                                <option value="evet">Evet</option>
+                                <option value="hayir">Hayır</option>
+                                <option value="kismen">Kısmen</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" placeholder="Not ekleyin..." style="padding: 5px; font-size: 0.85rem; width: 95%;">
+                        </td>
+                    </tr>`;
+                });
+                html += `</tbody></table></div></div>`;
+            }
+            html += `</div>`;
         });
         document.getElementById("processArea").innerHTML = html;
     }
 
-    // --- NAVIGASYON VE VALIDASYON ---
-    
     function validateAndShowStep(targetIdx) {
         const currentIdx = parseInt(document.querySelector("nav ul li.active").id.split("-")[1]);
-        
-        // Geriye gidiliyorsa validasyon yapma
         if (targetIdx < currentIdx) {
             showStep(targetIdx);
             return;
         }
-
-        // BÖLÜM 0 KONTROLÜ
         if (currentIdx === 0) {
             const erp = document.getElementById("existingErp").value;
             if (!erp) { alert("Lütfen mevcut ERP sisteminizi seçiniz."); return; }
@@ -308,14 +402,10 @@
                 }
             }
         }
-
-        // BÖLÜM 1 KONTROLÜ
         if (currentIdx === 1) {
             if (savedCompanies.length === 0) { alert("Lütfen şirketleri oluşturun ve kaydedin."); return; }
             if (!modTableGenerated) { alert("Lütfen Modül Eşleşme Tablosunu oluşturun."); return; }
         }
-
-        // Tüm kontroller geçtiyse ilerle
         showStep(targetIdx);
     }
 
