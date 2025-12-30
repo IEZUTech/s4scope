@@ -1,52 +1,234 @@
-<!-- 🔽 MEVCUT KODUN TAMAMI AYNI ŞEKİLDE BURADA (DEĞİŞMEDİ) 🔽 -->
-<!-- ... senin verdiğin kod ... -->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<title>S4Scope – SAP RFP | IEZU Tech</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f9;
+    margin:0;
+}
+header{
+    background:#0b5ed7;
+    color:#fff;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.container{
+    padding:20px;
+}
+.section{
+    background:#fff;
+    border:1px solid #ccc;
+    margin-top:20px;
+    padding:20px;
+}
+.section-title{
+    background:#0b5ed7;
+    color:#fff;
+    padding:12px;
+    margin:-20px -20px 20px -20px;
+    font-size:18px;
+}
+label{
+    font-weight:bold;
+    font-size:13px;
+    display:block;
+    margin-bottom:5px;
+}
+input, select{
+    width:100%;
+    padding:6px;
+    box-sizing:border-box;
+}
+button{
+    padding:8px 14px;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+    font-size:13px;
+}
+.btn-primary{ background:#0b5ed7; color:#fff; }
+.btn-success{ background:#198754; color:#fff; }
+.btn-danger{ background:#dc3545; color:#fff; }
+
+.company-block{
+    border:1px solid #ccc;
+    padding:15px;
+    margin-top:15px;
+}
+.company-grid{
+    display:grid;
+    grid-template-columns: repeat(5,1fr);
+    gap:12px;
+}
+.hidden{ display:none; }
+
+.counter{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+.counter span{
+    width:40px;
+    text-align:center;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div><strong>S4Scope</strong></div>
+    <div>SAP RFP Platformu | <strong>IEZU Tech</strong></div>
+</header>
+
+<div class="container">
+
+<label>Mevcut ERP Sistemi</label>
+<select id="existingErp">
+    <option value="">Seçiniz</option>
+    <option value="SAP">SAP</option>
+    <option value="Oracle">Oracle</option>
+    <option value="Logo">Logo</option>
+    <option value="Diğer">Diğer</option>
+</select>
+
+<br><br>
+<button class="btn-primary" onclick="goToSection1()">RFP'ye Başla</button>
+
+<!-- ================== BÖLÜM 1 ================== -->
+<div class="section hidden" id="section1">
+    <div class="section-title">Bölüm 1 – Şirket Bazlı Genel Bilgiler</div>
+
+    <label>Kaç şirket için RFP doldurulacak?</label>
+    <input type="number" id="companyCount" min="1" />
+    <br><br>
+
+    <button onclick="createCompanies()">Şirketleri Oluştur</button>
+    <button class="btn-success" onclick="addCompany()">Şirket Ekle</button>
+
+    <div id="companies"></div>
+
+    <br>
+    <button class="btn-success" onclick="saveCompanies()">Şirket Bilgilerini Kaydet</button>
+</div>
+
+</div>
 
 <script>
-/* MEVCUT JS KODLARIN AYNEN DURUYOR */
+const sectorMap = {
+ "Kesikli Üretim": ["Otomotiv","Makine"],
+ "Tüketici": ["Gıda","Perakende"]
+};
 
-/* 🔹 SADECE BU SATIR EKLENDİ */
+let companyIndex = 0;
+let savedCompanies = [];
+
+const section1 = document.getElementById("section1");
+const companiesDiv = document.getElementById("companies");
+const companyCount = document.getElementById("companyCount");
+
+function goToSection1(){
+    section1.classList.remove("hidden");
+}
+
+function addCompany(){
+    companyIndex++;
+    const c = document.createElement("div");
+    c.className="company-block";
+    c.innerHTML=`
+        <h3>Şirket ${companyIndex}</h3>
+        <div class="company-grid">
+            <div>
+                <label>Şirket Adı</label>
+                <input type="text" class="company-name">
+            </div>
+            <div>
+                <label>Ülke</label>
+                <select>
+                    <option>Türkiye</option>
+                    <option>Almanya</option>
+                    <option>ABD</option>
+                </select>
+            </div>
+            <div>
+                <label>Ana Sektör</label>
+                <select>
+                    <option>Kesikli Üretim</option>
+                    <option>Tüketici</option>
+                </select>
+            </div>
+            <div>
+                <label>Alt Sektör</label>
+                <select></select>
+            </div>
+            <div>
+                <label>Ana Faaliyet</label>
+                <select>
+                    <option>Üretim</option>
+                    <option>Hizmet</option>
+                </select>
+            </div>
+        </div>`;
+    companiesDiv.appendChild(c);
+}
+
+function createCompanies(){
+    const count = parseInt(companyCount.value);
+    if(!count) return;
+    companiesDiv.innerHTML="";
+    companyIndex=0;
+    for(let i=0;i<count;i++) addCompany();
+}
+
 function saveCompanies(){
     savedCompanies = [];
     document.querySelectorAll(".company-name").forEach(i=>{
-        if(i.value) savedCompanies.push(i.value);
+        if(i.value.trim()) savedCompanies.push(i.value.trim());
     });
     if(savedCompanies.length===0){
         alert("En az bir şirket adı girilmeli");
         return;
     }
-    document.getElementById("moduleBtn").classList.remove("hidden");
-
-    /* 🔴 SADECE BU SATIR EK */
     renderSection2();
 }
 
-/* 🔽 BÖLÜM 2 – YENİ EKLENEN KOD 🔽 */
+/* ================== BÖLÜM 2 ================== */
 
 function renderSection2(){
-    let html = `<div class="section">
+    const old = document.getElementById("section2");
+    if(old) old.remove();
+
+    let html = `<div class="section" id="section2">
         <div class="section-title">Bölüm 2 – Organizasyon & Yapı</div>`;
 
-    savedCompanies.forEach((name, i) => {
+    savedCompanies.forEach((name, i)=>{
         html += `
         <div class="company-block">
             <h3>${name}</h3>
 
-            <div class="form-group">
-                <label>Üretim Tesisi Sayısı</label>
+            <div class="counter">
+                Üretim Tesisi
                 <button onclick="changeValue('p${i}',-1)">-</button>
                 <span id="p${i}">0</span>
                 <button onclick="changeValue('p${i}',1)">+</button>
             </div>
 
-            <div class="form-group">
-                <label>Depo Sayısı</label>
+            <div class="counter">
+                Depo
                 <button onclick="changeValue('w${i}',-1)">-</button>
                 <span id="w${i}">0</span>
                 <button onclick="changeValue('w${i}',1)">+</button>
             </div>
 
-            <div class="form-group">
-                <label>Satış Ofisi Sayısı</label>
+            <div class="counter">
+                Satış Ofisi
                 <button onclick="changeValue('s${i}',-1)">-</button>
                 <span id="s${i}">0</span>
                 <button onclick="changeValue('s${i}',1)">+</button>
@@ -55,12 +237,16 @@ function renderSection2(){
     });
 
     html += `</div>`;
-    document.querySelector(".container").insertAdjacentHTML("beforeend", html);
+    document.querySelector(".container").appendChild(
+        document.createRange().createContextualFragment(html)
+    );
 }
 
 function changeValue(id, delta){
     const el = document.getElementById(id);
-    let v = parseInt(el.innerText);
-    el.innerText = Math.max(0, v + delta);
+    el.innerText = Math.max(0, parseInt(el.innerText) + delta);
 }
 </script>
+
+</body>
+</html>
