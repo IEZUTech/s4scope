@@ -36,9 +36,11 @@
 
         .section-title { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 25px; font-size: 1.3rem; color: var(--secondary); font-weight: 700; }
         
-        .grid-setup { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; text-align: left;}
+        /* GÜNCELLENEN GRID YAPISI - 5 KOLON YAN YANA */
+        .grid-setup { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; text-align: left;}
+        
         label { font-weight: 600; font-size: 0.85rem; color: #546e7a; display: block; margin-bottom: 8px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; }
         
         .company-block { background: #f8fbff; border: 1px solid #e3e9ef; border-radius: 10px; padding: 25px; margin-top: 20px; position: relative; }
         
@@ -67,7 +69,6 @@
             padding-top: 20px;
         }
 
-        /* PHASE SPECIFIC STYLES */
         .phase-card { border: 2px dashed #ccc; padding: 20px; margin-top: 20px; border-radius: 10px; background: #fff; }
         .phase-badge { background: var(--secondary); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; margin: 5px; display: inline-block; }
 
@@ -216,7 +217,7 @@
     </main>
 
 <script>
-    // --- VERİ YAPILARI (TAM LİSTE) ---
+    // --- VERİ YAPILARI ---
     const sectorMap = {
         "Tüketici Endüstrileri": ["Tarım & Gıda", "Hızlı Tüketim Ürünleri (FMCG)", "İlaç, Medikal", "Perakende", "Toptan Dağıtım"],
         "Kesikli Üretim": ["Otomotiv Tedarikçileri", "Kiralama & Leasing", "Batarya Üreticileri", "Makine ve Ekipman Üreticileri", "Yüksek Teknoloji Üreticileri"],
@@ -319,7 +320,6 @@
     let modTableGenerated = false;
     let phaseCount = 0;
 
-    // --- GENEL ERP FONKSİYONLARI ---
     function toggleSapFields() {
         const isSap = document.getElementById("existingErp").value === "SAP";
         ["sapModelArea", "sapVersionArea", "approachArea"].forEach(id => {
@@ -480,7 +480,7 @@
                 <h4 style="margin:0; color:var(--primary)">Faz #${phaseCount} Planlaması</h4>
                 <button class="btn-danger" style="padding:5px 10px; font-size:0.7rem;" onclick="this.closest('.phase-card').remove()">Fazı Kaldır</button>
             </div>
-            <div class="grid-setup">
+            <div class="grid-setup" style="grid-template-columns: 1fr 1fr;">
                 <div>
                     <label>Hedef Canlıya Geçiş Tarihi</label>
                     <input type="month" class="phase-date">
@@ -546,7 +546,6 @@
             </div>`;
     }
 
-    // --- NAVIGASYON ---
     function validateAndShowStep(targetIdx) {
         const currentIdx = parseInt(document.querySelector("nav ul li.active").id.split("-")[1]);
         if (targetIdx < currentIdx) { showStep(targetIdx); return; }
