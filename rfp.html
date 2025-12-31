@@ -36,12 +36,11 @@
 
         .section-title { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 25px; font-size: 1.3rem; color: var(--secondary); font-weight: 700; }
         
-        /* ŞİRKET GİRİŞİ İÇİN SABİT KOLON DÜZENİ */
-        .grid-setup { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; text-align: left;}
-        .company-grid { display: grid; grid-template-columns: 1fr 1fr 1.2fr 1.2fr 1fr; gap: 10px; align-items: start; }
+        /* ŞİRKET BİLGİLERİ GRİD DÜZENİ */
+        .company-grid { display: grid; grid-template-columns: 1.5fr 1fr 1.5fr 1.5fr 1.2fr; gap: 15px; align-items: start; }
         
         label { font-weight: 600; font-size: 0.85rem; color: #546e7a; display: block; margin-bottom: 8px; }
-        input, select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; box-sizing: border-box; }
+        input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; box-sizing: border-box; }
         
         .company-block { background: #f8fbff; border: 1px solid #e3e9ef; border-radius: 10px; padding: 25px; margin-top: 20px; position: relative; }
         
@@ -61,16 +60,12 @@
         td { padding: 12px; border: 1px solid #eee; text-align: center; background: white; font-size: 0.9rem;}
 
         .hidden { display: none; }
-
         .nav-buttons { margin-top: 30px; display: flex; justify-content: space-between; border-top: 1px solid #eee; padding-top: 20px; }
 
-        .phase-card { border: 2px dashed #ccc; padding: 20px; margin-top: 20px; border-radius: 10px; background: #fff; }
-        .phase-badge { background: var(--secondary); color: white; padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; margin: 5px; display: inline-block; }
-        
-        /* CHECKBOX LISTESİ STİLİ */
-        .checkbox-group { background: #fdfdfd; border: 1px solid #eee; padding: 10px; border-radius: 8px; max-height: 150px; overflow-y: auto; }
-        .checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; margin-bottom: 5px; cursor: pointer; }
-        .checkbox-item input { width: auto; }
+        /* BÖLÜM 5 CHECKBOX TASARIMI */
+        .checkbox-group { background: #fdfdfd; border: 1px solid #eee; padding: 10px; border-radius: 8px; max-height: 150px; overflow-y: auto; margin-top: 5px; }
+        .checkbox-item { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; margin-bottom: 8px; cursor: pointer; }
+        .checkbox-item input { width: 18px; height: 18px; cursor: pointer; }
 
         @media print {
             nav, #progress-container, .nav-buttons, button { display: none !important; }
@@ -99,7 +94,7 @@
     <main>
         <div class="section active" id="step-0">
             <div class="section-title">Bölüm 0 - ERP Yapısı</div>
-            <div class="grid-setup">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
                 <div>
                     <label>Mevcut ERP Sistemi</label>
                     <select id="existingErp" onchange="toggleSapFields()">
@@ -192,7 +187,6 @@
 
         <div class="section" id="step-5">
             <div class="section-title">Bölüm 5 – Dönüşüm Stratejisi (Fazlandırma)</div>
-            <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Şirketleri fazlara ayırın ve geçiş tarihlerini belirleyin.</p>
             <div style="margin-bottom:20px;"><button class="btn-success" onclick="addNewPhase()">+ Yeni Faz Ekle</button></div>
             <div id="phasesContainer"></div>
             <div class="nav-buttons">
@@ -239,15 +233,75 @@
     };
 
     const fiWbsStructure = {
-        "1. Organizasyon ve Temel Muhasebe Yapısı": ["1.1 Birden fazla şirket kodu?", "1.2 Mali konsolidasyon?", "1.3 Farklı mali yıl varyantları?", "1.4 Birden fazla hesap planı?", "1.5 Yerel/Grup muhasebe farkı?"],
-        "2. Genel Muhasebe (GL)": ["2.1 S/4HANA Universal Journal?", "2.2 Birden fazla defter?", "2.3 Belge bazlı muhasebe?", "2.4 Otomatik MM/SD kayıtları?", "2.5 Manuel fiş yoğunluğu?", "2.6 Onay süreci?", "2.7 Zorunlu alanlar?"],
-        "3. Alacaklar (AR)": ["3.1 Açık hesap takibi?", "3.2 Kredi limitleri?", "3.3 Ödeme planları?", "3.4 Mutabakat?", "3.5 Tahsilat takibi?", "3.6 Otomatik ihtar?", "3.7 Çoklu para birimi?"],
-        "4. Borçlar (AP)": ["4.1 Tedarikçi açık hesap?", "4.2 Fatura onayı?", "4.3 Vadeli ödeme?", "4.4 Avans takibi?", "4.5 Tedarikçi mutabakatı?", "4.6 Otomatik ödeme?", "4.7 İskonto uygulaması?"],
-        "5. Vergi ve Yasal Raporlama": ["5.1 Otomatik KDV?", "5.2 Farklı vergi kodları?", "5.3 Yasal defter üretimi?", "5.4 Beyanname raporları?", "5.5 Vergi düzeltme kayıtları?"],
-        "6. Sabit Kıymetler (FI-AA)": ["6.1 Sistem üzerinden takip?", "6.2 Çoklu amortisman alanı?", "6.3 Vergi/Muhasebe amortisman farkı?", "6.4 Alım/Satış/Hurda işlemleri?", "6.5 Kıymet transferleri?"],
-        "7. Kapanış İşlemleri": ["7.1 Standart takvim?", "7.2 Reeskont işlemleri?", "7.3 Otomatik kur farkı?", "7.4 Kapanış kontrolleri?", "7.5 Yetkilendirme kısıtı?"],
-        "8. Raporlama ve Analiz": ["8.1 Standart mali tablolar?", "8.2 Çoklu kırılım?", "8.3 Gerçek zamanlı rapor?", "8.4 Fiori kullanımı?", "8.5 Rapor yetkilendirmesi?"],
-        "9. Genel ve Kullanım": ["9.1 Rol bazlı yetki?", "9.2 Değişiklik logu?", "9.3 Çoklu dil?", "9.4 Çoklu para birimi?", "9.5 Denetim izleme?"]
+        "1. Organizasyon ve Temel Muhasebe Yapısı": [
+            "1.1 Birden fazla şirket kodu (company code) kullanıyor musunuz?",
+            "1.2 Şirket kodları arasında mali konsolidasyon ihtiyacı var mı?",
+            "1.3 Farklı mali yıl varyantları kullanıyor musunuz?",
+            "1.4 Birden fazla hesap planı (chart of accounts) ihtiyacınız var mı?",
+            "1.5 Yerel mevzuat ve grup raporlaması için farklı muhasebe kuralları uyguluyor musunuz?"
+        ],
+        "2. Genel Muhasebe (General Ledger – GL)": [
+            "2.1 Ana defter muhasebesini S/4HANA Universal Journal (ACDOCA) yapısı ile kullanmak ister misiniz?",
+            "2.2 Birden fazla defter (leading / non-leading ledger) kullanıyor musunuz?",
+            "2.3 Muhasebe kayıtlarında belge bazlı muhasebe prensibini uyguluyor musunuz?",
+            "2.4 Otomatik muhasebe kayıtları (MM/SD kaynaklı) kullanılıyor mu?",
+            "2.5 Manuel muhasebe fişleri sıkça oluşturuluyor mu?",
+            "2.6 Muhasebe fişleri için onay süreci bulunuyor mu?",
+            "2.7 Muhasebe belgelerinde açıklama ve referans alanları zorunlu mu?"
+        ],
+        "3. Alacaklar Muhasebesi (Accounts Receivable – AR)": [
+            "3.1 Müşteri bazında açık hesap takibi yapıyor musunuz?",
+            "3.2 Müşteri risk ve kredi limitleri tanımlıyor musunuz?",
+            "3.3 Vadeli satış ve ödeme planları kullanıyor musunuz?",
+            "3.4 Müşteri bazında mutabakat (reconciliation) ihtiyacı var mı?",
+            "3.5 Tahsilat süreçlerini sistem üzerinden takip ediyor musunuz?",
+            "3.6 Gecikmiş alacaklar için otomatik hatırlatma (dunning) kullanıyor musunuz?",
+            "3.7 Farklı para birimlerinde müşteri işlemleri yapıyor musunuz?"
+        ],
+        "4. Borçlar Muhasebesi (Accounts Payable – AP)": [
+            "4.1 Tedarikçi bazında açık hesap takibi yapıyor musunuz?",
+            "4.2 Tedarikçi faturaları için onay süreci uyguluyor musunuz?",
+            "4.3 Vadeli ödeme ve ödeme planları kullanıyor musunuz?",
+            "4.4 Avans ödemeleri takip ediyor musunuz?",
+            "4.5 Tedarikçi mutabakatı yapıyor musunuz?",
+            "4.6 Otomatik ödeme programları kullanıyor musunuz?",
+            "4.7 Erken ödeme indirimi (iskonto) uyguluyor musunuz?"
+        ],
+        "5. Vergi ve Yasal Raporlama": [
+            "5.1 KDV hesaplamalarını sistem üzerinden otomatik yapmak istiyor musunuz?",
+            "5.2 Farklı vergi kodları ve oranları kullanıyor musunuz?",
+            "5.3 Yerel mevzuata uygun yasal defterler (yevmiye, kebir vb.) üretiliyor mu?",
+            "5.4 Vergi beyannameleri için sistemden rapor alıyor musunuz?",
+            "5.5 Vergi düzeltme ve fark kayıtları yapılıyor mu?"
+        ],
+        "6. Sabit Kıymet Muhasebesi (Asset Accounting – FI-AA)": [
+            "6.1 Sabit kıymetleri sistem üzerinden takip ediyor musunuz?",
+            "6.2 Birden fazla amortisman alanı kullanıyor musunuz?",
+            "6.3 Vergi ve muhasebe amortismanlarını ayrı ayrı hesaplıyor musunuz?",
+            "6.4 Kıymet alım, satış ve hurdaya ayırma işlemleri yapılıyor mu?",
+            "6.5 Kıymet transferleri (departman / lokasyon) takip ediliyor mu?"
+        ],
+        "7. Dönem Sonu ve Kapanış İşlemleri": [
+            "7.1 Aylık mali kapanış süreçleri standart bir takvime bağlı mı?",
+            "7.2 Dönem sonu reeskont ve değerleme işlemleri yapılıyor mu?",
+            "7.3 Kur farkı değerlemeleri sistem tarafından otomatik yapılıyor mu?",
+            "7.4 Kapanış öncesi kontrol ve mutabakat raporları kullanılıyor mu?",
+            "7.5 Dönem kapatma için yetkilendirme kısıtları uygulanıyor mu?"
+        ],
+        "8. Raporlama ve Analiz": [
+            "8.1 Standart mali tablolar (Bilanço, Gelir Tablosu) sistemden alınıyor mu?",
+            "8.2 Finansal raporlar farklı kırılımlarda (şirket, dönem, para birimi) alınmalı mı?",
+            "8.3 Gerçek zamanlı finansal raporlama ihtiyacınız var mı?",
+            "8.4 SAP Fiori finans raporlarını kullanmak ister misiniz?",
+            "8.5 Kullanıcı bazlı rapor yetkilendirmesi gerekiyor mu?"
+        ],
+        "9. Genel ve Kullanım": [
+            "9.1 Muhasebe kullanıcıları için rol bazlı yetkilendirme kullanıyor musunuz?",
+            "9.2 Muhasebe belgelerinde belge kilitleme ve değişiklik logu gerekli mi?",
+            "9.3 Çoklu dil desteği gerekli mi?",
+            "9.4 Çoklu para birimi ile muhasebe tutuluyor mu?",
+            "9.5 Denetim (audit) gereksinimleri için detaylı izleme bekliyor musunuz?"
+        ]
     };
 
     let companyIndex = 0;
@@ -256,7 +310,9 @@
 
     function toggleSapFields() {
         const isSap = document.getElementById("existingErp").value === "SAP";
-        ["sapModelArea", "sapVersionArea", "approachArea"].forEach(id => document.getElementById(id).classList.toggle("hidden", !isSap));
+        ["sapModelArea", "sapVersionArea", "approachArea"].forEach(id => {
+            document.getElementById(id).classList.toggle("hidden", !isSap);
+        });
     }
 
     function addCompany() {
@@ -268,10 +324,19 @@
             <h4 style="margin:0 0 20px 0; color:var(--primary)">Şirket #${companyIndex}</h4>
             <div class="company-grid">
                 <div><label>Şirket Adı</label><input type="text" class="comp-name"></div>
-                <div><label>Ülke</label><input type="text" placeholder="Örn: Türkiye"></div>
+                <div>
+                    <label>Ülke</label>
+                    <select>
+                        <option>Türkiye</option>
+                        <option>Almanya</option>
+                        <option>ABD</option>
+                        <option>İngiltere</option>
+                        <option>Diğer</option>
+                    </select>
+                </div>
                 <div><label>Ana Sektör</label><select onchange="loadSubs(this)"><option value=""></option>${Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("")}</select></div>
                 <div><label>Alt Sektör</label><select class="sub-sector"></select></div>
-                <div><label>Faaliyet</label><select><option>Üretim</option><option>Hizmet</option><option>Proje</option></select></div>
+                <div><label>Ana Faaliyet</label><select><option>Üretim</option><option>Hizmet</option><option>Proje</option></select></div>
             </div>`;
         document.getElementById("companiesContainer").appendChild(div);
     }
@@ -294,7 +359,7 @@
         if(savedCompanies.length) {
             document.getElementById("modTabBtn").classList.remove("hidden");
             renderOrg(); renderProcesses(); renderTechInventory();
-            alert("Şirketler kaydedildi.");
+            alert("Şirket bilgileri kaydedildi.");
         }
     }
 
@@ -309,23 +374,38 @@
     function renderOrg() {
         let html = "";
         savedCompanies.forEach((name, i) => {
-            html += `<div class="company-block"><h4>${name}</h4>${counterRow('Üretim Tesisi', 'p'+i)}${counterRow('Depo', 'w'+i)}</div>`;
+            html += `<div class="company-block"><h4>${name}</h4>
+                ${counterRow('Üretim Tesisi', 'p'+i)}
+                ${counterRow('Depo / Lojistik Merkezi', 'w'+i)}
+                ${counterRow('Satış Ofisi / Bölge Müdürlüğü', 's'+i)}
+            </div>`;
         });
         document.getElementById("orgContainer").innerHTML = html;
     }
 
     function counterRow(label, id) {
-        return `<div class="counter-row"><span>${label}</span><div class="counter-box"><button class="btn-danger" style="padding:2px 10px" onclick="chgVal('${id}',-1)">-</button><span class="val-span" id="${id}">0</span><button class="btn-success" style="padding:2px 10px" onclick="chgVal('${id}',1)">+</button></div></div>`;
+        return `<div class="counter-row"><span>${label}</span><div class="counter-box">
+            <button class="btn-danger" style="padding:2px 10px" onclick="chgVal('${id}',-1)">-</button>
+            <span class="val-span" id="${id}">0</span>
+            <button class="btn-success" style="padding:2px 10px" onclick="chgVal('${id}',1)">+</button>
+        </div></div>`;
     }
 
-    function chgVal(id, d) { const el = document.getElementById(id); el.innerText = Math.max(0, parseInt(el.innerText) + d); }
+    function chgVal(id, d) {
+        const el = document.getElementById(id);
+        el.innerText = Math.max(0, parseInt(el.innerText) + d);
+    }
 
     function renderProcesses() {
         let html = "";
         savedCompanies.forEach(name => {
-            html += `<div class="company-block"><h3>${name} - FI Analizi</h3>`;
+            html += `<div class="company-block" style="border-left: 8px solid var(--primary);"><h3>${name} - FI Analizi</h3>`;
             for (const [title, qs] of Object.entries(fiWbsStructure)) {
-                html += `<h5>${title}</h5><div class="table-container"><table><thead><tr><th>Soru</th><th>Cevap</th><th>Not</th></tr></thead><tbody>${qs.map(q=>`<tr><td style="text-align:left">${q}</td><td><select><option>Evet</option><option>Hayır</option></select></td><td><input type="text"></td></tr>`).join("")}</tbody></table></div>`;
+                html += `<div style="margin-bottom:25px;"><h4 style="background:var(--secondary); color:white; padding:10px; border-radius:5px;">${title}</h4><div class="table-container"><table><thead><tr><th style="text-align:left; width:50%;">Süreç Sorusu</th><th style="width:20%;">Cevap</th><th>Not</th></tr></thead><tbody>`;
+                qs.forEach(q => {
+                    html += `<tr><td style="text-align:left; font-weight:600;">${q}</td><td><select><option value="">Seçiniz</option><option>Evet</option><option>Hayır</option><option>Kısmen</option></select></td><td><input type="text" placeholder="Not..." style="width:95%;"></td></tr>`;
+                });
+                html += `</tbody></table></div></div>`;
             }
             html += `</div>`;
         });
@@ -335,33 +415,54 @@
     function renderTechInventory() {
         let html = "";
         Object.keys(softwareGroups).forEach((group, i) => {
-            html += `<div class="company-block"><h4>${group}</h4><select id="sel-soft-${i}"><option value="">Seç...</option>${softwareGroups[group].map(s=>`<option>${s}</option>`).join("")}</select><button class="btn-success" onclick="addSoftRow(${i})">+</button><div id="cont-soft-${i}"></div></div>`;
+            html += `<div class="company-block">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h4 style="margin:0;">${group}</h4>
+                    <div style="display:flex; gap:10px;">
+                        <select id="sel-soft-${i}" style="width:200px;">
+                            <option value="">Yazılım Seç...</option>
+                            ${softwareGroups[group].map(s=>`<option value="${s}">${s}</option>`).join("")}
+                            <option value="DİĞER">Diğer +</option>
+                        </select>
+                        <button class="btn-success" onclick="addSoftwareRow(${i})">+</button>
+                    </div>
+                </div>
+                <div class="table-container" id="cont-soft-${i}" style="display:none; margin-top:15px;">
+                    <table style="min-width:100%;"><thead><tr><th>Yazılım</th><th style="width:50%">Hedef Mimari Konumu</th><th>İşlem</th></tr></thead><tbody id="tbody-soft-${i}"></tbody></table>
+                </div>
+            </div>`;
         });
         document.getElementById("softwareInventoryArea").innerHTML = html;
     }
 
-    function addSoftRow(i) {
-        const val = document.getElementById(`sel-soft-${i}`).value;
-        if(val) document.getElementById(`cont-soft-${i}`).innerHTML += `<div class="phase-badge">${val}</div>`;
+    function addSoftwareRow(i) {
+        let val = document.getElementById(`sel-soft-${i}`).value;
+        if(!val) return;
+        if(val === "DİĞER") { val = prompt("Yazılım Adı:"); if(!val) return; }
+        const container = document.getElementById(`cont-soft-${i}`);
+        const tbody = document.getElementById(`tbody-soft-${i}`);
+        container.style.display = "block";
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td style="font-weight:600;">${val}</td><td><select><option>SAP ürün ve modülü ile değiştirilebilir</option><option>Hedef Mimaride kalacak</option><option>3. parti sistem ile değiştirilebilir</option></select></td><td><button class="btn-danger" style="padding:5px 12px;" onclick="this.closest('tr').remove()">Kaldır</button></td>`;
+        tbody.appendChild(tr);
     }
 
-    // --- BÖLÜM 5: FAZLANDIRMA (YENİLENEN) ---
     function addNewPhase() {
         phaseCount++;
         const div = document.createElement("div");
         div.className = "phase-card";
         div.innerHTML = `
             <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-                <h4 style="margin:0; color:var(--primary)">Faz #${phaseCount}</h4>
-                <button class="btn-danger" style="padding:5px 10px; font-size:0.7rem;" onclick="this.closest('.phase-card').remove()">Fazı Sil</button>
+                <h4 style="margin:0; color:var(--primary)">Faz #${phaseCount} Planlaması</h4>
+                <button class="btn-danger" style="padding:5px 10px; font-size:0.7rem;" onclick="this.closest('.phase-card').remove()">Fazı Kaldır</button>
             </div>
-            <div class="grid-setup" style="grid-template-columns: 1fr 1fr;">
-                <div><label>Canlıya Geçiş Tarihi</label><input type="month" class="phase-date"></div>
+            <div class="grid-setup" style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                <div><label>Hedef Canlı Tarihi</label><input type="month" class="phase-date"></div>
                 <div>
                     <label>Şirketleri Seçin</label>
                     <div class="checkbox-group">
-                        <label class="checkbox-item"><input type="checkbox" onchange="toggleAll(this)"> <strong>Tümünü Seç</strong></label>
-                        <hr style="border:0; border-top:1px solid #eee;">
+                        <label class="checkbox-item"><input type="checkbox" onchange="toggleAllInPhase(this)"> <strong>Tümünü Seç</strong></label>
+                        <hr style="border:0; border-top:1px solid #eee; margin:8px 0;">
                         ${savedCompanies.map(c => `<label class="checkbox-item"><input type="checkbox" class="comp-check" value="${c}"> ${c}</label>`).join("")}
                     </div>
                 </div>
@@ -369,21 +470,28 @@
         document.getElementById("phasesContainer").appendChild(div);
     }
 
-    function toggleAll(source) {
+    function toggleAllInPhase(source) {
         const checkboxes = source.closest(".checkbox-group").querySelectorAll(".comp-check");
         checkboxes.forEach(cb => cb.checked = source.checked);
     }
 
-    // --- BÖLÜM 6: RAPOR ---
     function generateFinalReport() {
         const erp = document.getElementById("existingErp").value;
-        let phtml = "";
+        const approach = document.getElementById("sapApproach").value || "Belirtilmedi";
+        let phaseHtml = "";
         document.querySelectorAll(".phase-card").forEach((card, i) => {
-            const date = card.querySelector(".phase-date").value || "Tarih Yok";
+            const date = card.querySelector(".phase-date").value || "Tarih Belirtilmedi";
             const comps = Array.from(card.querySelectorAll(".comp-check:checked")).map(cb => cb.value).join(", ");
-            phtml += `<p><strong>Faz ${i+1} (${date}):</strong> ${comps || 'Seçim yok'}</p>`;
+            phaseHtml += `<p><strong>Faz ${i+1} (${date}):</strong> ${comps || 'Şirket seçilmedi'}</p>`;
         });
-        document.getElementById("rfpReportArea").innerHTML = `<div class="company-block"><h2>RFP ÖZETİ</h2><p>ERP: ${erp}</p><p>Şirketler: ${savedCompanies.join(", ")}</p><h4>Takvim</h4>${phtml}</div>`;
+
+        document.getElementById("rfpReportArea").innerHTML = `
+            <div class="company-block" style="background:#fff; border: 2px solid var(--primary);">
+                <h2 style="text-align:center; color:var(--primary);">RFP ÖZET RAPORU</h2>
+                <p>Mevcut ERP: <strong>${erp}</strong> | Yaklaşım: <strong>${approach}</strong></p>
+                <h4>Uygulama Takvimi</h4>
+                ${phaseHtml}
+            </div>`;
     }
 
     function validateAndShowStep(idx) {
