@@ -51,6 +51,7 @@
         .btn-success { background: var(--accent); color: white; }
         .btn-danger { background: #d32f2f; color: white; }
         .btn-secondary { background: #78909c; color: white; }
+        .btn-sm { padding: 5px 10px; font-size: 11px; }
 
         .table-container { overflow-x: auto; margin-top: 10px; border-radius: 8px; border: 1px solid var(--border); }
         table { width: 100%; border-collapse: collapse; min-width: 1000px; }
@@ -60,7 +61,7 @@
         .hidden { display: none; }
         .nav-buttons { margin-top: 30px; display: flex; justify-content: space-between; border-top: 1px solid #eee; padding-top: 20px; }
 
-        /* AKORDİYON STİLLERİ (YENİ) */
+        /* AKORDİYON STİLLERİ */
         .process-category { margin-bottom: 10px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
         .process-header { background: #f8f9fa; padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; font-weight: 700; color: var(--secondary); }
         .process-header:hover { background: #eceff1; }
@@ -76,7 +77,7 @@
             nav, #progress-container, .nav-buttons, button { display: none !important; }
             main { margin-left: 0; padding: 0; }
             .section { box-shadow: none; border: none; display: block !important; }
-            .process-content { display: block !important; } /* Yazdırırken hepsi açık çıksın */
+            .process-content { display: block !important; }
         }
     </style>
 </head>
@@ -216,7 +217,7 @@
     </main>
 
 <script>
-    // --- VERİ YAPILARI (TAM LİSTE KORUNDU) ---
+    // --- VERİ YAPILARI ---
     const sectorMap = {
         "Tüketici Endüstrileri": ["Tarım & Gıda", "Hızlı Tüketim Ürünleri (FMCG)", "İlaç, Medikal", "Perakende", "Toptan Dağıtım"],
         "Kesikli Üretim": ["Otomotiv Tedarikçileri", "Kiralama & Leasing", "Batarya Üreticileri", "Makine ve Ekipman Üreticileri", "Yüksek Teknoloji Üreticileri"],
@@ -352,7 +353,7 @@
 
     function loadSubs(sel) {
         const sub = sel.parentElement.nextElementSibling.querySelector("select");
-        sub.innerHTML = (sectorMap[sel.value] || []).map(s=>`<option>${s}</option>`).join("");
+        sub.innerHTML = (sectorMap[sel.value] || []).map(s=>`<option>${s}</option>`).join("") || '<option value="">Önce Ana Sektör Seçin</option>';
     }
 
     function saveCompanies() {
@@ -397,36 +398,94 @@
         el.innerText = Math.max(0, parseInt(el.innerText) + d);
     }
 
+    // --- BÖLÜM 3 GÜNCELLEME (SORU ÇOĞALTMA & ÖZEL SÜREÇ) ---
+
     function renderProcesses() {
-        let html = "";
-        savedCompanies.forEach(name => {
-            html += `<div class="company-block" style="border-left: 8px solid var(--primary);"><h3>${name} - FI Analizi</h3>`;
-            for (const [title, qs] of Object.entries(fiWbsStructure)) {
-                html += `
-                <div class="process-category">
-                    <div class="process-header" onclick="this.parentElement.classList.toggle('open')">
-                        ${title}
+        let html = `<div class="company-block" style="border-left: 8px solid var(--primary);"><h3>Genel FI Süreç Analizi</h3>`;
+        let catIndex = 0;
+        for (const [title, qs] of Object.entries(fiWbsStructure)) {
+            catIndex++;
+            html += `
+            <div class="process-category" id="cat-${catIndex}">
+                <div class="process-header" onclick="this.parentElement.classList.toggle('open')">
+                    ${title}
+                </div>
+                <div class="process-content">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="text-align:left; width:35%;">Süreç Sorusu</th>
+                                    <th style="width:15%;">Cevap</th>
+                                    <th style="width:15%;">Şirket Kapsamı</th>
+                                    <th>Not</th>
+                                    <th style="width:100px;">İşlem</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-cat-${catIndex}">`;
+            
+            qs.forEach((q, qIdx) => {
+                html += generateProcessRow(q, false);
+            });
+
+            html += `
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="process-content">
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th style="text-align:left; width:50%;">Süreç Sorusu</th>
-                                        <th style="width:20%;">Cevap</th>
-                                        <th>Not</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
-                qs.forEach(q => {
-                    html += `<tr><td style="text-align:left; font-weight:600;">${q}</td><td><select><option value="">Seçiniz</option><option>Evet</option><option>Hayır</option><option>Kısmen</option></select></td><td><input type="text" placeholder="Not..." style="width:95%;"></td></tr>`;
-                });
-                html += `</tbody></table></div></div></div>`;
-            }
-            html += `</div>`;
-        });
+                    <div style="margin-top:15px;">
+                        <button class="btn-success btn-sm" onclick="addNewProcessRow('${catIndex}')">+ Yeni Özel Süreç Ekle</button>
+                    </div>
+                </div>
+            </div>`;
+        }
+        html += `</div>`;
         document.getElementById("processArea").innerHTML = html;
     }
+
+    function generateProcessRow(questionText, isNew = false) {
+        const companyOptions = `<option value="ALL">Tüm Şirketler</option>` + 
+                               savedCompanies.map(c => `<option value="${c}">${c}</option>`).join("");
+        
+        return `
+            <tr>
+                <td style="text-align:left;">
+                    ${isNew ? `<input type="text" placeholder="Süreç detayını yazınız..." style="width:95%;">` : `<span style="font-weight:600;">${questionText}</span>`}
+                </td>
+                <td>
+                    <select>
+                        <option value="">Seçiniz</option>
+                        <option>Evet</option>
+                        <option>Hayır</option>
+                        <option>Kısmen</option>
+                    </select>
+                </td>
+                <td>
+                    <select>${companyOptions}</select>
+                </td>
+                <td><input type="text" placeholder="Not..." style="width:95%;"></td>
+                <td>
+                    <div style="display:flex; gap:5px; justify-content:center;">
+                        ${!isNew ? `<button class="btn-primary btn-sm" title="Soruyu Çoğalt" onclick="duplicateRow(this)">⧉</button>` : ''}
+                        <button class="btn-danger btn-sm" title="Sil" onclick="this.closest('tr').remove()">✕</button>
+                    </div>
+                </td>
+            </tr>`;
+    }
+
+    function duplicateRow(btn) {
+        const currentRow = btn.closest('tr');
+        const questionText = currentRow.cells[0].innerText;
+        const newRowHTML = generateProcessRow(questionText, false);
+        currentRow.insertAdjacentHTML('afterend', newRowHTML);
+    }
+
+    function addNewProcessRow(catId) {
+        const tbody = document.getElementById(`tbody-cat-${catId}`);
+        const newRowHTML = generateProcessRow("", true);
+        tbody.insertAdjacentHTML('beforeend', newRowHTML);
+    }
+
+    // --- BÖLÜM 4-5-6 ---
 
     function renderTechInventory() {
         let html = "";
@@ -459,7 +518,7 @@
         const tbody = document.getElementById(`tbody-soft-${i}`);
         container.style.display = "block";
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td style="font-weight:600;">${val}</td><td><select><option>SAP ürün ve modülü ile değiştirilebilir</option><option>Hedef Mimaride kalacak</option><option>3. parti sistem ile değiştirilebilir</option></select></td><td><button class="btn-danger" style="padding:5px 12px;" onclick="this.closest('tr').remove()">Kaldır</button></td>`;
+        tr.innerHTML = `<td style="font-weight:600;">${val}</td><td><select><option>SAP ürün ve modülü ile değiştirilebilir</option><option>Hedef Mimaride kalacak</option><option>3. parti sistem ile değiştirilebilir</option></select></td><td><button class="btn-danger btn-sm" onclick="this.closest('tr').remove()">✕</button></td>`;
         tbody.appendChild(tr);
     }
 
@@ -470,7 +529,7 @@
         div.innerHTML = `
             <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
                 <h4 style="margin:0; color:var(--primary)">Faz #${phaseCount} Planlaması</h4>
-                <button class="btn-danger" style="padding:5px 10px; font-size:0.7rem;" onclick="this.closest('.phase-card').remove()">Fazı Kaldır</button>
+                <button class="btn-danger btn-sm" onclick="this.closest('.phase-card').remove()">Kaldır</button>
             </div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
                 <div><label>Hedef Canlı Tarihi</label><input type="month" class="phase-date"></div>
