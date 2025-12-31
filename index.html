@@ -2,36 +2,176 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>S4Scope – Giriş</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S4Scope – S/4HANA RFP Manager</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 350px; text-align: center; }
-        h2 { color: #1a237e; margin-bottom: 25px; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #0d47a1; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
-        button:hover { background: #1a237e; }
-        .footer { margin-top: 20px; font-size: 12px; color: #666; }
+        :root {
+            --primary: #0d47a1;
+            --secondary: #1a237e;
+            --accent: #00c853;
+            --text: #2c3e50;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #f0f2f5 0%, #c3cfe2 100%);
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            color: var(--text);
+        }
+
+        .container {
+            background: white;
+            padding: 0;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            width: 900px;
+            display: flex;
+            overflow: hidden;
+            min-height: 550px;
+        }
+
+        /* SOL PANEL: GİRİŞ */
+        .login-side {
+            padding: 50px;
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 1px solid #eee;
+        }
+
+        /* SAĞ PANEL: BİLGİLENDİRME */
+        .info-side {
+            padding: 50px;
+            width: 60%;
+            background: #f8fbff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h2 { color: var(--secondary); margin-bottom: 10px; font-size: 24px; }
+        p.subtitle { color: #666; margin-bottom: 30px; font-size: 14px; }
+
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; color: #546e7a; }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 5px rgba(13,71,161,0.2); }
+
+        .btn-login { 
+            width: 100%; 
+            padding: 14px; 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 16px; 
+            transition: 0.3s;
+        }
+        .btn-login:hover { background: var(--secondary); transform: translateY(-2px); }
+
+        /* BİLGİ METNİ STİLLERİ */
+        .info-content h3 { color: var(--primary); margin-top: 0; }
+        .info-content ul { padding-left: 20px; font-size: 14px; line-height: 1.8; color: #455a64; }
+        .info-content li { margin-bottom: 10px; }
+        
+        .feature-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #e3f2fd;
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .hidden { display: none !important; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .start-anim { animation: slideIn 0.5s ease forwards; }
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <h2>S4Scope Login</h2>
-        <input type="text" id="username" placeholder="Kullanıcı Adı (admin)">
-        <input type="password" id="password" placeholder="Şifre (1234)">
-        <button onclick="login()">Giriş Yap</button>
-        <div class="footer">IEZU Tech – S/4HANA RFP Manager</div>
+
+    <div class="container">
+        <div class="login-side" id="loginForm">
+            <div class="feature-tag">IEZU Tech – S4Scope</div>
+            <h2>Giriş Yap</h2>
+            <p class="subtitle">RFP yönetim paneline erişmek için bilgilerinizi girin.</p>
+            
+            <div class="input-group">
+                <label>Kullanıcı Adı</label>
+                <input type="text" id="username" placeholder="admin">
+            </div>
+            
+            <div class="input-group">
+                <label>Şifre</label>
+                <input type="password" id="password" placeholder="1234">
+            </div>
+            
+            <button class="btn-login" onclick="checkLogin()">Devam Et</button>
+        </div>
+
+        <div class="info-side" id="initialInfo">
+            <div class="info-content">
+                <h3>S4Scope Nedir?</h3>
+                <p style="font-size: 14px; line-height: 1.6;">Bu uygulama, SAP S/4HANA geçiş süreçleriniz için kapsamlı bir <strong>Teklife Çağrı (RFP)</strong> dökümanı oluşturmanızı sağlar. Karmaşık süreçleri standartlaştırarak doğru kapsamı belirlemenize yardımcı olur.</p>
+                
+                <h3>İçerikte Neler Var?</h3>
+                <ul>
+                    <li><strong>Organizasyon Yapısı:</strong> Şirket, tesis ve depo kapsamlarının belirlenmesi.</li>
+                    <li><strong>İş Süreçleri Analizi:</strong> FI modülü özelinde detaylı WBS sorgulama.</li>
+                    <li><strong>Teknik Envanter:</strong> Mevcut yazılım ekosistemi ve hedef mimari konumu.</li>
+                    <li><strong>Dönüşüm Stratejisi:</strong> Fazlandırma ve canlıya geçiş planlaması.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="login-side hidden" id="startAction">
+            <div class="feature-tag">Erişim Onaylandı</div>
+            <h2>Hazırsınız!</h2>
+            <p class="subtitle">RFP dökümanınızı oluşturmaya başlayabiliriz.</p>
+            <p style="font-size: 14px; color: #666; margin-bottom: 30px;">Tüm verileriniz tarayıcı oturumunuz boyunca korunacaktır. Hazır olduğunuzda aşağıdaki butona tıklayın.</p>
+            <button class="btn-login" style="background: var(--accent);" onclick="goToRFP()">RFP'ye Başla →</button>
+        </div>
     </div>
 
     <script>
-        function login() {
+        function checkLogin() {
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
-            // Basit bir kontrol (Geliştirilebilir)
+
             if(user === "admin" && pass === "1234") {
-                window.location.href = "rfp.html";
+                // Giriş formunu gizle, Başla butonunu göster
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('startAction').classList.remove('hidden');
+                document.getElementById('startAction').classList.add('start-anim');
             } else {
                 alert("Hatalı kullanıcı adı veya şifre!");
             }
+        }
+
+        function goToRFP() {
+            window.location.href = "rfp.html";
         }
     </script>
 </body>
