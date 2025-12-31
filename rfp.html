@@ -36,9 +36,7 @@
 
         .section-title { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 25px; font-size: 1.3rem; color: var(--secondary); font-weight: 700; }
         
-        /* ŞİRKET BİLGİLERİ GRİD DÜZENİ */
         .company-grid { display: grid; grid-template-columns: 1.5fr 1fr 1.5fr 1.5fr 1.2fr; gap: 15px; align-items: start; }
-        
         label { font-weight: 600; font-size: 0.85rem; color: #546e7a; display: block; margin-bottom: 8px; }
         input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; box-sizing: border-box; }
         
@@ -54,7 +52,7 @@
         .btn-danger { background: #d32f2f; color: white; }
         .btn-secondary { background: #78909c; color: white; }
 
-        .table-container { overflow-x: auto; margin-top: 20px; border-radius: 8px; border: 1px solid var(--border); }
+        .table-container { overflow-x: auto; margin-top: 10px; border-radius: 8px; border: 1px solid var(--border); }
         table { width: 100%; border-collapse: collapse; min-width: 1000px; }
         th { background: var(--secondary); color: white; padding: 15px; font-size: 0.75rem; text-transform: uppercase; }
         td { padding: 12px; border: 1px solid #eee; text-align: center; background: white; font-size: 0.9rem;}
@@ -62,15 +60,23 @@
         .hidden { display: none; }
         .nav-buttons { margin-top: 30px; display: flex; justify-content: space-between; border-top: 1px solid #eee; padding-top: 20px; }
 
-        /* BÖLÜM 5 CHECKBOX TASARIMI */
+        /* AKORDİYON STİLLERİ (YENİ) */
+        .process-category { margin-bottom: 10px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
+        .process-header { background: #f8f9fa; padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; font-weight: 700; color: var(--secondary); }
+        .process-header:hover { background: #eceff1; }
+        .process-header::after { content: '▼'; font-size: 0.8rem; transition: 0.3s; }
+        .process-category.open .process-header::after { transform: rotate(180deg); }
+        .process-content { display: none; padding: 15px; background: white; border-top: 1px solid #eee; }
+        .process-category.open .process-content { display: block; }
+
         .checkbox-group { background: #fdfdfd; border: 1px solid #eee; padding: 10px; border-radius: 8px; max-height: 150px; overflow-y: auto; margin-top: 5px; }
         .checkbox-item { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; margin-bottom: 8px; cursor: pointer; }
-        .checkbox-item input { width: 18px; height: 18px; cursor: pointer; }
 
         @media print {
             nav, #progress-container, .nav-buttons, button { display: none !important; }
             main { margin-left: 0; padding: 0; }
             .section { box-shadow: none; border: none; display: block !important; }
+            .process-content { display: block !important; } /* Yazdırırken hepsi açık çıksın */
         }
     </style>
 </head>
@@ -210,7 +216,7 @@
     </main>
 
 <script>
-    // --- VERİ YAPILARI (TAM LİSTE) ---
+    // --- VERİ YAPILARI (TAM LİSTE KORUNDU) ---
     const sectorMap = {
         "Tüketici Endüstrileri": ["Tarım & Gıda", "Hızlı Tüketim Ürünleri (FMCG)", "İlaç, Medikal", "Perakende", "Toptan Dağıtım"],
         "Kesikli Üretim": ["Otomotiv Tedarikçileri", "Kiralama & Leasing", "Batarya Üreticileri", "Makine ve Ekipman Üreticileri", "Yüksek Teknoloji Üreticileri"],
@@ -396,11 +402,26 @@
         savedCompanies.forEach(name => {
             html += `<div class="company-block" style="border-left: 8px solid var(--primary);"><h3>${name} - FI Analizi</h3>`;
             for (const [title, qs] of Object.entries(fiWbsStructure)) {
-                html += `<div style="margin-bottom:25px;"><h4 style="background:var(--secondary); color:white; padding:10px; border-radius:5px;">${title}</h4><div class="table-container"><table><thead><tr><th style="text-align:left; width:50%;">Süreç Sorusu</th><th style="width:20%;">Cevap</th><th>Not</th></tr></thead><tbody>`;
+                html += `
+                <div class="process-category">
+                    <div class="process-header" onclick="this.parentElement.classList.toggle('open')">
+                        ${title}
+                    </div>
+                    <div class="process-content">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left; width:50%;">Süreç Sorusu</th>
+                                        <th style="width:20%;">Cevap</th>
+                                        <th>Not</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
                 qs.forEach(q => {
                     html += `<tr><td style="text-align:left; font-weight:600;">${q}</td><td><select><option value="">Seçiniz</option><option>Evet</option><option>Hayır</option><option>Kısmen</option></select></td><td><input type="text" placeholder="Not..." style="width:95%;"></td></tr>`;
                 });
-                html += `</tbody></table></div></div>`;
+                html += `</tbody></table></div></div></div>`;
             }
             html += `</div>`;
         });
@@ -445,13 +466,13 @@
     function addNewPhase() {
         phaseCount++;
         const div = document.createElement("div");
-        div.className = "phase-card";
+        div.className = "company-block phase-card";
         div.innerHTML = `
             <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
                 <h4 style="margin:0; color:var(--primary)">Faz #${phaseCount} Planlaması</h4>
                 <button class="btn-danger" style="padding:5px 10px; font-size:0.7rem;" onclick="this.closest('.phase-card').remove()">Fazı Kaldır</button>
             </div>
-            <div class="grid-setup" style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
                 <div><label>Hedef Canlı Tarihi</label><input type="month" class="phase-date"></div>
                 <div>
                     <label>Şirketleri Seçin</label>
