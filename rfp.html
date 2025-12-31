@@ -89,6 +89,9 @@
             <li onclick="validateAndShowStep(5)" id="nav-5">Bölüm 5: Dönüşüm Stratejisi</li>
             <li onclick="validateAndShowStep(6)" id="nav-6">Bölüm 6: Çıktı & Özet</li>
         </ul>
+        <div style="position: absolute; bottom: 20px; left: 20px;">
+            <button class="btn-danger" style="padding: 8px 15px; font-size: 12px;" onclick="window.location.href='index.html'">Çıkış Yap</button>
+        </div>
     </nav>
 
     <main>
@@ -207,6 +210,7 @@
     </main>
 
 <script>
+    // --- VERİ YAPILARI (TAM LİSTE) ---
     const sectorMap = {
         "Tüketici Endüstrileri": ["Tarım & Gıda", "Hızlı Tüketim Ürünleri (FMCG)", "İlaç, Medikal", "Perakende", "Toptan Dağıtım"],
         "Kesikli Üretim": ["Otomotiv Tedarikçileri", "Kiralama & Leasing", "Batarya Üreticileri", "Makine ve Ekipman Üreticileri", "Yüksek Teknoloji Üreticileri"],
@@ -324,16 +328,7 @@
             <h4 style="margin:0 0 20px 0; color:var(--primary)">Şirket #${companyIndex}</h4>
             <div class="company-grid">
                 <div><label>Şirket Adı</label><input type="text" class="comp-name"></div>
-                <div>
-                    <label>Ülke</label>
-                    <select>
-                        <option>Türkiye</option>
-                        <option>Almanya</option>
-                        <option>ABD</option>
-                        <option>İngiltere</option>
-                        <option>Diğer</option>
-                    </select>
-                </div>
+                <div><label>Ülke</label><select><option>Türkiye</option><option>Almanya</option><option>ABD</option><option>Diğer</option></select></div>
                 <div><label>Ana Sektör</label><select onchange="loadSubs(this)"><option value=""></option>${Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("")}</select></div>
                 <div><label>Alt Sektör</label><select class="sub-sector"></select></div>
                 <div><label>Ana Faaliyet</label><select><option>Üretim</option><option>Hizmet</option><option>Proje</option></select></div>
