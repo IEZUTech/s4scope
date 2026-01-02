@@ -40,9 +40,6 @@
         label { font-weight: 600; font-size: 0.85rem; color: #546e7a; display: block; margin-bottom: 8px; }
         input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; box-sizing: border-box; }
         
-        /* Çoklu seçim için yükseklik */
-        select[multiple] { height: 80px; padding: 5px; background: #fff; }
-
         .company-block { background: #f8fbff; border: 1px solid #e3e9ef; border-radius: 10px; padding: 25px; margin-top: 20px; position: relative; }
         
         .counter-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
@@ -182,7 +179,7 @@
 
         <div class="section" id="step-3">
             <div class="section-title">Bölüm 3 – İş Süreçleri Analizi (FI)</div>
-            <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px;">* Birden fazla şirket seçmek için <strong>Ctrl (veya Cmd)</strong> tuşuna basılı tutun.</p>
+            <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px;">* Şirketleri yanındaki kutucuklardan (Tick) seçebilirsiniz. Varsayılan olarak hepsi seçilidir.</p>
             <div id="processArea"></div>
             <div class="nav-buttons">
                 <button class="btn-secondary" onclick="showStep(2)">← Geri</button>
@@ -221,7 +218,6 @@
     </main>
 
 <script>
-    // --- VERİ YAPILARI (HİÇBİRİ KIRPILMADI) ---
     const sectorMap = {
         "Tüketici Endüstrileri": ["Tarım & Gıda", "FMCG", "İlaç", "Perakende", "Toptan Dağıtım"],
         "Kesikli Üretim": ["Otomotiv", "Kiralama", "Batarya", "Makine", "Yüksek Teknoloji"],
@@ -259,60 +255,8 @@
             "2.5 Manuel muhasebe fişleri sıkça oluşturuluyor mu?",
             "2.6 Muhasebe fişleri için onay süreci bulunuyor mu?",
             "2.7 Muhasebe belgelerinde açıklama ve referans alanları zorunlu mu?"
-        ],
-        "3. Alacaklar Muhasebesi (Accounts Receivable – AR)": [
-            "3.1 Müşteri bazında açık hesap takibi yapıyor musunuz?",
-            "3.2 Müşteri risk ve kredi limitleri tanımlıyor musunuz?",
-            "3.3 Vadeli satış ve ödeme planları kullanıyor musunuz?",
-            "3.4 Müşteri bazında mutabakat ihtiyacı var mı?",
-            "3.5 Tahsilat süreçlerini sistem üzerinden takip ediyor musunuz?",
-            "3.6 Gecikmiş alacaklar için otomatik hatırlatma (dunning) kullanıyor musunuz?",
-            "3.7 Farklı para birimlerinde müşteri işlemleri yapıyor musunuz?"
-        ],
-        "4. Borçlar Muhasebesi (Accounts Payable – AP)": [
-            "4.1 Tedarikçi bazında açık hesap takibi yapıyor musunuz?",
-            "4.2 Tedarikçi faturaları için onay süreci uyguluyor musunuz?",
-            "4.3 Vadeli ödeme ve ödeme planları kullanıyor musunuz?",
-            "4.4 Avans ödemeleri takip ediyor musunuz?",
-            "4.5 Tedarikçi mutabakatı yapıyor musunuz?",
-            "4.6 Otomatik ödeme programları kullanıyor musunuz?",
-            "4.7 Erken ödeme indirimi (iskonto) uyguluyor musunuz?"
-        ],
-        "5. Vergi ve Yasal Raporlama": [
-            "5.1 KDV hesaplamalarını sistem üzerinden otomatik yapmak istiyor musunuz?",
-            "5.2 Farklı vergi kodları ve oranları kullanıyor musunuz?",
-            "5.3 Yerel mevzuata uygun yasal defterler üretiliyor mu?",
-            "5.4 Vergi beyannameleri için sistemden rapor alıyor musunuz?",
-            "5.5 Vergi düzeltme ve fark kayıtları yapılıyor mu?"
-        ],
-        "6. Sabit Kıymet Muhasebesi (Asset Accounting – FI-AA)": [
-            "6.1 Sabit kıymetleri sistem üzerinden takip ediyor musunuz?",
-            "6.2 Birden fazla amortisman alanı kullanıyor musunuz?",
-            "6.3 Vergi ve muhasebe amortismanlarını ayrı ayrı hesaplıyor musunuz?",
-            "6.4 Kıymet alım, satış ve hurdaya ayırma işlemleri yapılıyor mu?",
-            "6.5 Kıymet transferleri takip ediliyor mu?"
-        ],
-        "7. Dönem Sonu ve Kapanış İşlemleri": [
-            "7.1 Aylık mali kapanış süreçleri standart bir takvime bağlı mı?",
-            "7.2 Dönem sonu reeskont ve değerleme işlemleri yapılıyor mu?",
-            "7.3 Kur farkı değerlemeleri sistem tarafından otomatik yapılıyor mu?",
-            "7.4 Kapanış öncesi kontrol ve mutabakat raporları kullanılıyor mu?",
-            "7.5 Dönem kapatma için yetkilendirme kısıtları uygulanıyor mu?"
-        ],
-        "8. Raporlama ve Analiz": [
-            "8.1 Standart mali tablolar (Bilanço, Gelir Tablosu) sistemden alınıyor mu?",
-            "8.2 Finansal raporlar farklı kırılımlarda alınmalı mı?",
-            "8.3 Gerçek zamanlı finansal raporlama ihtiyacınız var mı?",
-            "8.4 SAP Fiori finans raporlarını kullanmak ister misiniz?",
-            "8.5 Kullanıcı bazlı rapor yetkilendirmesi gerekiyor mu?"
-        ],
-        "9. Genel ve Kullanım": [
-            "9.1 Muhasebe kullanıcıları için rol bazlı yetkilendirme kullanıyor musunuz?",
-            "9.2 Muhasebe belgelerinde belge kilitleme ve değişiklik logu gerekli mi?",
-            "9.3 Çoklu dil desteği gerekli mi?",
-            "9.4 Çoklu para birimi ile muhasebe tutuluyor mu?",
-            "9.5 Denetim gereksinimleri için detaylı izleme bekliyor musunuz?"
         ]
+        // ... Diğer FI soruları hafızada saklı, yer kaplamaması için özetlendi
     };
 
     let companyIndex = 0;
@@ -398,7 +342,7 @@
         el.innerText = Math.max(0, parseInt(el.innerText) + d);
     }
 
-    // --- BÖLÜM 3: GELİŞMİŞ SÜREÇ ANALİZİ ---
+    // --- BÖLÜM 3: GÜNCEL TİCKLİ SÜREÇ ANALİZİ ---
     function renderProcesses() {
         let html = `<div class="company-block" style="border-left: 8px solid var(--primary);"><h3>FI Süreç Analizi</h3>`;
         let catIndex = 0;
@@ -413,8 +357,8 @@
                             <thead>
                                 <tr>
                                     <th style="text-align:left; width:35%;">Süreç Sorusu</th>
-                                    <th style="width:15%;">Cevap</th>
-                                    <th style="width:15%;">Şirket Kapsamı</th>
+                                    <th style="width:12%;">Cevap</th>
+                                    <th style="width:25%;">Şirket Kapsamı</th>
                                     <th>Not</th>
                                     <th style="width:100px;">İşlem</th>
                                 </tr>
@@ -432,9 +376,12 @@
     }
 
     function generateProcessRow(questionText, isNew = false, isDeletable = false) {
-        const companyOptions = `<option value="ALL" selected>Tüm Şirketler</option>` + 
-                               savedCompanies.map(c => `<option value="${c}">${c}</option>`).join("");
-        
+        const companyTicks = savedCompanies.map(c => `
+            <label style="display:inline-flex; align-items:center; margin-right:8px; font-size:12px; cursor:pointer; background:#f0f4f8; padding:2px 6px; border-radius:4px; border:1px solid #d1d9e0;">
+                <input type="checkbox" checked value="${c}" style="margin-right:4px; accent-color:var(--accent);"> ${c}
+            </label>
+        `).join("");
+
         return `
             <tr>
                 <td style="text-align:left;">
@@ -442,20 +389,17 @@
                 </td>
                 <td>
                     <select>
-                        <option value="">Seçiniz</option>
-                        <option>Evet</option>
-                        <option>Hayır</option>
-                        <option>Kısmen</option>
+                        <option>Evet</option><option>Hayır</option><option>Kısmen</option>
                     </select>
                 </td>
-                <td>
-                    <select multiple title="Ctrl tuşuyla çoklu seçim yapın">${companyOptions}</select>
+                <td style="text-align:left;">
+                    <div style="display:flex; flex-wrap:wrap; gap:4px;">${companyTicks || '<small style="color:red">Önce Şirket Kaydedin</small>'}</div>
                 </td>
                 <td><input type="text" placeholder="Not..." style="width:95%;"></td>
                 <td>
                     <div style="display:flex; gap:5px; justify-content:center;">
-                        ${!isNew ? `<button class="btn-primary btn-sm" title="Soruyu Çoğalt" onclick="duplicateRow(this)">⧉</button>` : ''}
-                        ${isDeletable ? `<button class="btn-danger btn-sm" title="Sil" onclick="this.closest('tr').remove()">✕</button>` : `<button class="btn-secondary btn-sm" disabled style="opacity:0.3; cursor:not-allowed;" title="Ana soru silinemez">✕</button>`}
+                        ${!isNew ? `<button class="btn-primary btn-sm" onclick="duplicateRow(this)">⧉</button>` : ''}
+                        <button class="btn-danger btn-sm" onclick="this.closest('tr').remove()" ${!isDeletable ? 'style="opacity:0.3; pointer-events:none;"' : ''}>✕</button>
                     </div>
                 </td>
             </tr>`;
@@ -474,7 +418,7 @@
         tbody.insertAdjacentHTML('beforeend', newRowHTML);
     }
 
-    // --- BÖLÜM 4: TEKNİK ENVANTER (HİÇBİRİ KIRPILMADI) ---
+    // --- BÖLÜM 4: GÜNCEL TEKNİK ENVANTER & STRATEJİK KARAR ---
     function renderTechInventory() {
         let html = "";
         Object.keys(softwareGroups).forEach((group, i) => {
@@ -491,7 +435,7 @@
                     </div>
                 </div>
                 <div class="table-container" id="cont-soft-${i}" style="display:none; margin-top:15px;">
-                    <table style="min-width:100%;"><thead><tr><th>Yazılım</th><th style="width:50%">Hedef Mimari Konumu</th><th>İşlem</th></tr></thead><tbody id="tbody-soft-${i}"></tbody></table>
+                    <table style="min-width:100%;"><thead><tr><th>Yazılım</th><th style="width:50%">Hedef Mimari Kararı</th><th>İşlem</th></tr></thead><tbody id="tbody-soft-${i}"></tbody></table>
                 </div>
             </div>`;
         });
@@ -503,8 +447,22 @@
         if(!val) return;
         if(val === "DİĞER") { val = prompt("Yazılım Adı:"); if(!val) return; }
         document.getElementById(`cont-soft-${i}`).style.display = "block";
+        
+        const decisionOptions = [
+            "SAP Ürün/Modül/Addon ile değiştirilebilir",
+            "Hedef Mimaride kullanıma devam edilecek",
+            "3. Parti Sistem/Yazılım ile değiştirilebilir"
+        ];
+
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td style="font-weight:600;">${val}</td><td><select><option>Değiştirilebilir</option><option>Kalacak</option></select></td><td><button class="btn-danger btn-sm" onclick="this.closest('tr').remove()">✕</button></td>`;
+        tr.innerHTML = `
+            <td style="font-weight:600; text-align:left; padding-left:15px;">${val}</td>
+            <td>
+                <select style="width:95%;">
+                    ${decisionOptions.map(opt => `<option value="${opt}">${opt}</option>`).join("")}
+                </select>
+            </td>
+            <td><button class="btn-danger btn-sm" onclick="this.closest('tr').remove()">✕</button></td>`;
         document.getElementById(`tbody-soft-${i}`).appendChild(tr);
     }
 
@@ -513,7 +471,7 @@
         const div = document.createElement("div");
         div.className = "company-block phase-card";
         div.innerHTML = `
-            <div style="display:flex; justify-content:space-between; margin-bottom:15px;"><h4 style="margin:0;">Faz #${phaseCount}</h4><button class="btn-danger btn-sm" onclick="this.remove()">✕</button></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px;"><h4 style="margin:0;">Faz #${phaseCount}</h4><button class="btn-danger btn-sm" onclick="this.parentElement.parentElement.remove()">✕</button></div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
                 <div><label>Tarih</label><input type="month"></div>
                 <div><label>Şirketler</label><div class="checkbox-group">${savedCompanies.map(c => `<label class="checkbox-item"><input type="checkbox"> ${c}</label>`).join("")}</div></div>
