@@ -99,11 +99,69 @@
         .counter-box { display: flex; align-items: center; gap: 10px; background: white; padding: 5px 10px; border-radius: 20px; border: 1px solid #ddd; }
         .val-span { font-weight: 700; color: var(--primary); min-width: 20px; text-align: center; }
 
-        /* EXCEL DROPDOWN */
-        .excel-dropdown { border: 1px solid var(--border); padding: 8px; border-radius: 6px; background: #fff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; position: relative; font-size: 13px; min-width: 140px; text-align: left;}
-        .excel-menu { position: absolute; top: 100%; left: 0; width: 100%; background: white; border: 1px solid #bbb; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 5000; display: none; max-height: 200px; overflow-y: auto; border-radius: 4px; }
-        .excel-menu label { display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid #eee; margin: 0; font-weight: normal; cursor: pointer; gap: 10px; color: #333;}
-        .excel-menu label:hover { background: #f5f5f5; }
+        /* --- YENİLENEN EXCEL DROPDOWN TASARIMI --- */
+        .excel-dropdown { 
+            border: 1px solid #ced4da; 
+            padding: 6px 10px; 
+            border-radius: 6px; 
+            background: #fdfdfd; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: relative; 
+            font-size: 12px; 
+            min-width: 150px; 
+            text-align: left;
+            transition: all 0.2s;
+            color: #495057;
+        }
+        .excel-dropdown:hover {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .excel-dropdown .label-text {
+            font-weight: 600;
+            color: var(--primary);
+            background: #eef2f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+        .excel-menu { 
+            position: absolute; 
+            top: calc(100% + 5px); 
+            left: 0; 
+            width: 220px; 
+            background: white; 
+            border: 1px solid #bbb; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
+            z-index: 5000; 
+            display: none; 
+            max-height: 250px; 
+            overflow-y: auto; 
+            border-radius: 8px;
+            padding: 5px 0;
+        }
+        .excel-menu label { 
+            display: flex; 
+            align-items: center; 
+            padding: 10px 15px; 
+            border-bottom: 1px solid #f1f1f1; 
+            margin: 0; 
+            font-weight: 500; 
+            cursor: pointer; 
+            gap: 12px; 
+            color: #333;
+            transition: 0.2s;
+        }
+        .excel-menu label:hover { background: #f8f9fa; color: var(--primary); }
+        .excel-menu input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
 
         /* AKORDİYON */
         .process-category { margin-bottom: 15px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
@@ -265,7 +323,7 @@
     </main>
 
 <script>
-    // --- VERİ SETLERİ (DÜZELTİLMİŞ) ---
+    // --- VERİ SETLERİ ---
     const sectorMap = {
         "Tüketici Endüstrileri": ["Tarım & Gıda", "FMCG", "İlaç", "Perakende"],
         "Kesikli Üretim": ["Otomotiv", "Makine Üretimi", "Yüksek Teknoloji", "Savunma Sanayi"],
@@ -275,7 +333,6 @@
         "Hizmet Endüstrileri": ["İnşaat", "Lojistik", "Turizm", "Profesyonel Hizmetler"]
     };
 
-    // SENİN İSTEDİĞİN ORİJİNAL MODÜL LİSTESİ
     const sapModules = [
         "FI - Mali Muhasebe", "FM - Bütçe Kontrol", "CO - Maliyet Muhasebesi ve Karlılık", 
         "PS - Proje Sistemi", "MM - Malzeme Yönetimi ve Satınalma", "SD - Satış ve Dağıtım", 
@@ -289,7 +346,6 @@
         "İnsan Kaynakları": ["Kolay İK", "Logo HR", "SuccessFactors", "Workday"]
     };
 
-    // SENİN İSTEDİĞİN ORİJİNAL FI YAPISI (BOZULMAMIŞ HALİ)
     const fiWbsStructure = {
         "1. Organizasyon ve Temel Muhasebe Yapısı": ["1.1 Birden fazla şirket kodu?", "1.2 Mali konsolidasyon?", "1.3 Farklı mali yıl varyantları?", "1.4 Birden fazla hesap planı?", "1.5 Yerel/Grup muhasebe farkı?"],
         "2. Genel Muhasebe (GL)": ["2.1 S/4HANA Universal Journal?", "2.2 Birden fazla defter?", "2.3 Belge bazlı muhasebe?", "2.4 Otomatik MM/SD kayıtları?", "2.5 Manuel fiş yoğunluğu?", "2.6 Onay süreci?", "2.7 Zorunlu alanlar?"],
@@ -302,57 +358,17 @@
         "9. Genel ve Kullanım": ["9.1 Rol bazlı yetki?", "9.2 Değişiklik logu?", "9.3 Çoklu dil?", "9.4 Çoklu para birimi?", "9.5 Denetim izleme?"]
     };
 
-    // DİĞER MODÜLLER İÇİN GENİŞLETİLMİŞ SORULAR (Bunları önceki talebine istinaden ekliyorum)
     const otherModules = {
-        "CO - Maliyet Muhasebesi ve Karlılık": [
-            "Masraf Yeri Muhasebesi (CCA) dağıtım anahtarları ve devirler nasıl kurgulanacak?",
-            "Ürün Maliyetlendirme (CO-PC) için standart maliyet ve fiili maliyet kullanılacak mı?",
-            "Karlılık Analizi (CO-PA) hesap bazlı mı yoksa maliyet bazlı mı izlenecek?",
-            "Sipariş bazlı üretimde parti maliyeti takibi gerekli mi?",
-            "Kar merkezi bazında transfer fiyatlandırması (Transfer Pricing) uygulanacak mı?"
-        ],
-        "FM - Bütçe Kontrol": [
-            "Bütçe kontrolü (Availability Control) sipariş/talep anında mı yoksa fatura anında mı yapılmalı?",
-            "Taahhüt yönetimi (Commitment Management) ile sipariş aşamasındaki bütçe blokajı aktif edilecek mi?",
-            "Nakit bütçesi ve ödeme bütçesi ayrımı yapılıyor mu?"
-        ],
-        "MM - Malzeme Yönetimi ve Satınalma": [
-            "Satınalma talep ve siparişlerinde onay stratejileri mobil uyumlu mu olmalı?",
-            "Çerçeve sözleşmeler ve kaynak listesi zorunluluğu var mı?",
-            "Tedarikçi değerlendirme sistemi sistem üzerinden otomatik puanlanacak mı?",
-            "Tüketim bazlı planlama (CBP) veya MRP ile otomatik satınalma talebi oluşturulacak mı?",
-            "Konsinye stok ve fason üretim süreçleri nasıl yönetilecek?"
-        ],
-        "SD - Satış ve Dağıtım": [
-            "Fiyatlandırma prosedürü ve koşul teknikleri ne kadar karmaşık?",
-            "Müşteri kredi limit kontrolü sipariş anında mı teslimat anında mı blokaj koymalı?",
-            "Bedelsiz numune çıkışları ve promosyon süreçleri nasıl yönetiliyor?",
-            "Prim ve ciro iadeleri (Rebate) takibi 'Settlement Management' ile mi yapılacak?"
-        ],
-        "PP - Üretim ve Planlama": [
-            "Üretim stratejileri (MTS, MTO, ETO) hangilerini kapsıyor?",
-            "Kapasite planlama ve iş merkezi yük dengeleme aktif kullanılacak mı?",
-            "MRP çalıştırma sıklığı ve planlama ufku nedir?",
-            "Üretim teyitleri otomasyon sistemlerinden (MES) mi gelecek yoksa manuel mi?"
-        ],
-        "QM - Kalite Yönetimi": [
-            "Mal girişinde numune alma ve kalite kontrol zorunlu mu?",
-            "Üretim operasyonları sırasında süreç içi kontrol yapılacak mı?",
-            "Kalite bildirimleri ve 8D raporlama süreci sistemde takip edilecek mi?"
-        ],
-        "PM - Bakım Yönetimi": [
-            "Ekipman ve teknik birim hiyerarşisi nasıl yapılandırılacak?",
-            "Planlı/Koruyucu bakım planları sayaç bazlı mı süre bazlı mı?",
-            "Arıza bildirimlerinin mobil uygulama üzerinden sahadan girilmesi isteniyor mu?"
-        ],
-        "WM/EWM - Depo Yönetimi": [
-            "Depo yapısı (Raf, Göz, Koridor) adreslemesi ve kapasite kontrolü gerekli mi?",
-            "El terminalleri (RF/Fiori) ile barkodlu/karekodlu mal kabul ve toplama yapılacak mı?",
-            "Karışık palet yönetimi ve paketleme spesifikasyonları kullanılıyor mu?"
-        ]
+        "CO - Maliyet Muhasebesi ve Karlılık": ["Masraf Yeri Muhasebesi dağıtım anahtarları?", "Ürün Maliyetlendirme fiili maliyet?", "Karlılık Analizi hesap bazlı?", "Parti maliyeti takibi?", "Transfer fiyatlandırması?"],
+        "FM - Bütçe Kontrol": ["Bütçe kontrolü (AVC) anlık?", "Taahhüt yönetimi?", "Nakit bütçesi ayrımı?"],
+        "MM - Malzeme Yönetimi ve Satınalma": ["Mobil onay stratejileri?", "Çerçeve sözleşmeler?", "Otomatik tedarikçi puanlama?", "MRP Live kullanımı?", "Fason üretim yönetimi?"],
+        "SD - Satış ve Dağıtım": ["Karmaşık fiyatlandırma (Pricing)?", "Kredi limit blokajı?", "Promosyon/Bedelsiz yönetimi?", "Settlement Management (Rebate)?"],
+        "PP - Üretim ve Planlama": ["MTS, MTO, ETO stratejileri?", "Kapasite yük dengeleme?", "MRP Live hızı?", "MES entegrasyonu?"],
+        "QM - Kalite Yönetimi": ["Giriş kalite kontrol?", "Süreç içi kontrol?", "8D Raporlama?"],
+        "PM - Bakım Yönetimi": ["Ekipman hiyerarşisi?", "Planlı bakım (Sayaç/Süre)?", "Mobil arıza girişi?"],
+        "WM/EWM - Depo Yönetimi": ["Adresleme ve Kapasite kontrolü?", "RF Terminal / Fiori Barkod?", "Paketleme Spesifikasyonları?"]
     };
 
-    // HEPSİNİ BİRLEŞTİRİYORUZ (FI en üstte senin yapınla, diğerleri altında)
     const allProcessStructures = { ...fiWbsStructure, ...otherModules };
 
     let companyIndex = 0;
@@ -454,11 +470,11 @@
         const menu = document.getElementById(id);
         const checkedCount = menu.querySelectorAll('input:checked').length;
         const total = savedCompanies.length;
-        const label = document.getElementById('label-' + id);
+        const labelContainer = document.getElementById('label-' + id);
         
-        if (checkedCount === total) label.innerText = "Tüm Şirketler";
-        else if (checkedCount === 0) label.innerText = "Seçiniz...";
-        else label.innerText = checkedCount + " Şirket Seçili";
+        if (checkedCount === total) labelContainer.innerText = "Tüm Şirketler";
+        else if (checkedCount === 0) labelContainer.innerText = "Seçiniz...";
+        else labelContainer.innerText = checkedCount + " Şirket Seçili";
     }
 
     function renderProcesses() {
@@ -477,7 +493,7 @@
                                     <th style="text-align:left; width:40%;">Süreç Sorusu</th>
                                     <th style="width:10%;">Cevap</th>
                                     <th style="width:12%;">Öncelik</th>
-                                    <th style="width:18%;">Şirket Kapsamı</th>
+                                    <th style="width:20%;">Şirket Kapsamı</th>
                                     <th>Not</th>
                                     <th style="width:70px;">İşlem</th>
                                 </tr>
@@ -512,7 +528,8 @@
                 </td>
                 <td>
                     <div class="excel-dropdown" onclick="toggleExcelMenu(event, '${dropId}')">
-                        <span id="label-${dropId}" style="font-size:11px;">Tüm Şirketler</span> <span style="font-size:10px;">▼</span>
+                        <span id="label-${dropId}" class="label-text">Tüm Şirketler</span> 
+                        <span style="font-size:8px; opacity:0.5;">▼</span>
                         <div id="${dropId}" class="excel-menu" onclick="event.stopPropagation()">
                             ${savedCompanies.map(c => `
                                 <label><input type="checkbox" checked onchange="updateExcelLabel('${dropId}')"> ${c}</label>
@@ -595,11 +612,6 @@
                 <tr><td style="font-weight:bold; text-align:left;">Mevcut ERP:</td><td style="text-align:left;">${erp}</td></tr>
                 <tr><td style="font-weight:bold; text-align:left;">Şirketler:</td><td style="text-align:left;">${companyList}</td></tr>
             </table>
-            <p>Bu rapor, yukarıdaki adımlarda girilen verilerin özetidir. Teknik detaylar ve süreç cevapları veritabanında saklanmıştır.</p>
-            <div style="text-align:center; margin-top:30px; padding:20px; background:#f5f5f5;">
-                <strong>PDF Çıktısı Almak İçin:</strong><br>
-                Aşağıdaki "PDF Olarak Kaydet" butonunu veya tarayıcınızın Yazdır (CTRL+P) özelliğini kullanın.
-            </div>
         </div>`;
         document.getElementById("rfpReportArea").innerHTML = html;
     }
