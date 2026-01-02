@@ -15,70 +15,56 @@
             --border: #dee2e6;
         }
 
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; display: flex; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; display: flex; color: var(--text); }
 
         /* PROGRESS BAR */
         #progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 5px; background: #ddd; z-index: 2000; }
         #progress-bar { height: 100%; width: 0%; background: var(--accent); transition: 0.4s; }
 
         /* NAVIGATOR */
-        nav { width: 280px; background: var(--secondary); color: white; height: 100vh; position: fixed; padding-top: 20px; box-shadow: 2px 0 10px rgba(0,0,0,0.2); }
+        nav { width: 280px; background: var(--secondary); color: white; height: 100vh; position: fixed; padding-top: 20px; box-shadow: 2px 0 10px rgba(0,0,0,0.2); z-index: 1000; }
         nav h2 { padding: 0 20px; font-size: 1.2rem; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
         nav ul { list-style: none; padding: 0; }
         nav ul li { padding: 15px 25px; cursor: pointer; transition: 0.3s; opacity: 0.7; font-size: 0.9rem; }
         nav ul li.active { opacity: 1; background: rgba(255,255,255,0.1); border-left: 5px solid var(--accent); font-weight: bold; }
 
         /* MAIN */
-        main { flex: 1; margin-left: 280px; padding: 40px; }
+        main { flex: 1; margin-left: 280px; padding: 40px; min-width: 0; }
         .section { background: var(--card); padding: 35px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: none; }
         .section.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .section-title { border-left: 5px solid var(--primary); padding-left: 15px; margin-bottom: 25px; font-size: 1.3rem; color: var(--secondary); font-weight: 700; }
         
-        .company-grid { display: grid; grid-template-columns: 1.5fr 1fr 1.5fr 1.5fr 1.2fr; gap: 15px; align-items: start; }
-        label { font-weight: 600; font-size: 0.85rem; color: #546e7a; display: block; margin-bottom: 8px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; box-sizing: border-box; }
-        
-        .company-block { background: #f8fbff; border: 1px solid #e3e9ef; border-radius: 10px; padding: 25px; margin-top: 20px; position: relative; }
-        
-        .counter-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
-        .counter-box { display: flex; align-items: center; gap: 10px; background: white; padding: 5px 10px; border-radius: 20px; border: 1px solid #ddd; }
-        .val-span { font-weight: 700; color: var(--primary); min-width: 20px; text-align: center; }
+        /* TABLES & UI ELEMENTS */
+        .table-container { overflow-x: visible; margin-top: 10px; border-radius: 8px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        th { background: #f8f9fa; color: var(--secondary); padding: 12px; font-size: 0.75rem; text-transform: uppercase; border-bottom: 2px solid #eee; }
+        td { padding: 10px; border: 1px solid #eee; text-align: center; background: white; font-size: 0.9rem; vertical-align: middle; }
 
-        button { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px;}
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-success { background: var(--accent); color: white; }
-        .btn-danger { background: #d32f2f; color: white; }
-        .btn-secondary { background: #78909c; color: white; }
+        input, select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; box-sizing: border-box; }
+        
+        .btn-primary { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-success { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+        .btn-danger { background: #d32f2f; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
         .btn-sm { padding: 5px 10px; font-size: 11px; }
 
-        .table-container { overflow-x: auto; margin-top: 10px; border-radius: 8px; border: 1px solid var(--border); }
-        table { width: 100%; border-collapse: collapse; min-width: 1100px; }
-        th { background: var(--secondary); color: white; padding: 15px; font-size: 0.75rem; text-transform: uppercase; }
-        td { padding: 12px; border: 1px solid #eee; text-align: center; background: white; font-size: 0.9rem;}
-
+        /* EXCEL FILTER STYLE */
+        .filter-dropdown { cursor: pointer; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background: #fff; display: flex; justify-content: space-between; align-items: center; font-size: 12px; min-width: 150px; }
+        .filter-menu { position: absolute; background: white; border: 1px solid #bbb; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 5000; min-width: 220px; border-radius: 6px; max-height: 250px; overflow-y: auto; text-align: left; }
+        .filter-item { padding: 6px 12px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; }
+        .filter-item:hover { background: #f5f5f5; }
         .hidden { display: none; }
-        .nav-buttons { margin-top: 30px; display: flex; justify-content: space-between; border-top: 1px solid #eee; padding-top: 20px; }
 
-        /* AKORDİYON */
-        .process-category { margin-bottom: 10px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
-        .process-header { background: #f8f9fa; padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; font-weight: 700; color: var(--secondary); }
-        .process-header:hover { background: #eceff1; }
-        .process-header::after { content: '▼'; font-size: 0.8rem; transition: 0.3s; }
-        .process-category.open .process-header::after { transform: rotate(180deg); }
+        /* ACCORDION */
+        .process-category { margin-bottom: 10px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: visible; }
+        .process-header { background: #f8f9fa; padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: var(--secondary); }
         .process-content { display: none; padding: 15px; background: white; border-top: 1px solid #eee; }
         .process-category.open .process-content { display: block; }
 
-        .checkbox-group { background: #fdfdfd; border: 1px solid #eee; padding: 10px; border-radius: 8px; max-height: 150px; overflow-y: auto; margin-top: 5px; }
-        .checkbox-item { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; margin-bottom: 8px; cursor: pointer; }
-
-        @media print {
-            nav, #progress-container, .nav-buttons, button { display: none !important; }
-            main { margin-left: 0; padding: 0; }
-            .section { box-shadow: none; border: none; display: block !important; }
-            .process-content { display: block !important; }
-        }
+        .company-block { background: #f8fbff; border: 1px solid #e3e9ef; border-radius: 10px; padding: 20px; margin-top: 20px; position: relative; }
+        
+        @media print { nav, #progress-container, button { display: none !important; } main { margin-left: 0; } .section { display: block !important; } }
     </style>
 </head>
 <body>
@@ -88,408 +74,235 @@
     <nav>
         <h2>S4Scope RFP</h2>
         <ul>
-            <li onclick="validateAndShowStep(0)" id="nav-0" class="active">Bölüm 0: ERP Yapısı</li>
-            <li onclick="validateAndShowStep(1)" id="nav-1">Bölüm 1: Genel Bilgiler</li>
-            <li onclick="validateAndShowStep(2)" id="nav-2">Bölüm 2: Organizasyon & Yapı</li>
-            <li onclick="validateAndShowStep(3)" id="nav-3">Bölüm 3: İş Süreçleri</li>
-            <li onclick="validateAndShowStep(4)" id="nav-4">Bölüm 4: Teknik & Entegrasyon</li>
-            <li onclick="validateAndShowStep(5)" id="nav-5">Bölüm 5: Dönüşüm Stratejisi</li>
-            <li onclick="validateAndShowStep(6)" id="nav-6">Bölüm 6: Çıktı & Özet</li>
+            <li onclick="showStep(0)" id="nav-0" class="active">Bölüm 0: ERP Yapısı</li>
+            <li onclick="showStep(1)" id="nav-1">Bölüm 1: Genel Bilgiler</li>
+            <li onclick="showStep(2)" id="nav-2">Bölüm 2: Organizasyon & Yapı</li>
+            <li onclick="showStep(3)" id="nav-3">Bölüm 3: İş Süreçleri (FI)</li>
+            <li onclick="showStep(4)" id="nav-4">Bölüm 4: Teknik & Entegrasyon</li>
+            <li onclick="showStep(5)" id="nav-5">Bölüm 5: Dönüşüm Stratejisi</li>
+            <li onclick="showStep(6)" id="nav-6">Bölüm 6: Çıktı & Özet</li>
         </ul>
-        <div style="position: absolute; bottom: 20px; left: 20px;">
-            <button class="btn-danger" style="padding: 8px 15px; font-size: 12px;" onclick="window.location.href='index.html'">Çıkış Yap</button>
-        </div>
     </nav>
 
     <main>
         <div class="section active" id="step-0">
             <div class="section-title">Bölüm 0 - ERP Yapısı</div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                <div>
-                    <label>Mevcut ERP Sistemi</label>
-                    <select id="existingErp" onchange="toggleSapFields()">
-                        <option value="">Seçiniz</option>
-                        <option value="SAP">SAP</option>
-                        <option value="Oracle">Oracle</option>
-                        <option value="Logo">Logo</option>
-                        <option value="Diğer">Diğer</option>
-                    </select>
-                </div>
-                <div id="sapModelArea" class="hidden">
-                    <label>SAP Modeli</label>
-                    <select id="sapModel">
-                        <option value="">Seçiniz</option>
-                        <option>S/4HANA OnPremise</option>
-                        <option>S/4HANA Public Cloud</option>
-                        <option>S/4HANA Private Cloud</option>
-                        <option>ECC</option>
-                        <option>R/3</option>
-                    </select>
-                </div>
-                <div id="sapVersionArea" class="hidden">
-                    <label>SAP Versiyonu</label>
-                    <input type="text" id="sapVersion" placeholder="Örn: 1909, 2022 FPS02">
-                </div>
-                <div id="approachArea" class="hidden">
-                    <label>Geçiş Yaklaşımı</label>
-                    <select id="sapApproach">
-                        <option value="">Seçiniz</option>
-                        <option>Greenfield</option>
-                        <option>Brownfield</option>
-                        <option>Bluefield / Hibrit</option>
-                        <option>Henüz karar verilmedi</option>
-                    </select>
-                </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div><label>Mevcut ERP</label><select id="existingErp" onchange="toggleSapFields()"><option value="">Seçiniz</option><option>SAP</option><option>Oracle</option><option>Logo</option><option>Diğer</option></select></div>
+                <div id="sapModelArea" class="hidden"><label>SAP Modeli</label><select id="sapModel"><option>S/4HANA Public Cloud</option><option>S/4HANA Private Cloud</option><option>ECC</option></select></div>
+                <div id="sapVersionArea" class="hidden"><label>Versiyon</label><input type="text" id="sapVersion" placeholder="Örn: 2022"></div>
             </div>
-            <div class="nav-buttons" style="justify-content: flex-end;">
-                <button class="btn-primary" onclick="validateAndShowStep(1)">Sonraki Bölüm →</button>
-            </div>
+            <div style="margin-top:40px; text-align:right;"><button class="btn-primary" onclick="showStep(1)">Sonraki →</button></div>
         </div>
 
         <div class="section" id="step-1">
-            <div class="section-title">Bölüm 1 – Şirket Bazlı Genel Bilgiler</div>
-            <div style="display: flex; gap: 15px; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap;">
-                <div style="flex:1; min-width: 200px;">
-                    <label>RFP Kapsamındaki Şirket Sayısı</label>
-                    <input type="number" id="companyCount" min="1" placeholder="Örn: 2">
-                </div>
+            <div class="section-title">Bölüm 1 – Şirket Bilgileri</div>
+            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                <input type="number" id="companyCount" style="width:150px;" placeholder="Şirket Sayısı">
                 <button class="btn-primary" onclick="createCompanies()">Şirketleri Oluştur</button>
-                <button class="btn-success" onclick="addCompany()">+ Şirket Ekle</button>
             </div>
             <div id="companiesContainer"></div>
-            <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
-                <button class="btn-success" onclick="saveCompanies()">Şirket Bilgilerini Kaydet</button>
-                <button class="btn-primary hidden" id="modTabBtn" onclick="showModTable()">Şirket - Modül Eşleşme Tablosu</button>
+            <div style="margin-top:20px;">
+                <button class="btn-success" onclick="saveCompanies()">Şirketleri Kaydet ve Devam Et</button>
             </div>
-            <div id="modTableContainer" class="table-container"></div>
-            <div class="nav-buttons">
-                <button class="btn-secondary" onclick="showStep(0)">← Geri</button>
-                <button class="btn-primary" onclick="validateAndShowStep(2)">Sonraki Bölüm →</button>
+            <div id="modTableContainer" class="table-container" style="margin-top:20px;"></div>
+            <div style="margin-top:40px; display:flex; justify-content:space-between;">
+                <button class="btn-primary" style="background:#777" onclick="showStep(0)">← Geri</button>
+                <button class="btn-primary" onclick="showStep(2)">Sonraki →</button>
             </div>
         </div>
 
         <div class="section" id="step-2">
-            <div class="section-title">Bölüm 2 – Organizasyon & Yapı</div>
+            <div class="section-title">Bölüm 2 – Organizasyon Yapısı</div>
             <div id="orgContainer"></div>
-            <div class="nav-buttons">
-                <button class="btn-secondary" onclick="showStep(1)">← Geri</button>
-                <button class="btn-primary" onclick="validateAndShowStep(3)">Sonraki Bölüm →</button>
+            <div style="margin-top:40px; display:flex; justify-content:space-between;">
+                <button class="btn-primary" style="background:#777" onclick="showStep(1)">← Geri</button>
+                <button class="btn-primary" onclick="showStep(3)">Sonraki →</button>
             </div>
         </div>
 
         <div class="section" id="step-3">
             <div class="section-title">Bölüm 3 – İş Süreçleri Analizi (FI)</div>
-            <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px;">* Şirketleri yanındaki kutucuklardan (Tick) seçebilirsiniz. Varsayılan olarak hepsi seçilidir.</p>
             <div id="processArea"></div>
-            <div class="nav-buttons">
-                <button class="btn-secondary" onclick="showStep(2)">← Geri</button>
-                <button class="btn-primary" onclick="validateAndShowStep(4)">Sonraki Bölüm →</button>
+            <div style="margin-top:40px; display:flex; justify-content:space-between;">
+                <button class="btn-primary" style="background:#777" onclick="showStep(2)">← Geri</button>
+                <button class="btn-primary" onclick="showStep(4)">Sonraki →</button>
             </div>
         </div>
 
         <div class="section" id="step-4">
-            <div class="section-title">Bölüm 4 – Teknik Entegrasyon & Yazılım Envanteri</div>
+            <div class="section-title">Bölüm 4 – Teknik Entegrasyon & Envanter</div>
             <div id="softwareInventoryArea"></div>
-            <div class="nav-buttons">
-                <button class="btn-secondary" onclick="showStep(3)">← Geri</button>
-                <button class="btn-primary" onclick="validateAndShowStep(5)">Sonraki Bölüm →</button>
+            <div style="margin-top:40px; display:flex; justify-content:space-between;">
+                <button class="btn-primary" style="background:#777" onclick="showStep(3)">← Geri</button>
+                <button class="btn-primary" onclick="showStep(5)">Sonraki →</button>
             </div>
         </div>
 
         <div class="section" id="step-5">
-            <div class="section-title">Bölüm 5 – Dönüşüm Stratejisi (Fazlandırma)</div>
-            <div style="margin-bottom:20px;"><button class="btn-success" onclick="addNewPhase()">+ Yeni Faz Ekle</button></div>
+            <div class="section-title">Bölüm 5 – Dönüşüm Stratejisi</div>
+            <button class="btn-success" onclick="addNewPhase()">+ Yeni Faz Ekle</button>
             <div id="phasesContainer"></div>
-            <div class="nav-buttons">
-                <button class="btn-secondary" onclick="showStep(4)">← Geri</button>
-                <button class="btn-primary" onclick="validateAndShowStep(6)">Son Bölüm: Çıktı & Özet →</button>
+            <div style="margin-top:40px; display:flex; justify-content:space-between;">
+                <button class="btn-primary" style="background:#777" onclick="showStep(4)">← Geri</button>
+                <button class="btn-primary" onclick="showStep(6)">Özeti Gör →</button>
             </div>
         </div>
 
         <div class="section" id="step-6">
-            <div class="section-title">Bölüm 6 – RFP Özet ve Çıktı Raporu</div>
-            <div id="rfpReportArea"></div>
-            <div class="nav-buttons">
-                <button class="btn-secondary" onclick="showStep(5)">← Geri</button>
-                <button class="btn-success" onclick="generateFinalReport()">Raporu Güncelle</button>
-                <button class="btn-primary" onclick="window.print()">PDF Olarak Kaydet</button>
-            </div>
+            <div class="section-title">Bölüm 6 – RFP Özet Raporu</div>
+            <div id="finalSummary" class="company-block">Rapor oluşturuluyor...</div>
+            <button class="btn-primary" onclick="window.print()">PDF Olarak Yazdır</button>
         </div>
     </main>
 
 <script>
-    const sectorMap = {
-        "Tüketici Endüstrileri": ["Tarım & Gıda", "FMCG", "İlaç", "Perakende", "Toptan Dağıtım"],
-        "Kesikli Üretim": ["Otomotiv", "Kiralama", "Batarya", "Makine", "Yüksek Teknoloji"],
-        "Süreç Endüstrileri": ["Kimya", "Petrol & Gaz", "Madencilik", "Kağıt"],
-        "Enerji ve Altyapı": ["Elektrik Dağıtım", "Doğalgaz", "Su/Atık", "Yenilenebilir Enerji"],
-        "Finansal Hizmetler": ["Bankalar", "Sigorta", "Leasing", "Fintech"],
-        "Kamu ve Sağlık": ["Kamu Kurumları", "Savunma", "Eğitim", "Sağlık"],
-        "Hizmet Endüstrileri": ["İnşaat", "Profesyonel Hizmetler", "Gayrimenkul", "Medya"],
-        "Ulaşım ve İletişim": ["Havayolu", "Lojistik", "Telekomünikasyon", "Seyahat"]
-    };
-
-    const sapModules = ["FI", "FM", "CO", "PS", "MM", "SD", "PP", "QM", "PM", "WM/EWM"];
-
-    const softwareGroups = {
-        "Analitik & Finans": ["Power BI", "LucaNet", "Tableau", "QlikView"],
-        "Üretim & Operasyon": ["Doruk OT (MES)", "SimSoft MES", "ProManage", "Siemens MES"],
-        "Otomasyon": ["UiPath", "Automation Anywhere", "Blue Prism"],
-        "Satış & Müşteri": ["T-Soft", "Salesforce", "Microsoft Dynamics CRM"],
-        "İnsan Kaynakları": ["Kolay İK", "Logo HR", "SAP SuccessFactors"]
-    };
-
-    const fiWbsStructure = {
-        "1. Organizasyon ve Temel Muhasebe Yapısı": [
-            "1.1 Birden fazla şirket kodu (company code) kullanıyor musunuz?",
-            "1.2 Şirket kodları arasında mali konsolidasyon ihtiyacı var mı?",
-            "1.3 Farklı mali yıl varyantları kullanıyor musunuz?",
-            "1.4 Birden fazla hesap planı (chart of accounts) ihtiyacınız var mı?",
-            "1.5 Yerel mevzuat ve grup raporlaması için farklı muhasebe kuralları uyguluyor musunuz?"
-        ],
-        "2. Genel Muhasebe (General Ledger – GL)": [
-            "2.1 Ana defter muhasebesini ACDOCA yapısı ile kullanmak ister misiniz?",
-            "2.2 Birden fazla defter (leading / non-leading ledger) kullanıyor musunuz?",
-            "2.3 Muhasebe kayıtlarında belge bazlı muhasebe prensibini uyguluyor musunuz?",
-            "2.4 Otomatik muhasebe kayıtları (MM/SD kaynaklı) kullanılıyor mu?",
-            "2.5 Manuel muhasebe fişleri sıkça oluşturuluyor mu?",
-            "2.6 Muhasebe fişleri için onay süreci bulunuyor mu?",
-            "2.7 Muhasebe belgelerinde açıklama ve referans alanları zorunlu mu?"
-        ]
-        // ... Diğer FI soruları hafızada saklı, yer kaplamaması için özetlendi
-    };
-
-    let companyIndex = 0;
     let savedCompanies = [];
-    let phaseCount = 0;
+    const fiWbs = {
+        "Genel Muhasebe": ["Defter Yapısı", "Belge Onay Süreçleri", "Dönem Sonu Kapanış"],
+        "Borçlar/Alacaklar": ["E-Fatura Entegrasyonu", "Ödeme Planları", "Mutabakat Süreçleri"]
+    };
+    const softwareGroups = ["Finans & ERP", "Lojistik & Depo", "İK & Bordro", "CRM & Satış"];
 
     function toggleSapFields() {
         const isSap = document.getElementById("existingErp").value === "SAP";
-        ["sapModelArea", "sapVersionArea", "approachArea"].forEach(id => {
-            document.getElementById(id).classList.toggle("hidden", !isSap);
-        });
-    }
-
-    function addCompany() {
-        companyIndex++;
-        const div = document.createElement("div");
-        div.className = "company-block";
-        div.innerHTML = `
-            <button class="btn-danger" style="position:absolute; top:15px; right:15px; padding:5px 10px; font-size:11px;" onclick="this.parentElement.remove()">Sil</button>
-            <h4 style="margin:0 0 20px 0; color:var(--primary)">Şirket #${companyIndex}</h4>
-            <div class="company-grid">
-                <div><label>Şirket Adı</label><input type="text" class="comp-name"></div>
-                <div><label>Ülke</label><select><option>Türkiye</option><option>Almanya</option><option>ABD</option><option>Diğer</option></select></div>
-                <div><label>Ana Sektör</label><select onchange="loadSubs(this)"><option value=""></option>${Object.keys(sectorMap).map(s=>`<option>${s}</option>`).join("")}</select></div>
-                <div><label>Alt Sektör</label><select class="sub-sector"></select></div>
-                <div><label>Ana Faaliyet</label><select><option>Üretim</option><option>Hizmet</option><option>Proje</option></select></div>
-            </div>`;
-        document.getElementById("companiesContainer").appendChild(div);
+        document.getElementById("sapModelArea").classList.toggle("hidden", !isSap);
+        document.getElementById("sapVersionArea").classList.toggle("hidden", !isSap);
     }
 
     function createCompanies() {
         const count = document.getElementById("companyCount").value;
-        if(!count || count < 1) return;
-        document.getElementById("companiesContainer").innerHTML = "";
-        companyIndex = 0;
-        for(let i=0; i<count; i++) addCompany();
-    }
-
-    function loadSubs(sel) {
-        const sub = sel.parentElement.nextElementSibling.querySelector("select");
-        sub.innerHTML = (sectorMap[sel.value] || []).map(s=>`<option>${s}</option>`).join("") || '<option value="">Önce Ana Sektör Seçin</option>';
+        const container = document.getElementById("companiesContainer");
+        container.innerHTML = "";
+        for(let i=1; i<=count; i++) {
+            container.innerHTML += `<div class="company-block"><h4>Şirket #${i}</h4><input type="text" class="comp-name" placeholder="Şirket Adını Giriniz"></div>`;
+        }
     }
 
     function saveCompanies() {
         savedCompanies = Array.from(document.querySelectorAll(".comp-name")).map(i => i.value).filter(v => v);
-        if(savedCompanies.length) {
-            document.getElementById("modTabBtn").classList.remove("hidden");
-            renderOrg(); renderProcesses(); renderTechInventory();
-            alert("Şirket bilgileri kaydedildi.");
-        }
-    }
-
-    function showModTable() {
-        let html = `<table><thead><tr><th>Şirket Adı</th>${sapModules.map(m=>`<th>${m}</th>`).join("")}</tr></thead><tbody>`;
-        savedCompanies.forEach(name => {
-            html += `<tr><td style="font-weight:700; text-align:left; padding-left:20px;">${name}</td>${sapModules.map(()=>`<td><input type="checkbox" style="width:18px; height:18px;"></td>`).join("")}</tr>`;
-        });
-        document.getElementById("modTableContainer").innerHTML = html + `</tbody></table>`;
+        if(savedCompanies.length === 0) { alert("Lütfen şirket adı girin"); return; }
+        renderOrg();
+        renderProcesses();
+        renderTechInventory();
+        alert("Şirketler ve süreç tabloları güncellendi.");
     }
 
     function renderOrg() {
-        let html = "";
-        savedCompanies.forEach((name, i) => {
-            html += `<div class="company-block"><h4>${name}</h4>
-                ${counterRow('Üretim Tesisi', 'p'+i)}
-                ${counterRow('Depo / Lojistik Merkezi', 'w'+i)}
-                ${counterRow('Satış Ofisi / Bölge Müdürlüğü', 's'+i)}
-            </div>`;
-        });
-        document.getElementById("orgContainer").innerHTML = html;
+        let h = "";
+        savedCompanies.forEach(c => h += `<div class="company-block"><h4>${c}</h4><label>Tesis Sayısı</label><input type="number" value="1"></div>`);
+        document.getElementById("orgContainer").innerHTML = h;
     }
 
-    function counterRow(label, id) {
-        return `<div class="counter-row"><span>${label}</span><div class="counter-box">
-            <button class="btn-danger btn-sm" onclick="chgVal('${id}',-1)">-</button>
-            <span class="val-span" id="${id}">0</span>
-            <button class="btn-success btn-sm" onclick="chgVal('${id}',1)">+</button>
-        </div></div>`;
-    }
-
-    function chgVal(id, d) {
-        const el = document.getElementById(id);
-        el.innerText = Math.max(0, parseInt(el.innerText) + d);
-    }
-
-    // --- BÖLÜM 3: GÜNCEL TİCKLİ SÜREÇ ANALİZİ ---
+    // --- BÖLÜM 3: EXCEL TİPİ FİLTRELEME ---
     function renderProcesses() {
-        let html = `<div class="company-block" style="border-left: 8px solid var(--primary);"><h3>FI Süreç Analizi</h3>`;
-        let catIndex = 0;
-        for (const [title, qs] of Object.entries(fiWbsStructure)) {
-            catIndex++;
-            html += `
-            <div class="process-category">
-                <div class="process-header" onclick="this.parentElement.classList.toggle('open')">${title}</div>
+        let h = "";
+        let idx = 0;
+        for (const [cat, qs] of Object.entries(fiWbs)) {
+            idx++;
+            h += `<div class="process-category">
+                <div class="process-header" onclick="this.parentElement.classList.toggle('open')">${cat}</div>
                 <div class="process-content">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="text-align:left; width:35%;">Süreç Sorusu</th>
-                                    <th style="width:12%;">Cevap</th>
-                                    <th style="width:25%;">Şirket Kapsamı</th>
-                                    <th>Not</th>
-                                    <th style="width:100px;">İşlem</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody-cat-${catIndex}">`;
-            qs.forEach(q => html += generateProcessRow(q, false, false));
-            html += `</tbody></table></div>
-                    <div style="margin-top:15px;">
-                        <button class="btn-success btn-sm" onclick="addNewProcessRow('${catIndex}')">+ Yeni Özel Süreç Ekle</button>
-                    </div>
+                    <table>
+                        <thead><tr><th style="text-align:left;">Süreç</th><th style="width:120px;">Cevap</th><th style="width:200px;">Şirket Kapsamı</th><th>İşlem</th></tr></thead>
+                        <tbody>${qs.map(q => generateProcessRow(q)).join("")}</tbody>
+                    </table>
                 </div>
             </div>`;
         }
-        document.getElementById("processArea").innerHTML = html + "</div>";
+        document.getElementById("processArea").innerHTML = h;
     }
 
-    function generateProcessRow(questionText, isNew = false, isDeletable = false) {
-        const companyTicks = savedCompanies.map(c => `
-            <label style="display:inline-flex; align-items:center; margin-right:8px; font-size:12px; cursor:pointer; background:#f0f4f8; padding:2px 6px; border-radius:4px; border:1px solid #d1d9e0;">
-                <input type="checkbox" checked value="${c}" style="margin-right:4px; accent-color:var(--accent);"> ${c}
-            </label>
+    function generateProcessRow(question) {
+        const filterId = 'filter-' + Math.random().toString(36).substr(2, 9);
+        const companyList = savedCompanies.map(c => `
+            <div class="filter-item">
+                <input type="checkbox" checked value="${c}" onchange="updateFilterText('${filterId}')">
+                <span>${c}</span>
+            </div>
         `).join("");
 
-        return `
-            <tr>
-                <td style="text-align:left;">
-                    ${isNew ? `<input type="text" placeholder="Süreci yazın..." style="width:95%;">` : `<span style="font-weight:600;">${questionText}</span>`}
-                </td>
-                <td>
-                    <select>
-                        <option>Evet</option><option>Hayır</option><option>Kısmen</option>
-                    </select>
-                </td>
-                <td style="text-align:left;">
-                    <div style="display:flex; flex-wrap:wrap; gap:4px;">${companyTicks || '<small style="color:red">Önce Şirket Kaydedin</small>'}</div>
-                </td>
-                <td><input type="text" placeholder="Not..." style="width:95%;"></td>
-                <td>
-                    <div style="display:flex; gap:5px; justify-content:center;">
-                        ${!isNew ? `<button class="btn-primary btn-sm" onclick="duplicateRow(this)">⧉</button>` : ''}
-                        <button class="btn-danger btn-sm" onclick="this.closest('tr').remove()" ${!isDeletable ? 'style="opacity:0.3; pointer-events:none;"' : ''}>✕</button>
+        return `<tr>
+            <td style="text-align:left; font-weight:600;">${question}</td>
+            <td><select><option>Evet</option><option>Hayır</option></select></td>
+            <td style="position:relative;">
+                <div class="filter-dropdown" onclick="toggleFilter(event, '${filterId}')">
+                    <span id="text-${filterId}">Tüm Şirketler</span>
+                    <span>▼</span>
+                </div>
+                <div id="${filterId}" class="filter-menu hidden">
+                    <div style="padding:8px; border-bottom:1px solid #ddd; background:#eee;">
+                        <button class="btn-sm btn-primary" onclick="bulkFilter('${filterId}', true)">Tümü</button>
+                        <button class="btn-sm btn-danger" onclick="bulkFilter('${filterId}', false)">Hiçbiri</button>
                     </div>
-                </td>
-            </tr>`;
+                    ${companyList}
+                </div>
+            </td>
+            <td><button class="btn-danger btn-sm" onclick="this.closest('tr').remove()">✕</button></td>
+        </tr>`;
     }
 
-    function duplicateRow(btn) {
-        const currentRow = btn.closest('tr');
-        const qText = currentRow.cells[0].innerText;
-        const newRowHTML = generateProcessRow(qText, false, true);
-        currentRow.insertAdjacentHTML('afterend', newRowHTML);
+    function toggleFilter(e, id) {
+        e.stopPropagation();
+        const menu = document.getElementById(id);
+        document.querySelectorAll('.filter-menu').forEach(m => { if(m.id !== id) m.classList.add('hidden'); });
+        menu.classList.toggle('hidden');
     }
 
-    function addNewProcessRow(catId) {
-        const tbody = document.getElementById(`tbody-cat-${catId}`);
-        const newRowHTML = generateProcessRow("", true, true);
-        tbody.insertAdjacentHTML('beforeend', newRowHTML);
+    function updateFilterText(id) {
+        const menu = document.getElementById(id);
+        const checked = menu.querySelectorAll('input:checked').length;
+        const total = menu.querySelectorAll('input[type="checkbox"]').length;
+        const label = document.getElementById('text-' + id);
+        label.innerText = (checked === total) ? "Tüm Şirketler" : (checked === 0 ? "Seçim Yok" : checked + " Şirket");
     }
 
-    // --- BÖLÜM 4: GÜNCEL TEKNİK ENVANTER & STRATEJİK KARAR ---
+    function bulkFilter(id, state) {
+        const menu = document.getElementById(id);
+        menu.querySelectorAll('input').forEach(i => i.checked = state);
+        updateFilterText(id);
+    }
+
+    // --- BÖLÜM 4: STRATEJİK SEÇENEKLER ---
     function renderTechInventory() {
-        let html = "";
-        Object.keys(softwareGroups).forEach((group, i) => {
-            html += `<div class="company-block">
+        let h = "";
+        softwareGroups.forEach((g, i) => {
+            h += `<div class="company-block">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h4 style="margin:0;">${group}</h4>
-                    <div style="display:flex; gap:10px;">
-                        <select id="sel-soft-${i}" style="width:200px;">
-                            <option value="">Yazılım Seç...</option>
-                            ${softwareGroups[group].map(s=>`<option value="${s}">${s}</option>`).join("")}
-                            <option value="DİĞER">Diğer +</option>
-                        </select>
-                        <button class="btn-success" onclick="addSoftwareRow(${i})">+</button>
-                    </div>
+                    <h4>${g}</h4>
+                    <button class="btn-success btn-sm" onclick="addSoftware('${i}')">+ Ekle</button>
                 </div>
-                <div class="table-container" id="cont-soft-${i}" style="display:none; margin-top:15px;">
-                    <table style="min-width:100%;"><thead><tr><th>Yazılım</th><th style="width:50%">Hedef Mimari Kararı</th><th>İşlem</th></tr></thead><tbody id="tbody-soft-${i}"></tbody></table>
-                </div>
+                <table style="margin-top:10px;"><thead><tr><th>Yazılım</th><th>Stratejik Karar</th><th>İşlem</th></tr></thead><tbody id="soft-body-${i}"></tbody></table>
             </div>`;
         });
-        document.getElementById("softwareInventoryArea").innerHTML = html;
+        document.getElementById("softwareInventoryArea").innerHTML = h;
     }
 
-    function addSoftwareRow(i) {
-        let val = document.getElementById(`sel-soft-${i}`).value;
-        if(!val) return;
-        if(val === "DİĞER") { val = prompt("Yazılım Adı:"); if(!val) return; }
-        document.getElementById(`cont-soft-${i}`).style.display = "block";
-        
-        const decisionOptions = [
-            "SAP Ürün/Modül/Addon ile değiştirilebilir",
-            "Hedef Mimaride kullanıma devam edilecek",
-            "3. Parti Sistem/Yazılım ile değiştirilebilir"
-        ];
-
+    function addSoftware(idx) {
+        const name = prompt("Yazılım Adı:");
+        if(!name) return;
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td style="font-weight:600; text-align:left; padding-left:15px;">${val}</td>
+            <td style="text-align:left; font-weight:bold;">${name}</td>
             <td>
-                <select style="width:95%;">
-                    ${decisionOptions.map(opt => `<option value="${opt}">${opt}</option>`).join("")}
+                <select>
+                    <option>SAP Ürün/Modül/Addon ile değiştirilebilir</option>
+                    <option>Hedef Mimaride kullanıma devam edilecek</option>
+                    <option>3. Parti Sistem/Yazılım ile değiştirilebilir</option>
                 </select>
             </td>
             <td><button class="btn-danger btn-sm" onclick="this.closest('tr').remove()">✕</button></td>`;
-        document.getElementById(`tbody-soft-${i}`).appendChild(tr);
+        document.getElementById("soft-body-" + idx).appendChild(tr);
     }
 
-    function addNewPhase() {
-        phaseCount++;
-        const div = document.createElement("div");
-        div.className = "company-block phase-card";
-        div.innerHTML = `
-            <div style="display:flex; justify-content:space-between; margin-bottom:15px;"><h4 style="margin:0;">Faz #${phaseCount}</h4><button class="btn-danger btn-sm" onclick="this.parentElement.parentElement.remove()">✕</button></div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
-                <div><label>Tarih</label><input type="month"></div>
-                <div><label>Şirketler</label><div class="checkbox-group">${savedCompanies.map(c => `<label class="checkbox-item"><input type="checkbox"> ${c}</label>`).join("")}</div></div>
-            </div>`;
-        document.getElementById("phasesContainer").appendChild(div);
-    }
-
-    function generateFinalReport() {
-        document.getElementById("rfpReportArea").innerHTML = `<div class="company-block" style="background:#fff; border: 2px solid var(--primary); text-align:center;"><h2>RFP ÖZETİ HAZIRLANDI</h2><p>Raporu PDF almak için yazdır butonunu kullanın.</p></div>`;
-    }
-
-    function validateAndShowStep(idx) { if(idx === 6) generateFinalReport(); showStep(idx); }
     function showStep(idx) {
         document.querySelectorAll(".section").forEach((s, i) => s.classList.toggle("active", i === idx));
         document.querySelectorAll("nav ul li").forEach((l, i) => l.classList.toggle("active", i === idx));
         document.getElementById("progress-bar").style.width = (idx / 6 * 100) + "%";
-        window.scrollTo(0,0);
+        if(idx === 6) document.getElementById("finalSummary").innerText = savedCompanies.length + " Şirket için RFP Hazırlandı.";
     }
+
+    window.onclick = () => document.querySelectorAll('.filter-menu').forEach(m => m.classList.add('hidden'));
 </script>
 </body>
 </html>
